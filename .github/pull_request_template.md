@@ -17,7 +17,7 @@ Please delete options that are not relevant
 
 [Please describe the tests you ran to verify your changes.Are there no bugs? / does all functionality work as before, etc]
 
-## Checklist: [put + or -]
+## Checklist: [put x or -]
 
 Please delete options that are not relevant(optional)
 
