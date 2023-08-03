@@ -42,11 +42,23 @@ const baseConfig = {
   ],
 };
 
+const devConfig = {
+  mode: 'development',
+  devtool: 'inline-source-map',
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+  },
+};
+
+const prodConfig = {
+  mode: 'production',
+};
+
 module.exports = ({ mode }) => {
   const isProductionMode = mode === 'prod';
-  const envConfig = isProductionMode
-    ? require('./webpack.prod.config')
-    : require('./webpack.dev.config');
+  const envConfig = isProductionMode ? prodConfig : devConfig;
 
   return merge(baseConfig, envConfig);
 };
