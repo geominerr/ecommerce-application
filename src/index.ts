@@ -9,7 +9,7 @@ async function start(): Promise<void> {
     console.log(
       `Limit: ${TEST_DATA.limit}. Count from: ${TEST_DATA.offset}. Count: ${TEST_DATA.count}. Total: ${TEST_DATA.total}`
     );
-    console.log(TEST_DATA.results);
+    console.log('Data from Api.getProjectData()', TEST_DATA.results);
     // TEST_DATA.results.forEach(element => {
     //   console.log(element);
     // });
@@ -19,7 +19,7 @@ async function start(): Promise<void> {
 }
 start();
 
-// Api.registerUser('1111', 'test3@mail.com', 'testName3', 'tSurname3', 'secret134d')
+// Api.registerUser('user@mail.ru', 'Name', 'Surname', 'secretTest01')
 //   .then(() => {
 //     console.log('success');
 //     // Действия после успешной регистрации
@@ -27,3 +27,12 @@ start();
 //   .catch((error) => {
 //     console.log(error);
 //   });
+
+Api.loginUser('user@mail.ru', 'secretTest01_')
+  .then((data) => {
+    console.log('login success', data);
+    console.log(`Hi ${data.firstName} ${data.lastName}`);
+  })
+  .catch((error) => {
+    console.log(error);
+  });

@@ -1,7 +1,8 @@
-//import dotenv from 'dotenv';
+// eslint-disable-next-line import/no-extraneous-dependencies
+// import dotenv from 'dotenv';
 // dotenv.config(); // временно отключен, пока не разобрались с dotenv
 
-import { ProjectData, AccessTokenResponse } from './api-interfaces';
+import { ProjectData, AccessTokenResponse, Customer } from './api-interfaces';
 
 export class API {
   public CTP_PROJECT_KEY: string;
@@ -84,10 +85,7 @@ export class API {
 
     console.log('Access Token: ', accessToken, '\n');
 
-    if (!accessToken) {
-      console.error('Failed to obtain access token.');
-      throw new Error('Failed to obtain access token.');
-    }
+    if (!accessToken) throw new Error('Failed to obtain access token.');
 
     try {
       const headers = {
@@ -109,7 +107,8 @@ export class API {
 
   // eslint-disable-next-line max-lines-per-function
   public async registerUser(
-    customerNumber: string,
+    // поля нужно будет добавить, если возникнет необходимость
+    // https://docs.commercetools.com/api/projects/customers#ctp:api:type:CustomerDraft
     email: string,
     firstName: string,
     lastName: string,
@@ -126,7 +125,6 @@ export class API {
     };
 
     const userData = {
-      customerNumber,
       email,
       firstName,
       lastName,
@@ -147,6 +145,46 @@ export class API {
       }
     } catch (error) {
       console.error('Error registering user:', error);
+      throw error;
+    }
+  }
+
+  public async loginUser(
+    email: string,
+    password: string,
+    anonymousCart?: { id: string; typeId: string }
+  ): Promise<Customer> {
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/login`;
+    const accessToken = await this.getAccessToken();
+
+    if (!accessToken) throw new Error('Failed to obtain access token.');
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    };
+
+    const userData = {
+      email,
+      password,
+      anonymousCart,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(userData),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log('User log in successful.');
+        return data.customer;
+      } else {
+        throw new Error(`${await response.json().then((data) => data.message)}`);
+      }
+    } catch (error) {
       throw error;
     }
   }
