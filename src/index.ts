@@ -1,7 +1,9 @@
 import { API } from './api/api';
+import { APIUserActions } from './api/api-user-actions';
 
 // SOME_PATH = '' / products / customers / categories / stores / orders / zones
-const Api = new API('products', 20, 0);
+const Api = new API('categories', 20, 0);
+const USER_ACTIONS = new APIUserActions();
 
 async function start(): Promise<void> {
   try {
@@ -9,7 +11,7 @@ async function start(): Promise<void> {
     console.log(
       `Limit: ${TEST_DATA.limit}. Count from: ${TEST_DATA.offset}. Count: ${TEST_DATA.count}. Total: ${TEST_DATA.total}`
     );
-    console.log('Data from Api.getProjectData()', TEST_DATA.results);
+    console.log('Data from Api.getProjectData()', TEST_DATA);
     // TEST_DATA.results.forEach(element => {
     //   console.log(element);
     // });
@@ -19,16 +21,28 @@ async function start(): Promise<void> {
 }
 start();
 
-// Api.registerUser('user@mail.ru', 'Name', 'Surname', 'secretTest01')
-//   .then(() => {
-//     console.log('success');
-//     // Действия после успешной регистрации
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
+// email: string, firstName: string, lastName: string, title: string, shippingAddresses: number[], billingAddresses: number[], password: string
+// function register(): void {
+//   USER_ACTIONS.registerUser(
+//     'MUuser@gmail3.com',
+//     'MUuserName3',
+//     'MUuserSurname3',
+//     'Lord',
+//     [],
+//     [],
+//     'secretMUuser'
+//   )
+//     .then(() => {
+//       console.log('success');
+//       // Действия после успешной регистрации
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
+// register();
 
-Api.loginUser('user@mail.ru', 'secretTest01_')
+USER_ACTIONS.loginUser('MUuser@gmail3.com', 'secretMUuser')
   .then((data) => {
     console.log('login success', data);
     console.log(`Hi ${data.firstName} ${data.lastName}`);
