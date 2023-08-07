@@ -1,7 +1,10 @@
 import { API } from '../api/api';
+import { APIUserActions } from '../api/api-user-actions';
 const Api = new API('categories', 20, 0);
+const USER_ACTIONS = new APIUserActions();
 
 class App {
+  // eslint-disable-next-line max-lines-per-function
   public start(): void {
     async function getData(): Promise<void> {
       try {
@@ -18,43 +21,39 @@ class App {
       }
     }
     getData();
+
+    // SOME_PATH = '' / products / customers / categories / stores / orders / zones
+
+    // email: string, firstName: string, lastName: string, title: string, shippingAddresses: number[], billingAddresses: number[], password: string
+    // function register(): void {
+    //   USER_ACTIONS.registerUser(
+    //     'MUuser@gmail3.com',
+    //     'MUuserName3',
+    //     'MUuserSurname3',
+    //     'Lord',
+    //     [],
+    //     [],
+    //     'secretMUuser'
+    //   )
+    //     .then(() => {
+    //       console.log('success');
+    //       // Действия после успешной регистрации
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // }
+    // register();
+
+    USER_ACTIONS.loginUser('MUuser@gmail3.com', 'secretMUuser')
+      .then((data) => {
+        console.log('login success', data);
+        console.log(`Hi ${data.firstName} ${data.lastName}`);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 }
 
 export default App;
-
-import { APIUserActions } from '../api/api-user-actions';
-
-// SOME_PATH = '' / products / customers / categories / stores / orders / zones
-
-const USER_ACTIONS = new APIUserActions();
-
-// email: string, firstName: string, lastName: string, title: string, shippingAddresses: number[], billingAddresses: number[], password: string
-// function register(): void {
-//   USER_ACTIONS.registerUser(
-//     'MUuser@gmail3.com',
-//     'MUuserName3',
-//     'MUuserSurname3',
-//     'Lord',
-//     [],
-//     [],
-//     'secretMUuser'
-//   )
-//     .then(() => {
-//       console.log('success');
-//       // Действия после успешной регистрации
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
-// register();
-
-USER_ACTIONS.loginUser('MUuser@gmail3.com', 'secretMUuser')
-  .then((data) => {
-    console.log('login success', data);
-    console.log(`Hi ${data.firstName} ${data.lastName}`);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
