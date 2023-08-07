@@ -1,0 +1,27 @@
+.navigation{
+	padding: 50px 50px;
+	width: 300px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.link{
+	width: 80px;
+	height: 50px;
+	background-color: tan;
+	color: white;
+	border-radius: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
+}
+
+.footer{
+	padding: 50px 50px;
+	width: 300px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
