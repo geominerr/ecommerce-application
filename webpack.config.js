@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const baseConfig = {
   entry: path.resolve(__dirname, './src/index.ts'),
@@ -13,7 +14,7 @@ const baseConfig = {
       { test: /\.ts$/i, use: 'ts-loader' },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
     ],
   },
@@ -23,6 +24,7 @@ const baseConfig = {
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -39,6 +41,9 @@ const baseConfig = {
         },
       ],
     }),
+    new MiniCssExtractPlugin({
+      filename: 'style.css',
+    }),
   ],
 };
 
@@ -49,6 +54,7 @@ const devConfig = {
     static: {
       directory: path.join(__dirname, 'dist'),
     },
+    historyApiFallback: true,
   },
 };
 
