@@ -1,0 +1,13 @@
+.input-container {
+  position: relative;
+}
+
+.input {
+  width: 20rem;
+  font-size: 2rem;
+  border-radius: 50%;
+}
+
+.input--error {
+  border: red;
+}
