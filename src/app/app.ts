@@ -1,5 +1,6 @@
 import { API } from '../api/api';
 import { APIUserActions } from '../api/api-user-actions';
+
 const Api = new API('categories', 20, 0);
 const USER_ACTIONS = new APIUserActions();
 
