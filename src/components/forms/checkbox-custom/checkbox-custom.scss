@@ -1,0 +1,29 @@
+.checkbox-custom {
+  position: relative;
+  display: inline-block;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-image: url('../../../assets/icons/illuminati-symbol.png');
+  background-size: contain;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.checkbox-original {
+  display: none;
+}
+
+.label {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+}
+
+.checkbox-original:checked+.checkbox-custom {
+  background-image: url('../../../assets/icons/illuminati-visible.png');
+  background-size: contain;
+}
+
+.checkbox-original:focus {
+  background-color: aqua;
+}
