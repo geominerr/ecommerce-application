@@ -1,11 +1,12 @@
-import BaseComponent from '../base-component/base-component';
+import BaseComponent from '../../base/base-component/base-component';
 import ErrorHint from '../error-hint/error-hint';
-import { TagNames, Styles, Events } from './enum';
+import { TagNames, Styles, Attributes, Events } from './enum';
+import './input-mail.scss';
 
 type CallbackStub = (inuptValue: string) => string | false;
 
 class InputMail extends BaseComponent {
-  private container: HTMLDivElement;
+  private container: HTMLElement;
 
   private input: HTMLInputElement;
 
@@ -23,10 +24,12 @@ class InputMail extends BaseComponent {
   }
 
   public createComponent(): this {
-    const { container, input, errorHint } = this;
+    const { input, errorHint } = this;
     const errorHintElement: HTMLElement = errorHint.getElement();
 
-    [input, errorHintElement].forEach((el: HTMLElement): void => container.append(el));
+    input.setAttribute(Attributes.PLACEHOLDER, Attributes.PLACEHOLDER_VALUE);
+
+    [input, errorHintElement].forEach((el: HTMLElement): void => this.container.append(el));
     this.addInputHadler(input);
 
     return this;
