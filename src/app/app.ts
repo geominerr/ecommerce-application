@@ -23,29 +23,36 @@ class App {
     getData();
 
     // SOME_PATH = '' / products / customers / categories / stores / orders / zones
+    // email: string, firstName: string, lastName: string, dateOfBirth: string YYYY-MM-DD, shippingAddresses: number[], billingAddresses: number[], password: string
+    function register(): void {
+      USER_ACTIONS.registerUser(
+        'Shipiing street',
+        '123-s',
+        'Shipping City',
+        '0000-s',
+        'US',
+        'Billing street',
+        '123-b',
+        'Billing city',
+        '0000-b',
+        'US',
+        'user@mail.com',
+        'FirstuserName',
+        'FirstuserSurname',
+        '2010-11-10',
+        'pAssw0rd!'
+      )
+        .then(() => {
+          console.log('success');
+          // Действия после успешной регистрации
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    register();
 
-    // email: string, firstName: string, lastName: string, title: string, shippingAddresses: number[], billingAddresses: number[], password: string
-    // function register(): void {
-    //   USER_ACTIONS.registerUser(
-    //     'MUuser@gmail3.com',
-    //     'MUuserName3',
-    //     'MUuserSurname3',
-    //     'Lord',
-    //     [],
-    //     [],
-    //     'secretMUuser'
-    //   )
-    //     .then(() => {
-    //       console.log('success');
-    //       // Действия после успешной регистрации
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // }
-    // register();
-
-    USER_ACTIONS.loginUser('MUuser@gmail3.com', 'secretMUuser')
+    USER_ACTIONS.loginUser('user@mail.com', 'pAssw0rd!')
       .then((data) => {
         console.log('login success', data);
         console.log(`Hi ${data.firstName} ${data.lastName}`);

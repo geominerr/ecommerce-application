@@ -21,12 +21,20 @@ export class APIUserActions {
   public async registerUser(
     // поля нужно будет добавить, если возникнет необходимость
     // https://docs.commercetools.com/api/projects/customers#ctp:api:type:CustomerDraft
+    streetName_shipping: string,
+    streetNumber_shipping: string,
+    city_shipping: string,
+    postalCode_shipping: string,
+    country_shipping: string, // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+    streetName_billing: string,
+    streetNumber_billing: string,
+    city_billing: string,
+    postalCode_billing: string,
+    country_billing: string,
     email: string,
     firstName: string,
     lastName: string,
-    title: string,
-    shippingAddresses: number[],
-    billingAddresses: number[],
+    dateOfBirth: string, // YYYY-MM-DD
     password: string
   ): Promise<void> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
@@ -40,12 +48,29 @@ export class APIUserActions {
     };
 
     const userData = {
+      addresses: [
+        {
+          streetName: streetName_shipping,
+          streetNumber: streetNumber_shipping,
+          city: city_shipping,
+          postalCode: postalCode_shipping,
+          country: country_shipping,
+        },
+        {
+          streetName: streetName_billing,
+          streetNumber: streetNumber_billing,
+          city: city_billing,
+          postalCode: postalCode_billing,
+          country: country_billing,
+        },
+        // Добавьте другие адреса по аналогии
+      ],
       email,
       firstName,
       lastName,
-      title,
-      shippingAddresses,
-      billingAddresses,
+      dateOfBirth,
+      shippingAddresses: [0],
+      billingAddresses: [1],
       password,
     };
 
