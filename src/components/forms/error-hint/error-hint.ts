@@ -1,4 +1,4 @@
-import BaseComponent from '../base-component/base-component';
+import BaseComponent from '../../base/base-component/base-component';
 import { TagNames, Styles } from './enum';
 import './error-hint.scss';
 
