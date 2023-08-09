@@ -5,7 +5,7 @@ enum TagNames {
 }
 
 enum Styles {
-  LABEL = 'label',
+  LABEL = 'label-checkbox',
   CHECKBOX = 'checkbox-original',
   CHECKBOX_CUSTOM = 'checkbox-custom',
 }
