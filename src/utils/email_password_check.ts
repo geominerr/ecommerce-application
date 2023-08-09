@@ -37,13 +37,24 @@ export class EmailPasswordCheck {
     if (!/\d/.test(password)) {
       return 'The password must contain at least one digit (0-9).';
     }
-    if (!/[!@#$%^&*]/.test(password)) {
-      return 'The password must contain at least one special character (!@#$%$%^&*).';
-    }
     if (password.trim() !== password) {
       return 'The password must not contain any initial or final spaces.';
     }
     // Все ок? - null
     return null;
+  }
+
+  public strengthOfPasswordCheck(password: string): string {
+    const mediumPasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/g;
+    const strongPasswordRegex =
+      /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g;
+
+    if (strongPasswordRegex.test(password)) {
+      return 'Strong password.';
+    } else if (mediumPasswordRegex.test(password)) {
+      return 'Medium password strength.';
+    } else {
+      return 'Weak password.';
+    }
   }
 }

@@ -20,7 +20,6 @@ test.each([
   ['pass0word!', 'The password must contain at least one capital letter (A-Z).'],
   ['PASS0WORD!', 'The password must contain at least one lowercase letter (a-z).'],
   ['pAssword!', 'The password must contain at least one digit (0-9).'],
-  ['pAss0word', 'The password must contain at least one special character (!@#$%$%^&*).'],
   [' pAss0word! ', 'The password must not contain any initial or final spaces.'],
 ])('passwordCheck should return the correct result', async (password, expectedResult) => {
   const result = await CHECK.passwordCheck(password);

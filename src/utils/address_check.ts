@@ -5,18 +5,19 @@ export class AddressCheck {
     this.constructorHolder = '';
   }
 
-  public streetCheck(street: string): string | null {
-    if (street.length < 1) {
-      return 'The address must be at least 1 character long.';
+  public mainCheck(word: string): string | null {
+    // Используй для проверки города, имени и фамилии.
+    const regex = /^[a-zA-Z]*[a-zA-Z][a-zA-Z]*$/;
+    if (!regex.test(word)) {
+      return 'The name / surname / city must contain at least one letter and no no special characters or numbers.';
     }
     // Все ок? - null
     return null;
   }
 
-  public cityCheck(city: string): string | null {
-    const regex = /^[a-zA-Z]*[a-zA-Z][a-zA-Z]*$/;
-    if (!regex.test(city)) {
-      return 'The city must contain at least one character and no special characters or numbers.';
+  public streetCheck(street: string): string | null {
+    if (street.length < 1) {
+      return 'The address must be at least 1 character long.';
     }
     // Все ок? - null
     return null;
