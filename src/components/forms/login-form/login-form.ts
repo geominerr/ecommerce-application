@@ -2,10 +2,11 @@ import BaseComponent from '../../base/base-component/base-component';
 import InputMail from '../input-mail/input-mail';
 import InputPassword from '../input-password/input-password';
 import Button from '../button/button';
-import { TagNames, Styles, Content, TypeButton } from './enum';
+import { TagNames, Styles, Content, Events, FormFields, Attributes, TypeButton } from './enum';
 import './login-form.scss';
 
-const validator = (data: string): string | false => {
+// удалить после того как будет util: Validator
+const validator = (data: string): string | null => {
   const randomNumber: number = Math.floor(Math.random() * 10);
   console.log(data);
 
@@ -13,11 +14,11 @@ const validator = (data: string): string | false => {
     return 'Not correct email address';
   }
 
-  return false;
+  return null;
 };
 
 class LoginForm extends BaseComponent {
-  private container: HTMLDivElement;
+  private form: HTMLFormElement;
 
   private title: HTMLHeadElement;
 
@@ -29,7 +30,7 @@ class LoginForm extends BaseComponent {
 
   constructor() {
     super();
-    this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
+    this.form = this.createElement(TagNames.FORM, Styles.FORM);
     this.title = this.createElement(TagNames.H3, Styles.TITLE);
     this.inputMail = new InputMail(validator).createComponent();
     this.inputPassword = new InputPassword(validator).createComponent();
@@ -37,22 +38,56 @@ class LoginForm extends BaseComponent {
   }
 
   public createComponent(): this {
-    const { container, title, inputMail, inputPassword, buttonLogin } = this;
-    const inputMailElement: HTMLElement = inputMail.getElement();
-    const inputPasswordElemenet: HTMLElement = inputPassword.getElement();
+    const { form, title, inputMail, inputPassword, buttonLogin } = this;
+    const inputMailContainer: HTMLElement = inputMail.getElement();
+    const inputPasswordContainer: HTMLElement = inputPassword.getElement();
     const buttonElement: HTMLElement = buttonLogin.getElement();
 
+    form.setAttribute(Attributes.ID, Attributes.ID_VALUE_FORM);
     title.innerText = Content.TITLE;
 
-    [title, inputMailElement, inputPasswordElemenet, buttonElement].forEach(
-      (el: HTMLElement): void => container.append(el)
+    [title, inputMailContainer, inputPasswordContainer, buttonElement].forEach(
+      (el: HTMLElement): void => form.append(el)
     );
+
+    this.addSubmitHandler(buttonElement);
 
     return this;
   }
 
   public getElement(): HTMLElement {
-    return this.container;
+    return this.form;
+  }
+
+  /**По хорошему необходимо внешний обработчик который будет управлять
+   * отправкой данных формы на сервер или показывать сообщение ошибки невалидных данных,
+   * перенеправлять на main page
+   * или показывать сообщения ошибки при отклонении от сервера.
+   */
+  private addSubmitHandler(buttonSubmit: HTMLElement): void {
+    buttonSubmit.addEventListener(Events.CLICK, (e: Event) => {
+      e.preventDefault();
+
+      const isValidData: boolean = this.isValidData();
+      const formData: FormData = new FormData(this.form);
+
+      const email: FormDataEntryValue | null = formData.get(FormFields.EMAIL);
+      const password: FormDataEntryValue | null = formData.get(FormFields.PASSWORD);
+
+      if (email && password && isValidData) {
+        console.log({ email, password }); // <= удалить после рефакторинга
+      } else {
+        console.log('Entry data or not-valid data'); // <= удалить после рефакторинга
+      }
+    });
+  }
+
+  private isValidData(): boolean {
+    if (!this.inputMail.isValid() || !this.inputPassword.isValid()) {
+      return false;
+    }
+
+    return true;
   }
 }
 
