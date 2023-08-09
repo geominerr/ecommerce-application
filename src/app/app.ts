@@ -1,7 +1,7 @@
 import { API } from '../api/api';
 import { APIUserActions } from '../api/api-user-actions';
 
-const Api = new API('categories', 20, 0);
+const Api = new API(30, 0);
 const USER_ACTIONS = new APIUserActions();
 
 class App {
@@ -9,11 +9,11 @@ class App {
   public start(): void {
     async function getData(): Promise<void> {
       try {
-        const TEST_DATA = await Api.getProjectData();
-        console.log(
-          `Limit: ${TEST_DATA.limit}. Count from: ${TEST_DATA.offset}. Count: ${TEST_DATA.count}. Total: ${TEST_DATA.total}`
-        );
-        console.log('Data from Api.getProjectData()', TEST_DATA);
+        const DATA_FULL = await Api.getProjectData('product-projections');
+        const DATA_BY_ID = await Api.searchByCategoryId('58b8811c-48c4-4b65-92ef-55607b7d0deb');
+
+        console.log('Data from Api in App FULL', DATA_FULL);
+        console.log('Data from Api in App BY_ID', DATA_BY_ID);
         // TEST_DATA.results.forEach(element => {
         //   console.log(element);
         // });
@@ -23,7 +23,6 @@ class App {
     }
     getData();
 
-    // SOME_PATH = '' / products / customers / categories / stores / orders / zones
     // email: string, firstName: string, lastName: string, dateOfBirth: string YYYY-MM-DD, shippingAddresses: number[], billingAddresses: number[], password: string
     function register(): void {
       USER_ACTIONS.registerUser(

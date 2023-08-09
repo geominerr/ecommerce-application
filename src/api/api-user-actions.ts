@@ -1,5 +1,5 @@
 import { Customer } from './api-interfaces';
-import { APIAcceesToken } from './api-acces-token';
+import { APIAcceesToken } from './api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY } from './api-env-constants';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
