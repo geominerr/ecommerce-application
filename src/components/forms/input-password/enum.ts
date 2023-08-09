@@ -1,5 +1,6 @@
 enum TagNames {
   DIV = 'div',
+  LABEL = 'label',
   INPUT = 'input',
 }
 
@@ -8,6 +9,7 @@ enum Styles {
   INPUT = 'input',
   INPUT_ERROR = 'input--error',
   INPUT_PASS = 'input--pass',
+  LABEL = 'label',
   CHECKBOX = 'checkbox',
 }
 
@@ -16,8 +18,17 @@ enum Attributes {
   TYPE_VALUE_TEXT = 'text',
   TYPE_VALUE_PASS = 'password',
   TYPE_VALUE_CHECKBOX = 'checkbox',
+  ID = 'id',
+  ID_VALUE_INPUT = 'password',
+  FOR = 'for',
+  NAME = 'name',
+  NAME_VALUE = 'password',
   PLACEHOLDER = 'placeholder',
-  PLACEHOLDER_VALUE_PASS = 'password',
+  PLACEHOLDER_VALUE_PASS = 'Enter password',
+}
+
+enum Contents {
+  LABEL = 'Password',
 }
 
 enum Events {
@@ -25,4 +36,4 @@ enum Events {
   CHANGE = 'change',
 }
 
-export { TagNames, Styles, Events, Attributes };
+export { TagNames, Styles, Events, Contents, Attributes };
