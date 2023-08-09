@@ -63,7 +63,6 @@ export class APIUserActions {
           postalCode: postalCode_billing,
           country: country_billing,
         },
-        // Добавьте другие адреса по аналогии
       ],
       email,
       firstName,
@@ -84,7 +83,8 @@ export class APIUserActions {
       if (response.status === 201) {
         console.log('User registration successful.');
       } else {
-        throw new Error(`User registration failed: ${await response.text()}`);
+        const errorMessage = await response.text();
+        throw new Error(JSON.parse(errorMessage).message);
       }
     } catch (error) {
       console.error('Error registering user:', error);

@@ -48,7 +48,7 @@ class App {
           // Действия после успешной регистрации
         })
         .catch((error) => {
-          console.log(error);
+          console.log('Register error in APP: ', error.message);
         });
     }
     register();
@@ -59,7 +59,7 @@ class App {
         console.log(`Hi ${data.firstName} ${data.lastName}`);
       })
       .catch((error) => {
-        console.log(error);
+        console.log('Login error in APP: ', error.message);
       });
   }
 }
