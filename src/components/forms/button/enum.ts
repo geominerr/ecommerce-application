@@ -8,7 +8,7 @@ enum Styles {
 
 enum Attributes {
   TYPE = 'type',
-  TYPE_VALUE_SUBMIT = 'type',
+  TYPE_VALUE_SUBMIT = 'submit',
 }
 
 enum Content {

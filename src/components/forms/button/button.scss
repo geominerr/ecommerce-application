@@ -1,22 +1,25 @@
 .button {
+  margin-top: 2rem;
   width: 100%;
   padding: 0.7rem;
   font-size: 2rem;
   color: rgb(202, 202, 202);
   background-color: rgb(14, 14, 14);
-  border: none;
+  border: 0.1rem solid rgb(14, 14, 14);
   cursor: pointer;
 }
 
 .button:hover {
-  background-color: rgb(76, 76, 76);
-  outline: none;
+  background-color: black;
 }
 
 .button:focus {
-  outline: none;
+  border: 0.1rem solid rgb(239, 239, 239);
+  outline: 0.1rem solid rgb(14, 14, 14);
+
 }
 
 .button:active {
   background-color: rgb(14, 14, 14);
+  outline: none;
 }
