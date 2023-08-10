@@ -1,8 +1,9 @@
 import BaseComponent from '../../base/base-component/base-component';
-import InputMail from '../input-mail/input-mail';
+import InputBase from '../input-base/input-base';
 import InputPassword from '../input-password/input-password';
 import Button from '../button/button';
 import { TagNames, Styles, Content, Events, FormFields, Attributes, TypeButton } from './enum';
+import { emailOptions, passwordOptions } from './input-options';
 import './login-form.scss';
 
 // удалить после того как будет util: Validator
@@ -22,7 +23,7 @@ class LoginForm extends BaseComponent {
 
   private title: HTMLHeadElement;
 
-  private inputMail: InputMail;
+  private inputMail: InputBase;
 
   private inputPassword: InputPassword;
 
@@ -32,8 +33,8 @@ class LoginForm extends BaseComponent {
     super();
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
     this.title = this.createElement(TagNames.H3, Styles.TITLE);
-    this.inputMail = new InputMail(validator).createComponent();
-    this.inputPassword = new InputPassword(validator).createComponent();
+    this.inputMail = new InputBase(validator, emailOptions);
+    this.inputPassword = new InputPassword(validator, passwordOptions);
     this.buttonLogin = new Button(TypeButton.LOGIN);
   }
 
