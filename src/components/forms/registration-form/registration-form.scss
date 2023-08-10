@@ -1,0 +1,15 @@
+.registration-form {
+  padding: 1.5rem;
+  width: 35rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.registration__title {
+  font-size: 3rem;
+  color: rgb(75, 75, 75);
+}
+
