@@ -1,10 +1,14 @@
+$fontFamily: 'Montserrat', sans-serif;
+
 .input-container {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 35rem;
+  width: 100%;
   min-height: 9.5rem;
   gap: 0.8rem;
+
+  font-family: $fontFamily;
 }
 
 .label {

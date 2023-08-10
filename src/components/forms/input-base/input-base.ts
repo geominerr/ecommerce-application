@@ -1,12 +1,10 @@
 import BaseComponent from '../../base/base-component/base-component';
 import ErrorHint from '../error-hint/error-hint';
-import { TagNames, Styles, Attributes, Contents, Events } from './enum';
-import './input-mail.scss';
+import { TagNames, Styles, Attributes, Events } from './enum';
+import { CallbackStub, InputOptions } from './input-base-interfaces';
+import './input-base.scss';
 
-// удалить после того как будет util: Validator
-type CallbackStub = (inuptValue: string) => string | null;
-
-class InputMail extends BaseComponent {
+class InputBase extends BaseComponent {
   private container: HTMLElement;
 
   private label: HTMLLabelElement;
@@ -17,7 +15,7 @@ class InputMail extends BaseComponent {
 
   private validator: CallbackStub;
 
-  constructor(validator: CallbackStub) {
+  constructor(validator: CallbackStub, options: InputOptions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.INPUT_CONTAINER);
     this.label = this.createElement(TagNames.LABEL, Styles.LABEL);
@@ -25,22 +23,23 @@ class InputMail extends BaseComponent {
     this.errorHint = new ErrorHint();
 
     this.validator = validator;
+
+    this.createComponent(options);
   }
 
-  public createComponent(): this {
+  private createComponent(options: InputOptions): void {
     const { container, label, input, errorHint } = this;
     const errorHintElement: HTMLElement = errorHint.getElement();
 
-    input.setAttribute(Attributes.ID, Attributes.ID_VALUE_INPUT);
-    input.setAttribute(Attributes.PLACEHOLDER, Attributes.PLACEHOLDER_VALUE);
-    input.setAttribute(Attributes.NAME, Attributes.NAME_VALUE);
-    label.setAttribute(Attributes.FOR, Attributes.ID_VALUE_INPUT);
-    label.innerText = Contents.LABEL;
+    input.setAttribute(Attributes.ID, options.ID);
+    input.setAttribute(Attributes.TYPE, options.TYPE);
+    input.setAttribute(Attributes.NAME, options.NAME);
+    label.setAttribute(Attributes.FOR, options.ID);
+    input.setAttribute(Attributes.PLACEHOLDER, options.PLACEHOLDER);
+    label.innerText = options.CONTENT_LABEL;
 
     [label, input, errorHintElement].forEach((el: HTMLElement): void => container.append(el));
     this.addInputHadler(input);
-
-    return this;
   }
 
   public getElement(): HTMLElement {
@@ -67,4 +66,4 @@ class InputMail extends BaseComponent {
   }
 }
 
-export default InputMail;
+export default InputBase;

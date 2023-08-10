@@ -14,6 +14,7 @@ enum Styles {
 enum Attributes {
   ID = 'id',
   ID_VALUE_INPUT = 'email',
+  TYPE = 'type',
   FOR = 'for',
   NAME = 'name',
   NAME_VALUE = 'email',
