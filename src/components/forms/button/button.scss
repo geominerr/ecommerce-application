@@ -1,8 +1,12 @@
+$fontFamily: 'Montserrat', sans-serif;
+
 .button {
   margin-top: 2rem;
   width: 100%;
   padding: 0.7rem;
+
   font-size: 2rem;
+  font-family: $fontFamily;
   color: rgb(202, 202, 202);
   background-color: rgb(14, 14, 14);
   border: 0.1rem solid rgb(14, 14, 14);
