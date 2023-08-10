@@ -1,14 +1,14 @@
 import TemplateView from './TemplateView';
-import './AboutUs.scss';
+import './Turntables.scss';
 
-export default class AboutUs extends TemplateView {
+export default class Turntables extends TemplateView {
   constructor() {
     super();
-    this.setTitle('About Us');
+    this.setTitle('Turntables');
   }
 
   public async getHtml(): Promise<string> {
-    return `<div class="about-us">This is About Us page</div>`;
+    return `<div class="turntables">This is Turntables page</div>`;
   }
 
   public setTitle(title: string): void {

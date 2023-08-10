@@ -1,13 +1,14 @@
 import TemplateView from './TemplateView';
+import './Registration.scss';
 
-export default class Auth extends TemplateView {
+export default class Registration extends TemplateView {
   constructor() {
     super();
-    this.setTitle('Auth');
+    this.setTitle('Registration');
   }
 
   public async getHtml(): Promise<string> {
-    return `<h1>This is auth page</h1>`;
+    return `<div class="registration">This is Registration page</div>`;
   }
 
   public setTitle(title: string): void {

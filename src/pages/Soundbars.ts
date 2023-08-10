@@ -1,13 +1,14 @@
 import TemplateView from './TemplateView';
+import './Soundbars.scss';
 
-export default class Registr extends TemplateView {
+export default class Soundbars extends TemplateView {
   constructor() {
     super();
-    this.setTitle('Registr');
+    this.setTitle('Soundbars');
   }
 
   public async getHtml(): Promise<string> {
-    return `<h1>This is registr page</h1>`;
+    return `<div class="soundbars">This is Soundbar page</div>`;
   }
 
   public setTitle(title: string): void {
