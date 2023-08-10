@@ -123,12 +123,22 @@ export class APIUserActions {
       if (response.status === 200) {
         const data = await response.json();
         console.log('User log in successful.');
+        localStorage.setItem('userID', data.customer.id);
         return data.customer;
       } else {
         throw new Error(`${await response.json().then((data) => data.message)}`);
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  public logoutUser(): void {
+    const userID = localStorage.getItem('userID');
+
+    if (userID) {
+      localStorage.removeItem('userID');
+      console.log('User log out successful.');
     }
   }
 }
