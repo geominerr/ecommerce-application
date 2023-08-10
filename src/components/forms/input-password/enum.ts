@@ -27,13 +27,9 @@ enum Attributes {
   PLACEHOLDER_VALUE_PASS = 'Enter password',
 }
 
-enum Contents {
-  LABEL = 'Password',
-}
-
 enum Events {
   INPUT = 'input',
   CHANGE = 'change',
 }
 
-export { TagNames, Styles, Events, Contents, Attributes };
+export { TagNames, Styles, Events, Attributes };

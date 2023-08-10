@@ -1,3 +1,5 @@
-type CallbackStub = (inuptValue: string) => string | false;
+import { InputOptions } from '../input-base/input-base-interfaces';
 
-export { CallbackStub };
+type CallbackStub = (inuptValue: string) => string | null;
+
+export { CallbackStub, InputOptions };

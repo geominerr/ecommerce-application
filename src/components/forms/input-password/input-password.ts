@@ -1,11 +1,9 @@
 import BaseComponent from '../../base/base-component/base-component';
 import ErrorHint from '../error-hint/error-hint';
 import CheckboxCustom from '../checkbox-custom/checkbox-custom';
-import { TagNames, Styles, Attributes, Contents, Events } from './enum';
+import { CallbackStub, InputOptions } from './input-password-interfaces';
+import { TagNames, Styles, Attributes, Events } from './enum';
 import './input-password.scss';
-
-// удалить после того как будет util: Validator
-type CallbackStub = (inuptValue: string) => string | null;
 
 class InputPassword extends BaseComponent {
   private container: HTMLElement;
@@ -20,7 +18,7 @@ class InputPassword extends BaseComponent {
 
   private validator: CallbackStub;
 
-  constructor(validator: CallbackStub) {
+  constructor(validator: CallbackStub, options: InputOptions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.INPUT_CONTAINER);
     this.label = this.createElement(TagNames.LABEL, Styles.LABEL);
@@ -29,22 +27,24 @@ class InputPassword extends BaseComponent {
     this.errorHint = new ErrorHint();
 
     this.validator = validator;
+
+    this.createComponent(options);
   }
 
-  public createComponent(): this {
+  private createComponent(options: InputOptions): void {
     const { container, label, input, customCheckbox, errorHint } = this;
     const errorHintElement: HTMLElement = errorHint.getElement();
     const customCheckboxContainer: HTMLElement = customCheckbox.getElement();
     const checkboxElement: HTMLInputElement = customCheckbox.getCheckboxElement();
 
-    input.setAttribute(Attributes.ID, Attributes.ID_VALUE_INPUT);
-    input.setAttribute(Attributes.TYPE, Attributes.TYPE_VALUE_PASS);
-    input.setAttribute(Attributes.NAME, Attributes.NAME_VALUE);
-    input.setAttribute(Attributes.PLACEHOLDER, Attributes.PLACEHOLDER_VALUE_PASS);
+    input.setAttribute(Attributes.ID, options.ID);
+    input.setAttribute(Attributes.TYPE, options.TYPE);
+    input.setAttribute(Attributes.NAME, options.NAME);
+    input.setAttribute(Attributes.PLACEHOLDER, options.PLACEHOLDER);
     input.classList.add(Styles.INPUT_PASS);
 
-    label.setAttribute(Attributes.FOR, Attributes.ID_VALUE_INPUT);
-    label.innerText = Contents.LABEL;
+    label.setAttribute(Attributes.FOR, options.ID);
+    label.innerText = options.CONTENT_LABEL;
 
     [label, input, customCheckboxContainer, errorHintElement].forEach((el: HTMLElement): void =>
       container.append(el)
@@ -52,8 +52,6 @@ class InputPassword extends BaseComponent {
 
     this.addInputHadler(input);
     this.addChangeHadler(input, checkboxElement);
-
-    return this;
   }
 
   public getElement(): HTMLElement {
