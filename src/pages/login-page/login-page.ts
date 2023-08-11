@@ -1,14 +1,18 @@
+import { APIUserActions } from '../../api/api-user-actions';
+import BaseComponent from '../../components/base/base-component/base-component';
 import LoginForm from '../../components/forms/login-form/login-form';
+import { TagNames, Styles } from './enum';
 import './login-page.scss';
 
-class LoginPage {
+class LoginPage extends BaseComponent {
   private container: HTMLDivElement;
 
   private loginForm: LoginForm;
 
-  constructor() {
-    this.container = this.createElement('div', 'container');
-    this.loginForm = new LoginForm().createComponent();
+  constructor(api: APIUserActions) {
+    super();
+    this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
+    this.loginForm = new LoginForm(api);
   }
 
   public render(): void {
@@ -17,13 +21,6 @@ class LoginPage {
 
     container.append(loginFormElement);
     document.body.append(container);
-  }
-
-  private createElement<T extends HTMLElement>(tagName: string, style: string): T {
-    const element: T = document.createElement(tagName) as T;
-    element.classList.add(style);
-
-    return element;
   }
 }
 
