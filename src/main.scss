@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat:wght@500;700&display=swap');
+@import url('./normalize.css');
+
+html{
+	scroll-behavior: smooth;
+}
+
+.nav-container{
+	position: fixed;
+	top: 0;
+	background-color: #fff;
+	width: 100%;
+}
+
+.navigation{
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 500;
+	color: #000;
+	line-height: 86.023%;
+	padding: 34px 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	max-width: 1440px;
+}
+
+.link{
+	color: #000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
+}
+
+.footer{
+	padding: 0 50px;
+}
+
+.container{
+	max-width: 1440px;
+	margin-left: auto;
+	margin-right: auto;
+	color: #000;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.header{
+	max-width: 1440px;
+}
