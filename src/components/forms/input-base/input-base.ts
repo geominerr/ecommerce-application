@@ -15,6 +15,10 @@ class InputBase extends BaseComponent {
 
   private validator: CallbackStub;
 
+  private hintRequiredField: string = 'This is a required field';
+
+  private hintUserNotFound: string = 'Invalid email or password. Please try again!';
+
   constructor(validator: CallbackStub, options: InputOptions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.INPUT_CONTAINER);
@@ -48,6 +52,23 @@ class InputBase extends BaseComponent {
 
   public isValid(): boolean {
     return !this.input.classList.contains(Styles.INPUT_ERROR);
+  }
+
+  public getValue(): string {
+    return this.input.value;
+  }
+
+  public showHintRequiredFieldIsEmpty(): void {
+    if (!this.input.value) {
+      this.input.classList.add(Styles.INPUT_ERROR);
+      this.errorHint.showErrorText(this.hintRequiredField);
+    }
+  }
+
+  public showHintNotFoundUser(): void {
+    this.input.value = '';
+    this.input.classList.add(Styles.INPUT_ERROR);
+    this.errorHint.showErrorText(this.hintUserNotFound);
   }
 
   private addInputHadler(input: HTMLInputElement): void {
