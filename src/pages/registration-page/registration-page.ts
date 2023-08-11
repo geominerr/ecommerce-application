@@ -1,5 +1,6 @@
 import BaseComponent from '../../components/base/base-component/base-component';
 import RegistrationForm from '../../components/forms/registration-form/registration-form';
+import { TagNames, Styles } from './enum';
 import './registration-page.scss';
 
 class RegistrationPage extends BaseComponent {
@@ -9,7 +10,7 @@ class RegistrationPage extends BaseComponent {
 
   constructor() {
     super();
-    this.container = this.createElement('div', 'container');
+    this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
     this.registrationForm = new RegistrationForm();
   }
 
