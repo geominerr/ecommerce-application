@@ -12,3 +12,18 @@
 .visible {
   opacity: 1;
 }
+
+.visible--strong-pass {
+  opacity: 1;
+  color: #2ab64b;
+}
+
+.visible--medium-pass {
+  opacity: 1;
+  color: #d89839;
+}
+
+.visible--weak-pass {
+  opacity: 1;
+  color: #fd7c04;
+}
