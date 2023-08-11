@@ -1,9 +1,16 @@
 import BaseComponent from '../../base/base-component/base-component';
 import ErrorHint from '../error-hint/error-hint';
 import CheckboxCustom from '../checkbox-custom/checkbox-custom';
-import { CallbackStub, InputOptions } from './input-password-interfaces';
+import { EmailPasswordCheck } from '../../../utils/email_password_check';
+import { InputOptions } from './input-password-interfaces';
 import { TagNames, Styles, Attributes, Events } from './enum';
+import { ValidationFunction } from '../../../types/general/general';
 import './input-password.scss';
+
+const validator: EmailPasswordCheck = new EmailPasswordCheck();
+const validationPass: ValidationFunction = validator.passwordCheck;
+const validationPassStrength: ValidationFunction = validator.strengthOfPasswordCheck;
+const validatorFunctions: ValidationFunction[] = [validationPass, validationPassStrength];
 
 class InputPassword extends BaseComponent {
   private container: HTMLElement;
@@ -16,17 +23,19 @@ class InputPassword extends BaseComponent {
 
   private errorHint: ErrorHint;
 
-  private validator: CallbackStub;
+  private validators: ValidationFunction[] = validatorFunctions;
 
-  constructor(validator: CallbackStub, options: InputOptions) {
+  private hintRequiredField: string = 'This is a required field';
+
+  private hintUserNotFound: string = 'Invalid email or password. Please try again!';
+
+  constructor(options: InputOptions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.INPUT_CONTAINER);
     this.label = this.createElement(TagNames.LABEL, Styles.LABEL);
     this.input = this.createElement<HTMLInputElement>(TagNames.INPUT, Styles.INPUT);
     this.customCheckbox = new CheckboxCustom().createComponent();
     this.errorHint = new ErrorHint();
-
-    this.validator = validator;
 
     this.createComponent(options);
   }
@@ -62,10 +71,33 @@ class InputPassword extends BaseComponent {
     return !this.input.classList.contains(Styles.INPUT_ERROR);
   }
 
+  public getValue(): string {
+    return this.input.value;
+  }
+
+  public showHintRequiredFieldIsEmpty(): void {
+    if (!this.input.value) {
+      this.input.classList.add(Styles.INPUT_ERROR);
+      this.errorHint.showErrorText(this.hintRequiredField);
+    }
+  }
+
+  public showHintNotFoundUser(): void {
+    this.input.value = '';
+    this.input.classList.add(Styles.INPUT_ERROR);
+    this.errorHint.showErrorText(this.hintUserNotFound);
+  }
+
   private addInputHadler(input: HTMLInputElement): void {
     input.addEventListener(Events.INPUT, (): void => {
       const inputValue: string = input.value;
-      const errorText: string | null = this.validator(inputValue);
+      const errorText: string | null = this.validators[0](inputValue);
+
+      if (inputValue.length >= 8 && !errorText) {
+        const passHint: string = this.validators[1](inputValue) as string;
+
+        this.errorHint.showPassHint(passHint);
+      }
 
       if (errorText) {
         input.classList.add(Styles.INPUT_ERROR);

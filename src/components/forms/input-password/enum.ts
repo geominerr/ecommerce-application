@@ -32,4 +32,10 @@ enum Events {
   CHANGE = 'change',
 }
 
-export { TagNames, Styles, Events, Attributes };
+enum StrengthPassword {
+  WEAK = 'Weak password.',
+  MEDIUM = 'Medium password strength.',
+  STRONG = 'Strong password.',
+}
+
+export { TagNames, Styles, Events, Attributes, StrengthPassword };
