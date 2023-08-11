@@ -1,6 +1,16 @@
 import { AddressCheck } from '../src/utils/address_check';
 const CHECK = new AddressCheck();
 
+// Age
+test.each([
+  ['1990-01-01', null], // Right case
+  ['2016-06-06', 'Get out of here, little sucker.'], // Wrong cases
+  ['1915-03-16', 'You should be dead.'],
+])('ageCheck should return the correct result', async (age, expectedResult) => {
+  const result = await CHECK.ageCheck(age);
+  expect(result).toEqual(expectedResult);
+});
+
 // Postal code
 test('postalCodeCheck should return null for correct postal code', async () => {
   const code = '12345';

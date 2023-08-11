@@ -7,6 +7,7 @@ test.each([
   ['testmail.sd', 'The email address must contain the "@" symbol.'], // Wrong cases
   ['test@', 'The email address must contain a local part and a domain name.'],
   [' test@mail.sd ', 'The email address must not contain any initial or final spaces.'],
+  ['test@mai l.sd', 'The email address must not contain spaces in the local part or domain.'],
   ['test@abc.a', 'The email address must be formatted like example@email.com'],
 ])('emailCheck should return the correct result', async (email, expectedResult) => {
   const result = await CHECK.emailCheck(email);
