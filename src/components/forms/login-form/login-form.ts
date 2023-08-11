@@ -2,12 +2,12 @@ import BaseComponent from '../../base/base-component/base-component';
 import InputBase from '../input-base/input-base';
 import InputPassword from '../input-password/input-password';
 import Button from '../button/button';
-import { TagNames, Styles, Content, Events, Attributes, TypeButton } from './enum';
-import { emailOptions, passwordOptions } from './input-options';
+import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
 import { ValidationFunction } from '../../../types/general/general';
+import { emailOptions, passwordOptions } from './input-options';
+import { TagNames, Styles, Content, Events, Attributes, TypeButton } from './enum';
 import './login-form.scss';
-import { APIUserActions } from '../../../api/api-user-actions';
 
 const validatorEmail: ValidationFunction = new EmailPasswordCheck().emailCheck;
 
@@ -41,9 +41,15 @@ class LoginForm extends BaseComponent {
     this.titleHint = this.createElement(TagNames.H5, Styles.TITLE_HINT);
     this.buttonSignup = new Button(TypeButton.SIGN_UP);
     this.api = apiUser;
+
+    this.createComponent();
   }
 
-  public createComponent(): this {
+  public getElement(): HTMLElement {
+    return this.form;
+  }
+
+  private createComponent(): void {
     const {
       form,
       title,
@@ -71,12 +77,6 @@ class LoginForm extends BaseComponent {
 
     this.addSubmitHandler(buttonElement);
     this.addClickHandler(buttonSignupElement);
-
-    return this;
-  }
-
-  public getElement(): HTMLElement {
-    return this.form;
   }
 
   private addClickHandler(buttonSignup: HTMLElement): void {
