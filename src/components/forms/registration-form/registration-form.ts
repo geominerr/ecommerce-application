@@ -30,6 +30,8 @@ class RegistrationForm extends BaseComponent {
 
   private api: APIUserActions;
 
+  private hintRequiredField: string = 'This is a required field';
+
   constructor(
     api: APIUserActions,
     validatorEmail: EmailPasswordCheck,
@@ -85,7 +87,39 @@ class RegistrationForm extends BaseComponent {
     button.addEventListener(Events.CLICK, (e: Event): void => {
       e.preventDefault();
 
-      this.fieldSetPersonal.getElement().classList.add('close');
+      const isValidPersonal: boolean = this.fieldSetPersonal.isValidData();
+      const isValidBilling: boolean = this.fieldSetBilling.isValidData();
+      const isValidShipping: boolean = this.fieldSetShipping.isValidData();
+      const isValidDataForm: boolean = isValidPersonal && isValidBilling && isValidShipping;
+
+      if (isValidDataForm) {
+        const personalData: string[] = this.fieldSetPersonal.getData();
+        let billingData: string[] | null = this.fieldSetBilling.getData();
+        let shippingData: string[] | null = this.fieldSetShipping.getData();
+        let dataUser: string[] = [];
+
+        if (billingData && !shippingData) {
+          shippingData = billingData;
+        } else if (!billingData && shippingData) {
+          billingData = shippingData;
+        }
+
+        if (billingData && shippingData) {
+          dataUser = [...shippingData, ...billingData, ...personalData];
+        }
+        console.log(dataUser);
+
+        // eslint-disable-next-line
+        this.api // @ts-ignore
+          .registerUser(...dataUser) // <= c этим надо что то делать :-)
+          .then(() => {
+            console.log('Redirect to main');
+          })
+          .catch((err) => {
+            this.fieldSetPersonal.showHintUserExist();
+            console.log('such user already exists', err);
+          });
+      }
     });
   }
 
