@@ -12,6 +12,10 @@ enum Styles {
   OPTION = 'option',
 }
 
+enum Events {
+  CHANGE = 'change',
+}
+
 enum Address {
   BILLING = 'billing',
   SHIPPING = 'shipping',
@@ -24,4 +28,4 @@ enum Attributes {
   VALUE = 'value',
 }
 
-export { TagNames, Styles, Address, Attributes };
+export { TagNames, Styles, Address, Attributes, Events };
