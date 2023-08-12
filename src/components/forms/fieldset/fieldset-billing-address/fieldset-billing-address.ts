@@ -5,7 +5,7 @@ import InputPostal from '../../input-postal/input-postal';
 import { AddressCheck } from '../../../../utils/address_check';
 import { TagNames, Styles, Contents } from './enum';
 import { OPTIONS } from './input-options';
-import './fieldset.scss';
+import './fieldset-billing.scss';
 
 class FieldsetBill extends BaseComponent {
   private fieldsetElement: HTMLFieldSetElement;
@@ -21,6 +21,8 @@ class FieldsetBill extends BaseComponent {
   private inputStreet: InputBase;
 
   private inputStreetNumber: InputBase;
+
+  private displaySwith: boolean = true;
 
   constructor(validatorAdrress: AddressCheck) {
     super();
@@ -40,6 +42,16 @@ class FieldsetBill extends BaseComponent {
 
   public getElement(): HTMLElement {
     return this.fieldsetElement;
+  }
+
+  public hideFromScreen(): void {
+    this.displaySwith = !this.displaySwith;
+    this.fieldsetElement.classList.add(Styles.FIELDSET_HIDE);
+  }
+
+  public showOnScreen(): void {
+    this.displaySwith = !this.displaySwith;
+    this.fieldsetElement.classList.remove(Styles.FIELDSET_HIDE);
   }
 
   private createComponent(): void {
