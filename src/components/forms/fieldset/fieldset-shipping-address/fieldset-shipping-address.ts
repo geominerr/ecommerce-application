@@ -1,10 +1,11 @@
 import BaseComponent from '../../../base/base-component/base-component';
 import SelectComponent from '../../select/select';
 import InputBase from '../../input-base/input-base';
+import InputPostal from '../../input-postal/input-postal';
 import { AddressCheck } from '../../../../utils/address_check';
 import { TagNames, Styles, Contents } from './enum';
 import { OPTIONS } from './input-options';
-import './fieldset.scss';
+import './fieldset-shipping.scss';
 
 class FieldsetShip extends BaseComponent {
   private fieldsetElement: HTMLFieldSetElement;
@@ -13,13 +14,15 @@ class FieldsetShip extends BaseComponent {
 
   private select: SelectComponent;
 
+  private inputPostal: InputPostal;
+
   private inputCity: InputBase;
 
   private inputStreet: InputBase;
 
   private inputStreetNumber: InputBase;
 
-  private inputPostal: InputBase;
+  private displaySwith: boolean = true;
 
   constructor(validator: AddressCheck) {
     super();
@@ -27,10 +30,12 @@ class FieldsetShip extends BaseComponent {
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
     this.select = new SelectComponent('shipping');
+    this.inputPostal = new InputPostal(validator.postalCodeCheck, OPTIONS[3]);
     this.inputCity = new InputBase(validator.mainCheck, OPTIONS[0]);
     this.inputStreet = new InputBase(validator.streetCheck, OPTIONS[1]);
     this.inputStreetNumber = new InputBase(validator.streetCheck, OPTIONS[2]);
-    this.inputPostal = new InputBase(validator.mainCheck, OPTIONS[3]);
+    this.select.setInputPostal(this.inputPostal);
+    this.inputPostal.setSelectComponent(this.select);
 
     this.createComponent();
   }
@@ -39,22 +44,32 @@ class FieldsetShip extends BaseComponent {
     return this.fieldsetElement;
   }
 
+  public hideFromScreen(): void {
+    this.displaySwith = !this.displaySwith;
+    this.fieldsetElement.classList.add(Styles.FIELDSET_HIDE);
+  }
+
+  public showOnScreen(): void {
+    this.displaySwith = !this.displaySwith;
+    this.fieldsetElement.classList.remove(Styles.FIELDSET_HIDE);
+  }
+
   private createComponent(): void {
     const {
       fieldsetElement,
       legendElement,
       select,
+      inputPostal,
       inputCity,
       inputStreet,
       inputStreetNumber,
-      inputPostal,
     } = this;
 
     legendElement.innerText = Contents.LEGEND;
     fieldsetElement.append(legendElement);
 
-    [select, inputCity, inputStreet, inputStreetNumber, inputPostal].forEach(
-      (component: InputBase | SelectComponent): void =>
+    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(
+      (component: InputBase | InputPostal | SelectComponent): void =>
         fieldsetElement.append(component.getElement())
     );
   }
