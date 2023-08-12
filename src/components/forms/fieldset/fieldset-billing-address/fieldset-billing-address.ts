@@ -75,14 +75,14 @@ class FieldsetBill extends BaseComponent {
       return true;
     }
 
-    const { inputCity, inputPostal, inputStreet, inputStreetNumber } = this;
+    const { inputCity, inputPostal, inputStreet, inputStreetNumber, select } = this;
 
-    const isValid: boolean = [inputCity, inputPostal, inputStreet, inputStreetNumber].every(
+    const isValid: boolean = [inputCity, inputPostal, inputStreet, inputStreetNumber, select].every(
       (input): boolean => input.isValid()
     );
 
     if (!isValid && this.isDisplayOn) {
-      [inputCity, inputPostal, inputStreet, inputStreetNumber].forEach((input): void =>
+      [inputCity, inputPostal, inputStreet, inputStreetNumber, select].forEach((input): void =>
         input.showHintRequiredFieldIsEmpty()
       );
     }
