@@ -3,7 +3,7 @@ import InputBase from '../../input-base/input-base';
 import InputPassword from '../../input-password/input-password';
 import { AddressCheck } from '../../../../utils/address_check';
 import { EmailPasswordCheck } from '../../../../utils/email_password_check';
-import { TagNames, Styles, Contents } from './enum';
+import { TagNames, Styles, Contents, Events } from './enum';
 import { OPTIONS } from './input-options';
 import './fieldset.scss';
 
@@ -81,6 +81,28 @@ class FieldsetPersonal extends BaseComponent {
     ].forEach((input: InputBase | InputPassword): void => {
       allInputs.push(input);
       fieldsetElement.append(input.getElement());
+    });
+
+    this.addCheckIndentityPasswords();
+  }
+
+  private addCheckIndentityPasswords(): void {
+    const inputPass: HTMLInputElement = this.inputPassword.getInputElement();
+    const inputConfirm: HTMLInputElement = this.inputPasswordRepeat.getInputElement();
+
+    inputConfirm.addEventListener(Events.INPUT, (): void => {
+      const valueInputPass: string = inputPass.value;
+      const valueInputConfirm: string = inputConfirm.value;
+      const isSameLength: boolean = valueInputPass.length === valueInputConfirm.length;
+      const isIndenticalValue: boolean = valueInputPass === valueInputConfirm;
+
+      if (
+        this.inputPassword.isValid() &&
+        this.inputPasswordRepeat.isValid() &&
+        !(isSameLength || isIndenticalValue)
+      ) {
+        this.inputPasswordRepeat.showHintNotConfirmPass();
+      }
     });
   }
 }

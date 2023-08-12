@@ -12,4 +12,8 @@ enum Contents {
   LEGEND = 'Personal information',
 }
 
-export { TagNames, Styles, Contents };
+enum Events {
+  INPUT = 'input',
+}
+
+export { TagNames, Styles, Contents, Events };

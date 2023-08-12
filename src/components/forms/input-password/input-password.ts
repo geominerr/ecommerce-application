@@ -26,6 +26,8 @@ class InputPassword extends BaseComponent {
 
   private hintUserNotFound: string = 'Invalid email or password. Please try again!';
 
+  private hintNotCorfimPassword: string = 'Your passwords are different';
+
   constructor(validator: EmailPasswordCheck, options: InputOptions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.INPUT_CONTAINER);
@@ -74,6 +76,10 @@ class InputPassword extends BaseComponent {
     return this.input.value;
   }
 
+  public getInputElement(): HTMLInputElement {
+    return this.input;
+  }
+
   public showHintRequiredFieldIsEmpty(): void {
     if (!this.input.value) {
       this.input.classList.add(Styles.INPUT_ERROR);
@@ -85,6 +91,11 @@ class InputPassword extends BaseComponent {
     this.input.value = '';
     this.input.classList.add(Styles.INPUT_ERROR);
     this.errorHint.showErrorText(this.hintUserNotFound);
+  }
+
+  public showHintNotConfirmPass(): void {
+    this.input.classList.add(Styles.INPUT_ERROR);
+    this.errorHint.showErrorText(this.hintNotCorfimPassword);
   }
 
   private addInputHadler(input: HTMLInputElement): void {
