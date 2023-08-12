@@ -42,6 +42,15 @@ class ErrorHint extends BaseComponent {
     this.element.classList.remove(Styles.VISIBLE);
   }
 
+  public showAddressWarning(text: string): void {
+    this.element.innerText = text;
+    this.element.classList.add(Styles.VISIBLE_WARNING);
+  }
+
+  public hideAddressWarning(): void {
+    this.element.classList.remove(Styles.VISIBLE_WARNING);
+  }
+
   private removePassHintStyles(): void {
     this.element.classList.remove(
       Styles.VISIBLE_PASS_WEAK,

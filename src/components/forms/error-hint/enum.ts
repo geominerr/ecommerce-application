@@ -4,6 +4,7 @@ enum Styles {
   VISIBLE_PASS_STRONG = 'visible--strong-pass',
   VISIBLE_PASS_MEDIUM = 'visible--medium-pass',
   VISIBLE_PASS_WEAK = 'visible--weak-pass',
+  VISIBLE_WARNING = 'visible--attention',
 }
 
 enum TagNames {
