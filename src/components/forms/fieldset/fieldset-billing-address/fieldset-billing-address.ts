@@ -1,6 +1,7 @@
 import BaseComponent from '../../../base/base-component/base-component';
 import SelectComponent from '../../select/select';
 import InputBase from '../../input-base/input-base';
+import InputPostal from '../../input-postal/input-postal';
 import { AddressCheck } from '../../../../utils/address_check';
 import { TagNames, Styles, Contents } from './enum';
 import { OPTIONS } from './input-options';
@@ -13,13 +14,13 @@ class FieldsetBill extends BaseComponent {
 
   private select: SelectComponent;
 
+  private inputPostal: InputPostal;
+
   private inputCity: InputBase;
 
   private inputStreet: InputBase;
 
   private inputStreetNumber: InputBase;
-
-  private inputPostal: InputBase;
 
   constructor(validatorAdrress: AddressCheck) {
     super();
@@ -30,7 +31,9 @@ class FieldsetBill extends BaseComponent {
     this.inputCity = new InputBase(validatorAdrress.mainCheck, OPTIONS[0]);
     this.inputStreet = new InputBase(validatorAdrress.streetCheck, OPTIONS[1]);
     this.inputStreetNumber = new InputBase(validatorAdrress.streetCheck, OPTIONS[2]);
-    this.inputPostal = new InputBase(validatorAdrress.streetCheck, OPTIONS[3]);
+    this.inputPostal = new InputPostal(validatorAdrress.postalCodeCheck, OPTIONS[3]);
+    this.select.setInputPostal(this.inputPostal);
+    this.inputPostal.setSelectComponent(this.select);
 
     this.createComponent();
   }
@@ -44,17 +47,17 @@ class FieldsetBill extends BaseComponent {
       fieldsetElement,
       legendElement,
       select,
+      inputPostal,
       inputCity,
       inputStreet,
       inputStreetNumber,
-      inputPostal,
     } = this;
 
     legendElement.innerText = Contents.LEGEND;
     fieldsetElement.append(legendElement);
 
-    [select, inputCity, inputStreet, inputStreetNumber, inputPostal].forEach(
-      (component: InputBase | SelectComponent): void =>
+    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(
+      (component: InputBase | InputPostal | SelectComponent): void =>
         fieldsetElement.append(component.getElement())
     );
   }
