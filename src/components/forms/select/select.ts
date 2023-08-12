@@ -1,4 +1,5 @@
 import BaseComponent from '../../base/base-component/base-component';
+import ErrorHint from '../error-hint/error-hint';
 import InputPostal from '../input-postal/input-postal';
 import { Address, Attributes, Events, Styles, TagNames } from './enum';
 import { AddresType } from './select-interfaces';
@@ -10,17 +11,22 @@ class SelectComponent extends BaseComponent {
 
   private select: HTMLSelectElement;
 
+  private errorHint: ErrorHint;
+
   private input: InputPostal | null = null;
 
-  private defaultCountryIndex: number = 6;
+  private disabledOptionText: string = 'Select country';
+
+  private disableOptionIndex: number = 0;
+
+  private hintRequiredField: string = 'This is a required field';
 
   constructor(type: AddresType) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
     this.select = this.createElement(TagNames.SELECT, Styles.SELECT);
+    this.errorHint = new ErrorHint();
     this.createComponent(type);
-
-    this.setDefaultCountry();
   }
 
   public getElement(): HTMLElement {
@@ -28,6 +34,14 @@ class SelectComponent extends BaseComponent {
   }
 
   public getCodeCountry(): string {
+    if (this.select.selectedIndex === this.disableOptionIndex) {
+      return '';
+    }
+
+    return this.select.options[this.select.selectedIndex].value;
+  }
+
+  public getValue(): string {
     return this.select.options[this.select.selectedIndex].value;
   }
 
@@ -35,9 +49,27 @@ class SelectComponent extends BaseComponent {
     this.input = input;
   }
 
+  public isValid(): boolean {
+    return this.select.selectedIndex !== this.disableOptionIndex;
+  }
+
+  public showHintRequiredFieldIsEmpty(): void {
+    if (this.select.selectedIndex === 0) {
+      this.select.classList.add(Styles.SELECT_ERROR);
+      this.errorHint.showErrorText(this.hintRequiredField);
+    }
+  }
+
   private createComponent(type: AddresType): void {
-    const { container, select } = this;
+    const { container, select, disabledOptionText } = this;
     const label: HTMLLabelElement = this.createElement(TagNames.LABEL, Styles.LABEL);
+    const disabledOption: HTMLOptionElement = this.createElement(TagNames.OPTION, Styles.OPTION);
+    const errorHintElement: HTMLElement = this.errorHint.getElement();
+
+    disabledOption.disabled = true;
+    disabledOption.selected = true;
+    disabledOption.hidden = true;
+    disabledOption.innerText = disabledOptionText;
 
     select.setAttribute(Attributes.ID, SHIPPING_OPTIONS.ID);
     select.setAttribute(Attributes.NAME, SHIPPING_OPTIONS.NAME);
@@ -51,6 +83,8 @@ class SelectComponent extends BaseComponent {
       label.innerText = BILLING_OPTIONS.LABEL_CONTENT;
     }
 
+    select.append(disabledOption);
+
     for (const country in COUNTRIES) {
       const option: HTMLOptionElement = this.createElement(TagNames.OPTION, Styles.OPTION);
 
@@ -62,11 +96,7 @@ class SelectComponent extends BaseComponent {
 
     this.addChangeHandler(select);
 
-    [label, select].forEach((el: HTMLElement): void => container.append(el));
-  }
-
-  private setDefaultCountry(): void {
-    this.select.selectedIndex = this.defaultCountryIndex;
+    [label, select, errorHintElement].forEach((el: HTMLElement): void => container.append(el));
   }
 
   private addChangeHandler(select: HTMLSelectElement): void {
@@ -74,6 +104,11 @@ class SelectComponent extends BaseComponent {
       if (this.input) {
         const codeCountry: string = this.getCodeCountry();
         this.input.showHintZipCode(codeCountry);
+      }
+
+      if (select.selectedIndex !== this.disableOptionIndex) {
+        select.classList.remove(Styles.SELECT_ERROR);
+        this.errorHint.hideErrorText();
       }
     });
   }

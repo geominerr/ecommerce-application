@@ -27,3 +27,11 @@
 .option:hover {
   background-color: rgb(145, 44, 44);
 }
+
+.select--error {
+  outline: 0.15rem solid #fd0404;
+
+  &:focus {
+    outline: 0.15rem solid #fd0404;
+  }
+}

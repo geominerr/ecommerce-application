@@ -104,6 +104,10 @@ class InputPostal extends BaseComponent {
       const codeCountry: string = this.selectComponent?.getCodeCountry() ?? '';
       const errorText: string | null = this.validator(inputValue, codeCountry);
 
+      if (!codeCountry.length) {
+        this.selectComponent?.showHintRequiredFieldIsEmpty();
+      }
+
       if (errorText) {
         input.classList.add(Styles.INPUT_ERROR);
         this.errorHint.showErrorText(errorText);

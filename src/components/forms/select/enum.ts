@@ -10,6 +10,7 @@ enum Styles {
   LABEL = 'label',
   SELECT = 'select-custom',
   OPTION = 'option',
+  SELECT_ERROR = 'select--error',
 }
 
 enum Events {
