@@ -45,14 +45,53 @@ class FieldsetPersonal extends BaseComponent {
     return this.fieldsetElement;
   }
 
-  public isValid(): boolean {
-    const { allInputs } = this;
+  public showHintUserExist(): void {
+    this.inputMail.showHintUserExist();
+  }
 
-    if (allInputs) {
-      return allInputs.every((input: InputBase | InputPassword): boolean => input.isValid());
+  public getData(): string[] {
+    const { inputMail, inputFirstName, inputLastName, inputDateBirth, inputPassword } = this;
+
+    const result: string[] = [];
+
+    [inputMail, inputFirstName, inputLastName, inputDateBirth, inputPassword].forEach(
+      (input): number => result.push(input.getValue())
+    );
+
+    return result;
+  }
+
+  public isValidData(): boolean {
+    const {
+      inputMail,
+      inputFirstName,
+      inputLastName,
+      inputDateBirth,
+      inputPassword,
+      inputPasswordRepeat,
+    } = this;
+
+    const isValid: boolean = [
+      inputMail,
+      inputFirstName,
+      inputLastName,
+      inputDateBirth,
+      inputPassword,
+      inputPasswordRepeat,
+    ].every((input): boolean => input.isValid());
+
+    if (!isValid) {
+      [
+        inputMail,
+        inputFirstName,
+        inputLastName,
+        inputDateBirth,
+        inputPassword,
+        inputPasswordRepeat,
+      ].forEach((input): void => input.showHintRequiredFieldIsEmpty());
     }
 
-    return false;
+    return isValid;
   }
 
   private createComponent(): void {
