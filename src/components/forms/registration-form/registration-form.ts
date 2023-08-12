@@ -1,21 +1,13 @@
 import BaseComponent from '../../base/base-component/base-component';
 import FieldsetPersonal from '../fieldset/fieldset-personal-info/fieldset-personal-info';
-import Button from '../button/button';
-import { TagNames, Styles, Content, Events } from './enum';
-import './registration-form.scss';
 import FieldsetShip from '../fieldset/fieldset-shipping-address/fieldset-shipping-address';
 import FieldsetBill from '../fieldset/fieldset-billing-address/fieldset-billing-address';
-
-const validator = (data: string): string | null => {
-  const randomNumber: number = Math.floor(Math.random() * 10);
-  console.log(data);
-
-  if (randomNumber <= 5) {
-    return 'Not correct email address';
-  }
-
-  return null;
-};
+import Button from '../button/button';
+import { APIUserActions } from '../../../api/api-user-actions';
+import { EmailPasswordCheck } from '../../../utils/email_password_check';
+import { AddressCheck } from '../../../utils/address_check';
+import { TagNames, Styles, Content, Events } from './enum';
+import './registration-form.scss';
 
 class RegistrationForm extends BaseComponent {
   private form: HTMLFormElement;
@@ -30,14 +22,21 @@ class RegistrationForm extends BaseComponent {
 
   private button: Button;
 
-  constructor() {
+  private api: APIUserActions;
+
+  constructor(
+    api: APIUserActions,
+    validatorEmail: EmailPasswordCheck,
+    validatorAddress: AddressCheck
+  ) {
     super();
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
     this.title = this.createElement(TagNames.H3, Styles.TITLE);
-    this.fieldSetPersonal = new FieldsetPersonal(validator);
-    this.fieldSetShipping = new FieldsetShip(validator);
-    this.fieldSetBilling = new FieldsetBill(validator);
+    this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
+    this.fieldSetShipping = new FieldsetShip(validatorAddress);
+    this.fieldSetBilling = new FieldsetBill(validatorAddress);
     this.button = new Button('signup');
+    this.api = api;
 
     this.createComponent();
   }
