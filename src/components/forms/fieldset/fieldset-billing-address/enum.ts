@@ -4,8 +4,9 @@ enum TagNames {
 }
 
 enum Styles {
-  FIELDSET = 'fieldset',
+  FIELDSET = 'fieldset-billing',
   LEGEND = 'legend',
+  FIELDSET_HIDE = 'fieldset--hide',
 }
 
 enum Contents {
