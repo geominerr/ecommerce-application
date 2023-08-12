@@ -34,11 +34,11 @@ class CheckboxComponent extends BaseComponent {
   }
 
   public showHintDefaultAddress(text: string): void {
-    this.hint.showErrorText(text);
+    this.hint.showAddressWarning(text);
   }
 
   public hideHintDefaultAddress(): void {
-    this.hint.hideErrorText();
+    this.hint.hideAddressWarning();
   }
 
   private createComponent(contentLabel: string, id: string): void {
