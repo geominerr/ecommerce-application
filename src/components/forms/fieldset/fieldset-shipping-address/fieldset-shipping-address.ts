@@ -22,7 +22,7 @@ class FieldsetShip extends BaseComponent {
 
   private inputStreetNumber: InputBase;
 
-  private displaySwith: boolean = true;
+  private isDisplayOn: boolean = true;
 
   constructor(validator: AddressCheck) {
     super();
@@ -45,13 +45,49 @@ class FieldsetShip extends BaseComponent {
   }
 
   public hideFromScreen(): void {
-    this.displaySwith = !this.displaySwith;
+    this.isDisplayOn = !this.isDisplayOn;
     this.fieldsetElement.classList.add(Styles.FIELDSET_HIDE);
   }
 
   public showOnScreen(): void {
-    this.displaySwith = !this.displaySwith;
+    this.isDisplayOn = !this.isDisplayOn;
     this.fieldsetElement.classList.remove(Styles.FIELDSET_HIDE);
+  }
+
+  public getData(): string[] | null {
+    const { inputStreet, inputStreetNumber, inputCity, inputPostal, select } = this;
+    const isDisplayOn: boolean = this.isDisplayOn;
+    const result: string[] = [];
+
+    if (isDisplayOn) {
+      [inputStreet, inputStreetNumber, inputCity, inputPostal, select].forEach((input): number =>
+        result.push(input.getValue())
+      );
+
+      return result;
+    }
+
+    return null;
+  }
+
+  public isValidData(): boolean {
+    if (!this.isDisplayOn) {
+      return true;
+    }
+
+    const { inputCity, inputPostal, inputStreet, inputStreetNumber } = this;
+
+    const isValid: boolean = [inputCity, inputPostal, inputStreet, inputStreetNumber].every(
+      (input): boolean => input.isValid()
+    );
+
+    if (!isValid && this.isDisplayOn) {
+      [inputCity, inputPostal, inputStreet, inputStreetNumber].forEach((input): void =>
+        input.showHintRequiredFieldIsEmpty()
+      );
+    }
+
+    return isValid;
   }
 
   private createComponent(): void {
