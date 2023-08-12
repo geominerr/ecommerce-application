@@ -1,7 +1,8 @@
+import { ValidationFunction } from '../../../types/general/general';
 import BaseComponent from '../../base/base-component/base-component';
 import ErrorHint from '../error-hint/error-hint';
 import { TagNames, Styles, Attributes, Events } from './enum';
-import { CallbackStub, InputOptions } from './input-base-interfaces';
+import { InputOptions } from './input-base-interfaces';
 import './input-base.scss';
 
 class InputBase extends BaseComponent {
@@ -13,13 +14,13 @@ class InputBase extends BaseComponent {
 
   private errorHint: ErrorHint;
 
-  private validator: CallbackStub;
+  private validator: ValidationFunction;
 
   private hintRequiredField: string = 'This is a required field';
 
   private hintUserNotFound: string = 'Invalid email or password. Please try again!';
 
-  constructor(validator: CallbackStub, options: InputOptions) {
+  constructor(validator: ValidationFunction, options: InputOptions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.INPUT_CONTAINER);
     this.label = this.createElement(TagNames.LABEL, Styles.LABEL);

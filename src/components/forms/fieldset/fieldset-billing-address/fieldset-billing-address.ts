@@ -1,8 +1,8 @@
 import BaseComponent from '../../../base/base-component/base-component';
 import SelectComponent from '../../select/select';
 import InputBase from '../../input-base/input-base';
+import { AddressCheck } from '../../../../utils/address_check';
 import { TagNames, Styles, Contents } from './enum';
-import { CallbackStub } from './fieldset-interfaces';
 import { OPTIONS } from './input-options';
 import './fieldset.scss';
 
@@ -21,16 +21,16 @@ class FieldsetBill extends BaseComponent {
 
   private inputPostal: InputBase;
 
-  constructor(validator: CallbackStub) {
+  constructor(validatorAdrress: AddressCheck) {
     super();
 
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
     this.select = new SelectComponent('billing');
-    this.inputCity = new InputBase(validator, OPTIONS[0]);
-    this.inputStreet = new InputBase(validator, OPTIONS[1]);
-    this.inputStreetNumber = new InputBase(validator, OPTIONS[2]);
-    this.inputPostal = new InputBase(validator, OPTIONS[3]);
+    this.inputCity = new InputBase(validatorAdrress.mainCheck, OPTIONS[0]);
+    this.inputStreet = new InputBase(validatorAdrress.streetCheck, OPTIONS[1]);
+    this.inputStreetNumber = new InputBase(validatorAdrress.streetCheck, OPTIONS[2]);
+    this.inputPostal = new InputBase(validatorAdrress.streetCheck, OPTIONS[3]);
 
     this.createComponent();
   }

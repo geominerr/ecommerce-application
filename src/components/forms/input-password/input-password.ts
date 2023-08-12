@@ -7,11 +7,6 @@ import { TagNames, Styles, Attributes, Events } from './enum';
 import { ValidationFunction } from '../../../types/general/general';
 import './input-password.scss';
 
-const validator: EmailPasswordCheck = new EmailPasswordCheck();
-const validationPass: ValidationFunction = validator.passwordCheck;
-const validationPassStrength: ValidationFunction = validator.strengthOfPasswordCheck;
-const validatorFunctions: ValidationFunction[] = [validationPass, validationPassStrength];
-
 class InputPassword extends BaseComponent {
   private container: HTMLElement;
 
@@ -23,19 +18,23 @@ class InputPassword extends BaseComponent {
 
   private errorHint: ErrorHint;
 
-  private validators: ValidationFunction[] = validatorFunctions;
+  private validatorPass: ValidationFunction;
+
+  private validatorPassStrength: ValidationFunction;
 
   private hintRequiredField: string = 'This is a required field';
 
   private hintUserNotFound: string = 'Invalid email or password. Please try again!';
 
-  constructor(options: InputOptions) {
+  constructor(validator: EmailPasswordCheck, options: InputOptions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.INPUT_CONTAINER);
     this.label = this.createElement(TagNames.LABEL, Styles.LABEL);
     this.input = this.createElement<HTMLInputElement>(TagNames.INPUT, Styles.INPUT);
     this.customCheckbox = new CheckboxCustom().createComponent();
     this.errorHint = new ErrorHint();
+    this.validatorPass = validator.passwordCheck;
+    this.validatorPassStrength = validator.strengthOfPasswordCheck;
 
     this.createComponent(options);
   }
@@ -91,10 +90,10 @@ class InputPassword extends BaseComponent {
   private addInputHadler(input: HTMLInputElement): void {
     input.addEventListener(Events.INPUT, (): void => {
       const inputValue: string = input.value;
-      const errorText: string | null = this.validators[0](inputValue);
+      const errorText: string | null = this.validatorPass(inputValue);
 
       if (inputValue.length >= 8 && !errorText) {
-        const passHint: string = this.validators[1](inputValue) as string;
+        const passHint: string = this.validatorPassStrength(inputValue) as string;
 
         this.errorHint.showPassHint(passHint);
       }

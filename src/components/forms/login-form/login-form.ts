@@ -4,12 +4,9 @@ import InputPassword from '../input-password/input-password';
 import Button from '../button/button';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
-import { ValidationFunction } from '../../../types/general/general';
 import { emailOptions, passwordOptions } from './input-options';
 import { TagNames, Styles, Content, Events, Attributes, TypeButton } from './enum';
 import './login-form.scss';
-
-const validatorEmail: ValidationFunction = new EmailPasswordCheck().emailCheck;
 
 class LoginForm extends BaseComponent {
   private form: HTMLFormElement;
@@ -30,12 +27,12 @@ class LoginForm extends BaseComponent {
 
   private api: APIUserActions;
 
-  constructor(apiUser: APIUserActions) {
+  constructor(apiUser: APIUserActions, validator: EmailPasswordCheck) {
     super();
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
     this.title = this.createElement(TagNames.H3, Styles.TITLE);
-    this.inputMail = new InputBase(validatorEmail, emailOptions);
-    this.inputPassword = new InputPassword(passwordOptions);
+    this.inputMail = new InputBase(validator.emailCheck, emailOptions);
+    this.inputPassword = new InputPassword(validator, passwordOptions);
     this.buttonLogin = new Button(TypeButton.LOGIN);
     this.signupContainer = this.createElement(TagNames.DIV, Styles.SUBMIT_WRAPPER);
     this.titleHint = this.createElement(TagNames.H5, Styles.TITLE_HINT);

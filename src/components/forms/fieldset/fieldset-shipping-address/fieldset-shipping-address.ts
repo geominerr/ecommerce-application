@@ -1,8 +1,8 @@
 import BaseComponent from '../../../base/base-component/base-component';
 import SelectComponent from '../../select/select';
 import InputBase from '../../input-base/input-base';
+import { AddressCheck } from '../../../../utils/address_check';
 import { TagNames, Styles, Contents } from './enum';
-import { CallbackStub } from './fieldset-interfaces';
 import { OPTIONS } from './input-options';
 import './fieldset.scss';
 
@@ -21,16 +21,16 @@ class FieldsetShip extends BaseComponent {
 
   private inputPostal: InputBase;
 
-  constructor(validator: CallbackStub) {
+  constructor(validator: AddressCheck) {
     super();
 
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
     this.select = new SelectComponent('shipping');
-    this.inputCity = new InputBase(validator, OPTIONS[0]);
-    this.inputStreet = new InputBase(validator, OPTIONS[1]);
-    this.inputStreetNumber = new InputBase(validator, OPTIONS[2]);
-    this.inputPostal = new InputBase(validator, OPTIONS[3]);
+    this.inputCity = new InputBase(validator.mainCheck, OPTIONS[0]);
+    this.inputStreet = new InputBase(validator.streetCheck, OPTIONS[1]);
+    this.inputStreetNumber = new InputBase(validator.streetCheck, OPTIONS[2]);
+    this.inputPostal = new InputBase(validator.mainCheck, OPTIONS[3]);
 
     this.createComponent();
   }
