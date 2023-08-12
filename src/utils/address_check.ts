@@ -15,6 +15,22 @@ export class AddressCheck {
     return null;
   }
 
+  public ageCheck(age: string): string | null {
+    const currentDate = new Date();
+    const birthDate = new Date(age);
+
+    const ageInMilliseconds = +currentDate - +birthDate;
+    const ageInYears = ageInMilliseconds / (365 * 24 * 60 * 60 * 1000);
+
+    if (ageInYears < 13) {
+      return 'Get out of here, little sucker.';
+    } else if (ageInYears > 100) {
+      return 'You should be dead.';
+    }
+    // Все ок? - null
+    return null;
+  }
+
   public streetCheck(street: string): string | null {
     if (street.length < 1) {
       return 'The address must be at least 1 character long.';

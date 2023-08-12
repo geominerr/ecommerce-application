@@ -16,6 +16,9 @@ export class EmailPasswordCheck {
     if (email.trim() !== email) {
       return 'The email address must not contain any initial or final spaces.';
     }
+    if (localPart.includes(' ') || domain.includes(' ')) {
+      return 'The email address must not contain spaces in the local part or domain.';
+    }
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return 'The email address must be formatted like example@email.com';
