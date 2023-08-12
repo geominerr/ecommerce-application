@@ -1,5 +1,4 @@
 import BaseComponent from '../../base/base-component/base-component';
-import ErrorHint from '../error-hint/error-hint';
 import InputPostal from '../input-postal/input-postal';
 import { Address, Attributes, Events, Styles, TagNames } from './enum';
 import { AddresType } from './select-interfaces';
