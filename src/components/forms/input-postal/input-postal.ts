@@ -55,6 +55,10 @@ class InputPostal extends BaseComponent {
   }
 
   public isValid(): boolean {
+    if (!this.input.value) {
+      return false;
+    }
+
     return !this.input.classList.contains(Styles.INPUT_ERROR);
   }
 

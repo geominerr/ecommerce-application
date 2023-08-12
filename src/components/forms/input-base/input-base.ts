@@ -20,6 +20,8 @@ class InputBase extends BaseComponent {
 
   private hintUserNotFound: string = 'Invalid email or password. Please try again!';
 
+  private hintUserExist: string = 'Such user already exists. Please try again!';
+
   constructor(validator: ValidationFunction, options: InputOptions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.INPUT_CONTAINER);
@@ -52,6 +54,10 @@ class InputBase extends BaseComponent {
   }
 
   public isValid(): boolean {
+    if (!this.input.value) {
+      return false;
+    }
+
     return !this.input.classList.contains(Styles.INPUT_ERROR);
   }
 
@@ -70,6 +76,12 @@ class InputBase extends BaseComponent {
     this.input.value = '';
     this.input.classList.add(Styles.INPUT_ERROR);
     this.errorHint.showErrorText(this.hintUserNotFound);
+  }
+
+  public showHintUserExist(): void {
+    this.input.value = '';
+    this.input.classList.add(Styles.INPUT_ERROR);
+    this.errorHint.showErrorText(this.hintUserExist);
   }
 
   private addInputHadler(input: HTMLInputElement): void {
