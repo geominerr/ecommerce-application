@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
-import TemplateView from './TemplateView';
-import './Main.scss';
+import TemplateView from '../template-view/template-view';
+import './main.scss';
 
 export default class Main extends TemplateView {
   constructor() {

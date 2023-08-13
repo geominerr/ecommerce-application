@@ -1,19 +1,19 @@
 /* eslint-disable max-lines-per-function */
 import { createElement } from './createElement';
 import { Route } from '../types/router.interfaces';
-import Main from '../pages/Main';
-import Authorization from '../pages/Authorization';
-import Registration from '../pages/Registration';
-import AboutUs from '../pages/AboutUs';
-import NotFound from '../pages/NotFound';
-import Headphones from '../pages/Headphones';
-import Speakers from '../pages/Speakers';
-import Turntables from '../pages/Turntables';
-import Amplifiers from '../pages/Amplifiers';
-import Soundbars from '../pages/Soundbars';
-import Controllers from '../pages/Controllers';
-import Profile from '../pages/Profile';
-import Cart from '../pages/Cart';
+import Main from '../pages/main/main';
+import Authorization from '../pages/authorization/authorization';
+import Registration from '../pages/registration/registration';
+import AboutUs from '../pages/abouts-us/about-us';
+import NotFound from '../pages/not-found/not-found';
+import Headphones from '../pages/headphones/headphones';
+import Speakers from '../pages/speakers/speakers';
+import Turntables from '../pages/turntables/turntables';
+import Amplifiers from '../pages/amplifiers/amplifiers';
+import Soundbars from '../pages/soundbars/soundbars';
+import Controllers from '../pages/controllers/controllers';
+import Profile from '../pages/profile/profile';
+import Cart from '../pages/cart/cart';
 
 export class Router {
   public container: HTMLElement;
@@ -56,7 +56,7 @@ export class Router {
     this.content = createElement('div', 'content');
     this.navContainer = createElement('div', 'nav-container');
 
-    const mainLink = this.createLink('/', 'Main', '../assets/img/logo.png');
+    const mainLink = this.createLink('/', 'Main', '../assets/svg/music-universe.svg');
     const headphonesLink = this.createLink('/headphones', 'Headphones');
     const speakersLink = this.createLink('/speakers', 'Speakers');
     const turntablesLink = this.createLink('/turntables', 'Turntables');

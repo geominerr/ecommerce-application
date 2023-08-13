@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Profile.scss';
+import TemplateView from '../template-view/template-view';
+import './profile.scss';
 
 export default class Profile extends TemplateView {
   constructor() {
