@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import TemplateView from '../template-view/template-view';
-import './main.scss';
+import './main-page.scss';
 
 export default class Main extends TemplateView {
   constructor() {
@@ -43,8 +43,64 @@ export default class Main extends TemplateView {
     </div>
     <div class="main-follow">
         <div class="main-follow women" style="background-image: url(../assets/img/banner2.png)">
-            <p>Follow your soul. And we’ll help you with that.</p>
+            <p>Follow your<br> soul.<br> And we’ll help you with that.</p>
         </div>
+    </div>
+    <div class="main-advantages">
+        <div class="main-advantages-title">
+            Making an order with us,<br>
+            you get:
+        </div>
+        <div class="main-advantages list">
+            <div class="main-advantages prices">
+                <img src="../assets/img/advantages/pig.png" alt="none">
+                <div class="main-advantages description">
+                    low<br>
+                    prices
+                </div>
+            </div>
+            <div class="main-advantages advice">
+                <img src="../assets/img/advantages/support.png" alt="none">
+                <div class="main-advantages description">
+                    friendly<br>
+                    advice
+                </div>
+            </div>
+            <div class="main-advantages delivery">
+                <img src="../assets/img/advantages/car.png" alt="none">
+                <div class="main-advantages description">
+                    fast<br>
+                    delivery
+                </div>
+            </div>
+            <div class="main-advantages package">
+                <img src="../assets/img/advantages/package.png" alt="none">
+                <div class="main-advantages description">
+                    reliable<br>
+                    packaging<br>
+                </div>
+            </div>
+            <div class="main-advantages ambient">
+                <img src="../assets/img/advantages/ambient.png" alt="none">
+                <div class="main-advantages description">
+                    minimum<br>
+                    percentage<br>
+                    of defects
+                </div>
+            </div>
+            <div class="main-advantages loyalty">
+                <img src="../assets/img/advantages/loyalty.png" alt="none">
+                <div class="main-advantages description">
+                    discount<br>
+                    of a regular<br>
+                    customer
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-holiday" style="background-image: url(../assets/img/holiday.png)">
+        <p>Treat yourself<br>
+        to a holiday!</p>
     </div>
     `;
   }

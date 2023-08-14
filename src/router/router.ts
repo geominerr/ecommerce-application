@@ -141,6 +141,7 @@ export class Router {
       const view = route.view;
       this.content.innerHTML = await view.getHtml();
       view.setTitle(route.view.constructor.name);
+      //   console.log(route.view.constructor.name);
     } else {
       const errorPage = new NotFound();
       this.content.innerHTML = await errorPage.getHtml();
