@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Cart.scss';
+import TemplateView from '../template-view/template-view';
+import './cart.scss';
 
 export default class Cart extends TemplateView {
   constructor() {

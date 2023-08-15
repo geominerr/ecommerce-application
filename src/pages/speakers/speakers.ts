@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Speakers.scss';
+import TemplateView from '../template-view/template-view';
+import './speakers.scss';
 
 export default class Speakers extends TemplateView {
   constructor() {

@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './NotFound.scss';
+import TemplateView from '../template-view/template-view';
+import './not-found.scss';
 
 export default class NotFound extends TemplateView {
   constructor() {

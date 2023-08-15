@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Controllers.scss';
+import TemplateView from '../template-view/template-view';
+import './controllers.scss';
 
 export default class Controllers extends TemplateView {
   constructor() {

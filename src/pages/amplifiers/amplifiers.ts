@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Amplifiers.scss';
+import TemplateView from '../template-view/template-view';
+import './amplifiers.scss';
 
 export default class Amplifiers extends TemplateView {
   constructor() {

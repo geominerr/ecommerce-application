@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Turntables.scss';
+import TemplateView from '../template-view/template-view';
+import './turntables.scss';
 
 export default class Turntables extends TemplateView {
   constructor() {

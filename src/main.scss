@@ -8,8 +8,8 @@ html{
 .nav-container{
 	position: fixed;
 	top: 0;
-	background-color: #fff;
-	width: 100%;
+	background-color: #000;
+	width: 1440px;
 }
 
 .navigation{
@@ -26,7 +26,7 @@ html{
 }
 
 .link{
-	color: #000;
+	color: #fff;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -34,7 +34,8 @@ html{
 }
 
 .footer{
-	padding: 0 50px;
+	padding: 100px 0;
+	background-color: #000;
 }
 
 .container{
@@ -46,5 +47,11 @@ html{
 }
 
 .header{
-	max-width: 1440px;
+	width: 100%;
+}
+
+@media (max-width: 1440px) {
+	.nav-container {
+		width: 100%;
+	}
 }

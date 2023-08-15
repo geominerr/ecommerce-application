@@ -39,6 +39,10 @@ const baseConfig = {
           from: './src/assets',
           to: 'assets',
         },
+        {
+          from: '_redirects',
+          to: '',
+        },
       ],
     }),
     new MiniCssExtractPlugin({

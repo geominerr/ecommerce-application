@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './AboutUs.scss';
+import TemplateView from '../template-view/template-view';
+import './about-us.scss';
 
 export default class AboutUs extends TemplateView {
   constructor() {
