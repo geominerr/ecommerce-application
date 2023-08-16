@@ -1,18 +1,20 @@
 import InputPassword from '../../../../src/components/forms/input-password/input-password';
 import { passwordOptions } from '../../../../src/components/forms/login-form/input-options';
 import { EmailPasswordCheck } from '../../../../src/utils/email_password_check';
+import { Styles } from '../../../../src/components/forms/input-password/enum';
 
 describe('InputPassword', () => {
   const validator: EmailPasswordCheck = new EmailPasswordCheck();
   const inputPassword: InputPassword = new InputPassword(validator, passwordOptions);
   const inputPasswordElement = inputPassword
     .getElement()
-    .querySelector('.input') as HTMLInputElement;
+    .querySelector(`.${Styles.INPUT}`) as HTMLInputElement;
 
   it('should create an instance of inputPassword', () => {
     expect(inputPassword).toBeInstanceOf(InputPassword);
   });
 
+  console.log(inputPasswordElement);
   it('isValid should return true when input value is not empty and has no error class', () => {
     inputPasswordElement.value = 'email@gmail.com';
     const isValidData = validator.passwordCheck(inputPasswordElement.value);
@@ -25,10 +27,10 @@ describe('InputPassword', () => {
 
     if (!isValidData) {
       expect(result).toBe(false);
-      expect(inputPasswordElement.classList.contains('input--error')).toBe(true);
+      expect(inputPasswordElement.classList.contains(Styles.INPUT_ERROR)).toBe(true);
     } else {
       expect(result).toBe(true);
-      expect(inputPasswordElement.classList.contains('input--error')).toBe(false);
+      expect(inputPasswordElement.classList.contains(Styles.INPUT_ERROR)).toBe(false);
     }
   });
 
@@ -37,6 +39,6 @@ describe('InputPassword', () => {
     const result = inputPassword.isValid();
 
     expect(result).toBe(false);
-    expect(inputPasswordElement.classList.contains('input--error')).toBe(true);
+    expect(inputPasswordElement.classList.contains(Styles.INPUT_ERROR)).toBe(true);
   });
 });
