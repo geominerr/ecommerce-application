@@ -1,0 +1,34 @@
+.error-hint {
+  width: 100%;
+
+  font-size: 1.4rem;
+  color: #fd0404;
+  text-align: center;
+
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.visible {
+  opacity: 1;
+}
+
+.visible--strong-pass {
+  opacity: 1;
+  color: #2ab64b;
+}
+
+.visible--medium-pass {
+  opacity: 1;
+  color: #d89839;
+}
+
+.visible--weak-pass {
+  opacity: 1;
+  color: #fd7c04;
+}
+
+.visible--attention {
+  opacity: 1;
+  color: #fd7c04;
+}

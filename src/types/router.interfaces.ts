@@ -4,6 +4,6 @@ export interface Route {
 }
 
 export interface View {
-  setTitle(path: string): unknown;
-  getHtml(): Promise<string>;
+  setTitle(): void;
+  getHtml(): Promise<string | HTMLElement>;
 }

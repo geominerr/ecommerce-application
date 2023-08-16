@@ -1,0 +1,53 @@
+$fontFamily: 'Montserrat', sans-serif;
+
+.input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 9.8rem;
+  gap: 0.5rem;
+
+  font-family: $fontFamily;
+}
+
+.label {
+  font-size: 1.7rem;
+  color: #141414;
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+
+  font-size: 1.5rem;
+  color: #555555;
+  background-color: #fdfdfd;
+
+  border-radius: 0;
+  outline: 0;
+  border: 0.005rem solid #505050;
+
+  transition: all 0.3s;
+
+  &:focus {
+    color: #242424;
+
+    outline: none;
+    border-radius: 0;
+    background-color: #f0f0f0;
+  }
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.input--error {
+  outline: 0.15rem solid #fd0404;
+
+  &:focus {
+    outline: 0.15rem solid #fd0404;
+  }
+}

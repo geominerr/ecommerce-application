@@ -139,13 +139,21 @@ export class Router {
 
     if (route) {
       const view = route.view;
-      this.content.innerHTML = await view.getHtml();
-      view.setTitle(route.view.constructor.name);
-      //   console.log(route.view.constructor.name);
+      const element = await view.getHtml();
+
+      if (element instanceof HTMLElement) {
+        this.content.innerHTML = '';
+        this.content.append(element);
+      } else {
+        this.content.innerHTML = element;
+      }
+
+      view.setTitle();
     } else {
       const errorPage = new NotFound();
       this.content.innerHTML = await errorPage.getHtml();
-      errorPage.setTitle('Not Found');
+
+      errorPage.setTitle();
     }
   }
 
