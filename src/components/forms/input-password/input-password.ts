@@ -51,7 +51,6 @@ class InputPassword extends BaseComponent {
     input.setAttribute(Attributes.TYPE, options.TYPE);
     input.setAttribute(Attributes.NAME, options.NAME);
     input.setAttribute(Attributes.PLACEHOLDER, options.PLACEHOLDER);
-    input.classList.add(Styles.INPUT_PASS);
 
     label.setAttribute(Attributes.FOR, options.ID);
     label.innerText = options.CONTENT_LABEL;

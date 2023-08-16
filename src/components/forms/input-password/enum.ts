@@ -6,9 +6,8 @@ enum TagNames {
 
 enum Styles {
   INPUT_CONTAINER = 'input-container',
-  INPUT = 'input',
+  INPUT = 'input-pass',
   INPUT_ERROR = 'input--error',
-  INPUT_PASS = 'input--pass',
   LABEL = 'label',
   CHECKBOX = 'checkbox',
 }
