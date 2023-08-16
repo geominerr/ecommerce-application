@@ -3,7 +3,7 @@ export default class TemplateView {
     document.title = title;
   }
 
-  public async getHtml(): Promise<string> {
+  public async getHtml(): Promise<string | HTMLElement> {
     return '';
   }
 }
