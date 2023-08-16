@@ -39,6 +39,7 @@ export class AddressCheck {
     return null;
   }
 
+  // eslint-disable-next-line max-lines-per-function
   public postalCodeCheck(code: string, country: string): string | null {
     let length = 1;
     switch (country) {
@@ -46,19 +47,39 @@ export class AddressCheck {
         length = 7;
         break;
 
-      case 'LV' || 'MD' || 'RO' || 'RU' || 'BY' || 'CN':
+      case 'LV':
+      case 'MD':
+      case 'RO':
+      case 'RU':
+      case 'BY':
+      case 'CN':
         length = 6;
         break;
 
-      case 'US' || 'MX' || 'UA' || 'PL' || 'SK' || 'FI' || 'FR' || 'GR' || 'IT' || 'TR' || 'ES':
+      case 'US':
+      case 'MX':
+      case 'UA':
+      case 'PL':
+      case 'SK':
+      case 'FI':
+      case 'FR':
+      case 'GR':
+      case 'IT':
+      case 'TR':
+      case 'ES':
         length = 5;
         break;
 
-      case 'HU' || 'NO' || 'PT' || 'CH' || 'SI':
+      case 'HU':
+      case 'NO':
+      case 'PT':
+      case 'CH':
+      case 'SI':
         length = 4;
         break;
 
-      case 'DE' || 'GB':
+      case 'DE':
+      case 'GB':
         length = 2;
         break;
 
