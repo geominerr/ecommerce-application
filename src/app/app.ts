@@ -12,9 +12,10 @@ import Soundbars from '../pages/soundbars/soundbars';
 import Controllers from '../pages/controllers/controllers';
 import Profile from '../pages/profile/profile';
 import Cart from '../pages/cart/cart';
-
 import { API } from '../api/api';
 import { APIUserActions } from '../api/api-user-actions';
+import { EmailPasswordCheck } from '../utils/email_password_check';
+import { AddressCheck } from '../utils/address_check';
 
 class App {
   private main: Main;
@@ -45,10 +46,19 @@ class App {
 
   private router: Router;
 
+  private api: APIUserActions;
+
+  private validatorEmail: EmailPasswordCheck;
+
+  private validatorAddress: AddressCheck;
+
   constructor() {
+    this.api = new APIUserActions();
+    this.validatorEmail = new EmailPasswordCheck();
+    this.validatorAddress = new AddressCheck();
     this.main = new Main();
-    this.authorization = new Authorization();
-    this.registration = new Registration();
+    this.authorization = new Authorization(this.api, this.validatorEmail);
+    this.registration = new Registration(this.api, this.validatorEmail, this.validatorAddress);
     this.aboutUs = new AboutUs();
     this.notFound = new NotFound();
     this.headphones = new Headphones();
