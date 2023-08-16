@@ -1,17 +1,41 @@
+import LoginForm from '../../components/forms/login-form/login-form';
 import TemplateView from '../template-view/template-view';
+import { APIUserActions } from '../../api/api-user-actions';
+import { EmailPasswordCheck } from '../../utils/email_password_check';
+import { TagNames, Styles } from './enum';
 import './authorization.scss';
 
-export default class Authorization extends TemplateView {
-  constructor() {
+class Authorization extends TemplateView {
+  private container: HTMLDivElement;
+
+  private loginForm: LoginForm;
+
+  constructor(api: APIUserActions, validator: EmailPasswordCheck) {
     super();
+    this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
+    this.loginForm = new LoginForm(api, validator);
+
+    this.createComponent();
     this.setTitle('Authorization');
   }
 
-  public async getHtml(): Promise<string> {
-    return `<div class="authorization">This is Authorization page</div>`;
+  public async getHtml(): Promise<string | HTMLElement> {
+    return this.container;
   }
 
-  public setTitle(title: string): void {
-    document.title = title;
+  private createComponent(): void {
+    const { container, loginForm } = this;
+    const loginFormElement: HTMLElement = loginForm.getElement();
+
+    container.append(loginFormElement);
+  }
+
+  private createElement<T extends HTMLElement>(tagName: string, style: string): T {
+    const element: T = document.createElement(tagName) as T;
+    element.classList.add(style);
+
+    return element;
   }
 }
+
+export default Authorization;
