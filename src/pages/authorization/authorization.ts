@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Authorization.scss';
+import TemplateView from '../template-view/template-view';
+import './authorization.scss';
 
 export default class Authorization extends TemplateView {
   constructor() {

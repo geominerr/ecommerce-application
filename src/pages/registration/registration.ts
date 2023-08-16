@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Registration.scss';
+import TemplateView from '../template-view/template-view';
+import './registration.scss';
 
 export default class Registration extends TemplateView {
   constructor() {

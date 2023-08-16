@@ -1,5 +1,5 @@
-import TemplateView from './TemplateView';
-import './Soundbars.scss';
+import TemplateView from '../template-view/template-view';
+import './soundbars.scss';
 
 export default class Soundbars extends TemplateView {
   constructor() {
