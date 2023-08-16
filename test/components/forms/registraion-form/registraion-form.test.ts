@@ -8,11 +8,11 @@ import FieldsetBill from '../../../../src/components/forms/fieldset/fieldset-bil
 
 // eslint-disable-next-line
 describe('RegistrationForm', () => {
-  const api: APIUserActions = new APIUserActions();
+  const apiMockInstance = new APIUserActions() as jest.Mocked<APIUserActions>;
   const emailValidator: EmailPasswordCheck = new EmailPasswordCheck();
   const addressValidator: AddressCheck = new AddressCheck();
-  const registrationForm = new RegistrationForm(api, emailValidator, addressValidator);
-  const registerUserSpy = jest.spyOn(api, 'registerUser');
+  const registrationForm = new RegistrationForm(apiMockInstance, emailValidator, addressValidator);
+  const registerUserSpy = jest.spyOn(apiMockInstance, 'registerUser').mockResolvedValue();
 
   // Mock the methods and properties of fieldset instances
   const mockIsValidData = jest.fn().mockReturnValue(true);

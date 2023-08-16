@@ -7,10 +7,10 @@ import InputPassword from '../../../../src/components/forms/input-password/input
 
 // eslint-disable-next-line
 describe('LoginForm', () => {
-  const api: APIUserActions = new APIUserActions();
+  const mockApi = new APIUserActions() as jest.Mocked<APIUserActions>;
   const emailValidator: EmailPasswordCheck = new EmailPasswordCheck();
-  const loginForm: LoginForm = new LoginForm(api, emailValidator);
-  const registerUserSpy = jest.spyOn(api, 'loginUser');
+  const loginForm: LoginForm = new LoginForm(mockApi, emailValidator);
+  mockApi.loginUser = jest.fn().mockResolvedValue('1');
 
   // Mock the methods and properties of fieldset instances
   const mockIsValidData = jest.fn().mockReturnValue(true);
@@ -41,7 +41,7 @@ describe('LoginForm', () => {
     const submitButton = loginForm.getElement().querySelector('button');
     submitButton?.click();
 
-    expect(registerUserSpy).not.toHaveBeenCalled();
+    expect(mockApi.loginUser).not.toHaveBeenCalled();
   });
 
   it('should submit valid data', () => {
@@ -51,6 +51,6 @@ describe('LoginForm', () => {
     const submitButton = loginForm.getElement().querySelector('button');
     submitButton?.click();
 
-    expect(registerUserSpy).toHaveBeenCalled();
+    expect(mockApi.loginUser).toHaveBeenCalled();
   });
 });
