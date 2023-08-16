@@ -3,10 +3,7 @@ import TemplateView from '../template-view/template-view';
 import './main-page.scss';
 
 export default class Main extends TemplateView {
-  constructor() {
-    super();
-    this.setTitle('Main');
-  }
+  private documentTitle: string = 'Main';
 
   public async getHtml(): Promise<string> {
     return `
@@ -105,7 +102,7 @@ export default class Main extends TemplateView {
     `;
   }
 
-  public setTitle(title: string): void {
-    document.title = title;
+  public setTitle(): void {
+    document.title = this.documentTitle;
   }
 }

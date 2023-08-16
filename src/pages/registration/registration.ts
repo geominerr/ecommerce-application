@@ -11,17 +11,22 @@ class Registration extends TemplateView {
 
   private registrationForm: RegistrationForm;
 
+  private documentTitle: string = 'Registration';
+
   constructor(api: APIUserActions, validator1: EmailPasswordCheck, validator2: AddressCheck) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
     this.registrationForm = new RegistrationForm(api, validator1, validator2);
 
     this.createComponent();
-    this.setTitle('Registration');
   }
 
   public async getHtml(): Promise<string | HTMLElement> {
     return this.container;
+  }
+
+  public setTitle(): void {
+    document.title = this.documentTitle;
   }
 
   private createComponent(): void {

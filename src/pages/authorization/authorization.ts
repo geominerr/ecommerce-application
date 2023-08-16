@@ -10,17 +10,22 @@ class Authorization extends TemplateView {
 
   private loginForm: LoginForm;
 
+  private documentTitle: string = 'Authorization';
+
   constructor(api: APIUserActions, validator: EmailPasswordCheck) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
     this.loginForm = new LoginForm(api, validator);
 
     this.createComponent();
-    this.setTitle('Authorization');
   }
 
   public async getHtml(): Promise<string | HTMLElement> {
     return this.container;
+  }
+
+  public setTitle(): void {
+    document.title = this.documentTitle;
   }
 
   private createComponent(): void {

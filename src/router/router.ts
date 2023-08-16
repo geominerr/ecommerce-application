@@ -147,12 +147,13 @@ export class Router {
       } else {
         this.content.innerHTML = element;
       }
-      view.setTitle(route.view.constructor.name);
-      //   console.log(route.view.constructor.name);
+
+      view.setTitle();
     } else {
       const errorPage = new NotFound();
       this.content.innerHTML = await errorPage.getHtml();
-      errorPage.setTitle('Not Found');
+
+      errorPage.setTitle();
     }
   }
 

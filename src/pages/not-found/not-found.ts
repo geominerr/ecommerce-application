@@ -2,10 +2,7 @@ import TemplateView from '../template-view/template-view';
 import './not-found.scss';
 
 export default class NotFound extends TemplateView {
-  constructor() {
-    super();
-    this.setTitle('Not Found');
-  }
+  private documentTitle: string = 'Not found';
 
   public async getHtml(): Promise<string> {
     return `
@@ -20,7 +17,7 @@ export default class NotFound extends TemplateView {
     `;
   }
 
-  public setTitle(title: string): void {
-    document.title = title;
+  public setTitle(): void {
+    document.title = this.documentTitle;
   }
 }
