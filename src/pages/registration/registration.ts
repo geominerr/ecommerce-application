@@ -1,11 +1,11 @@
 import { APIUserActions } from '../../api/api-user-actions';
 import TemplateView from '../template-view/template-view';
 import RegistrationForm from '../../components/forms/registration-form/registration-form';
+import { Router } from '../../router/router';
 import { AddressCheck } from '../../utils/address_check';
 import { EmailPasswordCheck } from '../../utils/email_password_check';
 import { TagNames, Styles } from './enum';
 import './registration.scss';
-import { Router } from '../../router/router';
 
 class Registration extends TemplateView {
   private container: HTMLDivElement;
