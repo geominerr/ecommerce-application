@@ -1,5 +1,6 @@
 import LoginForm from '../../components/forms/login-form/login-form';
 import TemplateView from '../template-view/template-view';
+import { Router } from '../../router/router';
 import { APIUserActions } from '../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../utils/email_password_check';
 import { TagNames, Styles } from './enum';
@@ -26,6 +27,10 @@ class Authorization extends TemplateView {
 
   public setTitle(): void {
     document.title = this.documentTitle;
+  }
+
+  public setRouter(router: Router): void {
+    this.loginForm.setRouter(router);
   }
 
   private createComponent(): void {

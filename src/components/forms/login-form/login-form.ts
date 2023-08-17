@@ -2,6 +2,7 @@ import BaseComponent from '../../base/base-component/base-component';
 import InputBase from '../input-base/input-base';
 import InputPassword from '../input-password/input-password';
 import Button from '../button/button';
+import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
 import { emailOptions, passwordOptions } from './input-options';
@@ -27,6 +28,12 @@ class LoginForm extends BaseComponent {
 
   private api: APIUserActions;
 
+  private router: Router | null = null;
+
+  private pathToMain: string = '/';
+
+  private pathToRegistration: string = '/registration';
+
   constructor(apiUser: APIUserActions, validator: EmailPasswordCheck) {
     super();
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
@@ -44,6 +51,10 @@ class LoginForm extends BaseComponent {
 
   public getElement(): HTMLElement {
     return this.form;
+  }
+
+  public setRouter(router: Router): void {
+    this.router = router;
   }
 
   private createComponent(): void {
@@ -67,7 +78,6 @@ class LoginForm extends BaseComponent {
     titleHint.innerText = Content.TITLE_HINT;
 
     [titleHint, buttonSignupElement].forEach((el: HTMLElement): void => signupContainer.append(el));
-
     [title, inputMailContainer, inputPasswordContainer, buttonElement, signupContainer].forEach(
       (el: HTMLElement): void => form.append(el)
     );
@@ -80,7 +90,7 @@ class LoginForm extends BaseComponent {
     buttonSignup.addEventListener(Events.CLICK, (e: Event) => {
       e.preventDefault();
 
-      console.log('go to registration page');
+      this.redirectToRegistration();
     });
   }
 
@@ -94,10 +104,11 @@ class LoginForm extends BaseComponent {
       const password: string = this.inputPassword.getValue();
 
       if (email && password && isValidData) {
-        console.log({ email, password }); // <= удалить после рефакторинга
         this.api
           .loginUser(email, password)
-          .then((data) => console.log('redirect to main page', data))
+          .then(() => {
+            this.redirectToMain();
+          })
           .catch(() =>
             [this.inputMail, this.inputPassword].forEach((input): void =>
               input.showHintNotFoundUser()
@@ -116,6 +127,20 @@ class LoginForm extends BaseComponent {
     }
 
     return true;
+  }
+
+  private redirectToMain(): void {
+    if (this.router) {
+      history.pushState(null, '', this.pathToMain);
+      this.router.router();
+    }
+  }
+
+  private redirectToRegistration(): void {
+    if (this.router) {
+      history.pushState(null, '', this.pathToRegistration);
+      this.router.router();
+    }
   }
 }
 
