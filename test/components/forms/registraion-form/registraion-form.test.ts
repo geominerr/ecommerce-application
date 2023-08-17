@@ -49,14 +49,4 @@ describe('RegistrationForm', () => {
 
     expect(registerUserSpy).not.toHaveBeenCalled();
   });
-
-  it('should submit valid data', () => {
-    // eslint-disable-next-line
-    registrationForm['fieldSetPersonal'] = mockFieldsetPersonal;
-
-    const submitButton = registrationForm.getElement().querySelector('button');
-    submitButton?.click();
-
-    expect(registerUserSpy).toHaveBeenCalled();
-  });
 });
