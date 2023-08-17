@@ -20,7 +20,8 @@ class InputBase extends BaseComponent {
 
   private hintUserNotFound: string = 'Invalid email or password. Please try again!';
 
-  private hintUserExist: string = 'Such user already exists. Please try again!';
+  private hintUserExist: string =
+    "Such user already exists. Try a different email or log in if you're already registered!";
 
   constructor(validator: ValidationFunction, options: InputOptions) {
     super();

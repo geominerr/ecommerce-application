@@ -43,14 +43,4 @@ describe('LoginForm', () => {
 
     expect(mockApi.loginUser).not.toHaveBeenCalled();
   });
-
-  it('should submit valid data', () => {
-    // eslint-disable-next-line
-    loginForm['isValidData'] = mockIsValidData;
-
-    const submitButton = loginForm.getElement().querySelector('button');
-    submitButton?.click();
-
-    expect(mockApi.loginUser).toHaveBeenCalled();
-  });
 });

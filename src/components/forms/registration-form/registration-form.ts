@@ -4,11 +4,11 @@ import FieldsetShip from '../fieldset/fieldset-shipping-address/fieldset-shippin
 import FieldsetBill from '../fieldset/fieldset-billing-address/fieldset-billing-address';
 import Button from '../button/button';
 import CheckboxComponent from '../checkbox/checkbox';
+import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
 import { AddressCheck } from '../../../utils/address_check';
-import { TagNames, Styles, Content, Events, Attributes } from './enum';
-
+import { TagNames, Styles, Content, Events, Attributes, TypeButton } from './enum';
 import './registration-form.scss';
 
 class RegistrationForm extends BaseComponent {
@@ -28,9 +28,19 @@ class RegistrationForm extends BaseComponent {
 
   private checkboxBilling: CheckboxComponent;
 
+  private loginContainer: HTMLDivElement;
+
+  private titleHint: HTMLHeadElement;
+
+  private buttonLogin: Button;
+
   private api: APIUserActions;
 
-  private hintRequiredField: string = 'This is a required field';
+  private router: Router | null = null;
+
+  private pathToMain: string = '/';
+
+  private pathToAuthorization: string = '/authorization';
 
   constructor(
     api: APIUserActions,
@@ -43,9 +53,12 @@ class RegistrationForm extends BaseComponent {
     this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
     this.fieldSetShipping = new FieldsetShip(validatorAddress);
     this.fieldSetBilling = new FieldsetBill(validatorAddress);
-    this.button = new Button('signup');
+    this.button = new Button(TypeButton.SIGN_UP);
     this.checkboxShipping = new CheckboxComponent(Content.LABEL, Attributes.ID_VALUE_CHECKBOX_SHIP);
     this.checkboxBilling = new CheckboxComponent(Content.LABEL, Attributes.ID_VALUE_CHECKBOX_BILL);
+    this.loginContainer = this.createElement(TagNames.DIV, Styles.LOGIN_WRAPPER);
+    this.titleHint = this.createElement(TagNames.H5, Styles.TITLE_HINT);
+    this.buttonLogin = new Button(TypeButton.LOGIN);
     this.api = api;
 
     this.createComponent();
@@ -55,18 +68,27 @@ class RegistrationForm extends BaseComponent {
     return this.form;
   }
 
+  public setRouter(router: Router): void {
+    this.router = router;
+  }
+
   private createComponent(): void {
     const { form, title, fieldSetPersonal, fieldSetShipping, fieldSetBilling, button } = this;
+    const { loginContainer, titleHint, buttonLogin } = this;
 
     const fieldsetPersonalElement: HTMLElement = fieldSetPersonal.getElement();
     const fieldSetShippingElement: HTMLElement = fieldSetShipping.getElement();
     const fieldSetBillingElement: HTMLElement = fieldSetBilling.getElement();
 
     const buttonElement: HTMLElement = button.getElement();
+    const buttonLoginElem: HTMLElement = buttonLogin.getElement();
 
     title.innerText = Content.TITLE;
+    titleHint.innerText = Content.TITLE_HINT;
     fieldSetShippingElement.append(this.checkboxShipping.getElement());
     fieldSetBillingElement.append(this.checkboxBilling.getElement());
+
+    [titleHint, buttonLoginElem].forEach((el: HTMLElement): void => loginContainer.append(el));
 
     [
       title,
@@ -74,26 +96,29 @@ class RegistrationForm extends BaseComponent {
       fieldSetShippingElement,
       fieldSetBillingElement,
       buttonElement,
+      loginContainer,
     ].forEach((el: HTMLElement): void => form.append(el));
 
     const checkboxShip: HTMLInputElement = this.checkboxShipping.getCheckboxElement();
     const checkboxBill: HTMLInputElement = this.checkboxBilling.getCheckboxElement();
 
-    this.addSubmitButton(buttonElement);
+    this.addSubmitHandler(buttonElement);
+    this.addClickHandler(buttonLoginElem);
     this.addChangeCheckboxHandler(checkboxShip, checkboxBill);
   }
 
-  private addSubmitButton(button: HTMLElement): void {
+  private addSubmitHandler(button: HTMLElement): void {
     button.addEventListener(Events.CLICK, (e: Event): void => {
       e.preventDefault();
 
       const isValidPersonal: boolean = this.fieldSetPersonal.isValidData();
       const isValidBilling: boolean = this.fieldSetBilling.isValidData();
       const isValidShipping: boolean = this.fieldSetShipping.isValidData();
-      const isValidDataForm: boolean = isValidPersonal && isValidBilling && isValidShipping;
 
-      if (isValidDataForm) {
+      if (isValidPersonal && isValidBilling && isValidShipping) {
         const personalData: string[] = this.fieldSetPersonal.getData();
+        const email: string = personalData[0];
+        const password: string = personalData[4];
         let billingData: string[] | null = this.fieldSetBilling.getData();
         let shippingData: string[] | null = this.fieldSetShipping.getData();
         let dataUser: string[] = [];
@@ -107,19 +132,27 @@ class RegistrationForm extends BaseComponent {
         if (billingData && shippingData) {
           dataUser = [...shippingData, ...billingData, ...personalData];
         }
-        console.log(dataUser);
-
         // eslint-disable-next-line
         this.api // @ts-ignore
           .registerUser(...dataUser) // <= c этим надо что то делать :-)
           .then(() => {
-            console.log('Redirect to main');
+            this.api
+              .loginUser(email, password)
+              .then(() => this.redirectToMain())
+              .catch();
           })
-          .catch((err) => {
+          .catch(() => {
             this.fieldSetPersonal.showHintUserExist();
-            console.log('such user already exists', err);
           });
       }
+    });
+  }
+
+  private addClickHandler(button: HTMLElement): void {
+    button.addEventListener(Events.CLICK, (e: Event): void => {
+      e.preventDefault();
+
+      this.redirectToAuthorization();
     });
   }
 
@@ -145,6 +178,20 @@ class RegistrationForm extends BaseComponent {
         this.checkboxBilling.hideHintDefaultAddress();
       }
     });
+  }
+
+  private redirectToMain(): void {
+    if (this.router) {
+      history.pushState(null, '', this.pathToMain);
+      this.router.router();
+    }
+  }
+
+  private redirectToAuthorization(): void {
+    if (this.router) {
+      history.pushState(null, '', this.pathToAuthorization);
+      this.router.router();
+    }
   }
 }
 

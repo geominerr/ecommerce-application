@@ -14,7 +14,6 @@ describe('InputPassword', () => {
     expect(inputPassword).toBeInstanceOf(InputPassword);
   });
 
-  console.log(inputPasswordElement);
   it('isValid should return true when input value is not empty and has no error class', () => {
     inputPasswordElement.value = 'email@gmail.com';
     const isValidData = validator.passwordCheck(inputPasswordElement.value);

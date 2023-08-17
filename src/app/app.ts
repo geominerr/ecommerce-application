@@ -88,6 +88,8 @@ class App {
 
   public start(): void {
     this.router.start();
+    this.registration.setRouter(this.router);
+    this.authorization.setRouter(this.router);
 
     const api = new API();
 
