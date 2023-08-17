@@ -5,6 +5,7 @@ import { AddressCheck } from '../../utils/address_check';
 import { EmailPasswordCheck } from '../../utils/email_password_check';
 import { TagNames, Styles } from './enum';
 import './registration.scss';
+import { Router } from '../../router/router';
 
 class Registration extends TemplateView {
   private container: HTMLDivElement;
@@ -27,6 +28,10 @@ class Registration extends TemplateView {
 
   public setTitle(): void {
     document.title = this.documentTitle;
+  }
+
+  public setRouter(router: Router): void {
+    this.registrationForm.setRouter(router);
   }
 
   private createComponent(): void {
