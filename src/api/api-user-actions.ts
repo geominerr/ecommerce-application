@@ -11,6 +11,12 @@ export class APIUserActions {
 
   public STORE_KEY: string;
 
+  private keyAccessToken: string = '_cyber_(^-^)_punk_A';
+
+  private keyRefreshToken: string = '_cyber_(^-^)_punk_R';
+
+  private keyExpireTime: string = '_cyber_(^-^)_punk_T';
+
   constructor() {
     this.CTP_PROJECT_KEY = CTP_PROJECT_KEY;
     this.CTP_API_URL = CTP_API_URL;
@@ -133,12 +139,58 @@ export class APIUserActions {
     }
   }
 
-  public logoutUser(): void {
-    const userID = localStorage.getItem('userID');
+  //eslint-disable-next-line
+  public async loginUserPassFlow(
+    email: string,
+    password: string,
+    anonymousCart?: { id: string; typeId: string }
+  ): Promise<Customer> {
+    const ACCESS_TOKEN = await API_ACCESS_TOKEN.getCustomerAccessToken({
+      username: email,
+      password: password,
+    });
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/in-store/key=${this.STORE_KEY}/me/login`;
 
-    if (userID) {
-      localStorage.removeItem('userID');
-      console.log('User log out successful.');
+    if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
+
+    const headers = {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+    };
+
+    const userData = {
+      email,
+      password,
+      anonymousCart,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(userData),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        localStorage.setItem('userID', data.customer.id);
+
+        return data.customer;
+      } else {
+        throw new Error(`${await response.json().then((data) => data.message)}`);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public logoutUser(): void {
+    const accessToken: string | null = localStorage.getItem(this.keyAccessToken);
+
+    if (accessToken) {
+      localStorage.removeItem(this.keyAccessToken);
+      localStorage.removeItem(this.keyRefreshToken);
+      localStorage.removeItem(this.keyExpireTime);
     }
   }
 }
