@@ -144,7 +144,7 @@ class RegistrationForm extends BaseComponent {
           .registerUser(...dataUser) // <= c этим надо что то делать :-)
           .then(() => {
             this.api
-              .loginUserPassFlow(email, password)
+              .loginUser(email, password)
               .then(() => this.redirectToMain())
               .catch();
           })
@@ -190,7 +190,8 @@ class RegistrationForm extends BaseComponent {
   private redirectToMain(): void {
     if (this.router && this.stateManager) {
       history.pushState(null, '', this.pathToMain);
-      this.router.router().then(() => this.stateManager?.changeAuthorizationStatus());
+      this.router.router();
+      this.stateManager.changeAuthorizationStatus();
     }
   }
 
