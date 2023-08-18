@@ -16,6 +16,7 @@ import { API } from '../api/api';
 import { APIUserActions } from '../api/api-user-actions';
 import { EmailPasswordCheck } from '../utils/email_password_check';
 import { AddressCheck } from '../utils/address_check';
+import StateManager from '../state-manager/state-manager';
 
 class App {
   private main: Main;
@@ -52,6 +53,8 @@ class App {
 
   private validatorAddress: AddressCheck;
 
+  private stateManager: StateManager;
+
   constructor() {
     this.api = new APIUserActions();
     this.validatorEmail = new EmailPasswordCheck();
@@ -84,12 +87,13 @@ class App {
       this.profile,
       this.cart
     );
+    this.stateManager = new StateManager(this.api, this.router);
   }
 
   public start(): void {
     this.router.start();
-    this.registration.setRouter(this.router);
-    this.authorization.setRouter(this.router);
+    this.registration.setRouter(this.router).setStateManager(this.stateManager);
+    this.authorization.setRouter(this.router).setStateManager(this.stateManager);
 
     const api = new API();
 

@@ -4,6 +4,7 @@ import FieldsetShip from '../fieldset/fieldset-shipping-address/fieldset-shippin
 import FieldsetBill from '../fieldset/fieldset-billing-address/fieldset-billing-address';
 import Button from '../button/button';
 import CheckboxComponent from '../checkbox/checkbox';
+import StateManager from '../../../state-manager/state-manager';
 import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
@@ -38,6 +39,8 @@ class RegistrationForm extends BaseComponent {
 
   private router: Router | null = null;
 
+  private stateManager: StateManager | null = null;
+
   private pathToMain: string = '/';
 
   private pathToAuthorization: string = '/authorization';
@@ -70,6 +73,10 @@ class RegistrationForm extends BaseComponent {
 
   public setRouter(router: Router): void {
     this.router = router;
+  }
+
+  public setStateManager(state: StateManager): void {
+    this.stateManager = state;
   }
 
   private createComponent(): void {
@@ -181,9 +188,9 @@ class RegistrationForm extends BaseComponent {
   }
 
   private redirectToMain(): void {
-    if (this.router) {
+    if (this.router && this.stateManager) {
       history.pushState(null, '', this.pathToMain);
-      this.router.router();
+      this.router.router().then(() => this.stateManager?.changeAuthorizationStatus());
     }
   }
 
