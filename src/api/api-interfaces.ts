@@ -15,6 +15,7 @@ export interface AccessTokenResponse {
   token_type: string;
   expires_in: number;
   scope: string;
+  refresh_token?: string;
 }
 
 export interface Customer {
@@ -36,4 +37,9 @@ export interface Customer {
   stores: unknown[];
   version: number;
   versionModifiedAt: string;
+}
+
+export interface IPassFlow {
+  password: string;
+  username: string;
 }

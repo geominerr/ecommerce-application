@@ -137,7 +137,7 @@ class RegistrationForm extends BaseComponent {
           .registerUser(...dataUser) // <= c этим надо что то делать :-)
           .then(() => {
             this.api
-              .loginUser(email, password)
+              .loginUserPassFlow(email, password)
               .then(() => this.redirectToMain())
               .catch();
           })
