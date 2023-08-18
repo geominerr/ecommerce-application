@@ -5,6 +5,7 @@ import { APIUserActions } from '../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../utils/email_password_check';
 import { TagNames, Styles } from './enum';
 import './authorization.scss';
+import StateManager from '../../state-manager/state-manager';
 
 class Authorization extends TemplateView {
   private container: HTMLDivElement;
@@ -29,8 +30,16 @@ class Authorization extends TemplateView {
     document.title = this.documentTitle;
   }
 
-  public setRouter(router: Router): void {
+  public setRouter(router: Router): this {
     this.loginForm.setRouter(router);
+
+    return this;
+  }
+
+  public setStateManager(state: StateManager): this {
+    this.loginForm.setStateManager(state);
+
+    return this;
   }
 
   private createComponent(): void {

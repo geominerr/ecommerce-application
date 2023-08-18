@@ -53,7 +53,7 @@ export class APIAcceesToken {
       });
 
       const responseData = (await response.json()) as AccessTokenResponse;
-
+      this.saveTokensToLocalStorage(responseData);
       return responseData.access_token;
     } catch (error) {
       console.error('Error obtaining access token:', error);
