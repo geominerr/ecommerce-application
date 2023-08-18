@@ -105,7 +105,7 @@ class LoginForm extends BaseComponent {
 
       if (email && password && isValidData) {
         this.api
-          .loginUser(email, password)
+          .loginUserPassFlow(email, password)
           .then(() => {
             this.redirectToMain();
           })
