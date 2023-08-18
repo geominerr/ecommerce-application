@@ -139,7 +139,7 @@ export class Router {
     let currentPath = location.pathname;
 
     if (localStorage.getItem(this.keyAccessToken)) {
-      if (currentPath === '/authorization') {
+      if (currentPath === '/authorization' || currentPath === '/registration') {
         history.replaceState(null, '', '/');
         currentPath = '/';
       }
