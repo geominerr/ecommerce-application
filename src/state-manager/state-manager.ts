@@ -12,40 +12,50 @@ class StateManager {
 
   private loginLink: HTMLAnchorElement;
 
+  private signupLink: HTMLAnchorElement;
+
   private keyAccessToken: string = '_cyber_(^-^)_punk_A';
 
   constructor(api: APIUserActions, router: Router) {
     this.api = api;
     this.router = router;
     this.state = this.setState();
-    this.loginLink = this.setLoginLink();
+    this.loginLink = this.setElementLink('/authorization');
+    this.signupLink = this.setElementLink('/registration');
 
-    this.updateApp();
+    this.updateApp(this.state.isLogin);
     this.addClickHandler();
   }
 
   public changeAuthorizationStatus(): void {
     this.state.isLogin = !this.state.isLogin;
 
-    this.updateLoginLink(this.state.isLogin);
+    this.updateApp(this.state.isLogin);
   }
 
-  public setLoginLink(): HTMLAnchorElement {
+  private setElementLink(href: string): HTMLAnchorElement {
     const element: HTMLAnchorElement = document.querySelector(
-      `a[href='/authorization']`
+      `a[href="${href}"]`
     ) as HTMLAnchorElement;
 
     return element;
   }
 
-  private updateApp(): void {
-    this.updateLoginLink(this.state.isLogin);
+  private updateApp(isLogin: boolean): void {
+    this.updateLoginLink(isLogin);
+    this.updateSignupLink(isLogin);
   }
 
   private updateLoginLink(isLogin: boolean): void {
     const textContent: string = isLogin ? 'Logout' : 'Login';
 
     this.loginLink.innerText = textContent;
+  }
+
+  private updateSignupLink(isLogin: boolean): void {
+    const displayValue: string = isLogin ? 'none' : 'inline-flex';
+
+    this.signupLink.style.display = displayValue;
   }
 
   private setState(): IStateOptions {
@@ -66,8 +76,6 @@ class StateManager {
       const { target } = e;
 
       if (target === this.loginLink && this.state.isLogin) {
-        history.pushState(null, '', '/');
-        this.router.router();
         this.api.logoutUser();
         this.changeAuthorizationStatus();
       }
