@@ -54,6 +54,7 @@ export class APIAcceesToken {
 
       const responseData = (await response.json()) as AccessTokenResponse;
       this.saveTokensToLocalStorage(responseData);
+
       return responseData.access_token;
     } catch (error) {
       console.error('Error obtaining access token:', error);
@@ -84,6 +85,7 @@ export class APIAcceesToken {
 
       const responseData = (await response.json()) as AccessTokenResponse;
       this.saveTokensToLocalStorage(responseData);
+
       return responseData.access_token;
     } catch (error) {
       console.error('Error obtaining access token:', error);
@@ -98,10 +100,13 @@ export class APIAcceesToken {
     const currentTime: number = Math.floor(Date.now() / 1000);
     const tokenExpirationTime: string = (currentTime + timeAction - 3600).toString();
 
-    localStorage.setItem(this.keyAccessToken, accessToken);
-    localStorage.setItem(this.keyExpireTime, tokenExpirationTime);
-    if (refreshToken) {
-      localStorage.setItem(this.keyRefreshToken, refreshToken);
+    if (accessToken && refreshToken && timeAction) {
+      localStorage.setItem(this.keyAccessToken, accessToken);
+      localStorage.setItem(this.keyExpireTime, tokenExpirationTime);
+
+      if (refreshToken) {
+        localStorage.setItem(this.keyRefreshToken, refreshToken);
+      }
     }
   }
 
@@ -139,8 +144,8 @@ export class APIAcceesToken {
         });
 
         const responseData = (await response.json()) as AccessTokenResponse;
-
         this.saveTokensToLocalStorage(responseData);
+
         return responseData.access_token;
       } catch (error) {
         console.error('Error obtaining access token:', error);
