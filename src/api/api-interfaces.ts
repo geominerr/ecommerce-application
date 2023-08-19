@@ -43,3 +43,24 @@ export interface IPassFlow {
   password: string;
   username: string;
 }
+
+interface IAddress {
+  streetName: string;
+  streetNumber: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface IUserData {
+  addresses: IAddress[];
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  shippingAddresses?: number[];
+  billingAddresses?: number[];
+  password: string;
+  defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
+}

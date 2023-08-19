@@ -100,7 +100,7 @@ export class APIAcceesToken {
     const currentTime: number = Math.floor(Date.now() / 1000);
     const tokenExpirationTime: string = (currentTime + timeAction - 3600).toString();
 
-    if (accessToken && refreshToken && timeAction) {
+    if (accessToken && timeAction) {
       localStorage.setItem(this.keyAccessToken, accessToken);
       localStorage.setItem(this.keyExpireTime, tokenExpirationTime);
 
