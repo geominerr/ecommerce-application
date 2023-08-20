@@ -30,7 +30,7 @@ class FieldsetBill extends BaseComponent {
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
     this.select = new SelectComponent('billing');
-    this.inputCity = new InputBase(validatorAdrress.mainCheck, OPTIONS[0]);
+    this.inputCity = new InputBase(validatorAdrress.cityCheck, OPTIONS[0]);
     this.inputStreet = new InputBase(validatorAdrress.streetCheck, OPTIONS[1]);
     this.inputStreetNumber = new InputBase(validatorAdrress.streetCheck, OPTIONS[2]);
     this.inputPostal = new InputPostal(validatorAdrress.postalCodeCheck, OPTIONS[3]);
