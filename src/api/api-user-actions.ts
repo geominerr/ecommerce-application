@@ -14,9 +14,7 @@ export class APIUserActions {
 
   private keyAccessToken: string = '_cyber_(^-^)_punk_A';
 
-  private keyRefreshToken: string = '_cyber_(^-^)_punk_R';
-
-  private keyExpireTime: string = '_cyber_(^-^)_punk_T';
+  private keyUserId: string = 'userID';
 
   constructor() {
     this.CTP_PROJECT_KEY = CTP_PROJECT_KEY;
@@ -86,7 +84,7 @@ export class APIUserActions {
       if (response.status === 200) {
         const data = await response.json();
         this.saveTokensToLocalStorage(ACCESS_TOKEN);
-        localStorage.setItem('userID', data.customer.id);
+        localStorage.setItem(this.keyUserId, data.customer.id);
         return data.customer;
       } else {
         throw new Error(`${await response.json().then((data) => data.message)}`);
@@ -147,8 +145,7 @@ export class APIUserActions {
 
     if (accessToken) {
       localStorage.removeItem(this.keyAccessToken);
-      localStorage.removeItem(this.keyRefreshToken);
-      localStorage.removeItem(this.keyExpireTime);
+      localStorage.removeItem(this.keyUserId);
     }
   }
 
