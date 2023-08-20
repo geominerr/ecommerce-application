@@ -26,7 +26,7 @@ export class APIUserActions {
 
   public async registerUser(userData: IUserData): Promise<void> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
-    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/in-store/key=${this.STORE_KEY}/me/signup`;
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/signup`;
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
 
@@ -61,7 +61,7 @@ export class APIUserActions {
     anonymousCart?: { id: string; typeId: string }
   ): Promise<Customer> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
-    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/in-store/key=${this.STORE_KEY}/me/login`;
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
 
@@ -106,7 +106,7 @@ export class APIUserActions {
       username: email,
       password: password,
     });
-    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/in-store/key=${this.STORE_KEY}/me/login`;
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
 
