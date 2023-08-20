@@ -169,12 +169,29 @@ export class Router {
 
   public handleClick(e: Event): void {
     const target = e.target as HTMLElement;
+
     if (target instanceof HTMLAnchorElement) {
       e.preventDefault();
+
       const url = target.getAttribute('href');
       if (url) {
         history.pushState(null, '', url);
         this.router();
+      }
+    }
+
+    if (target instanceof HTMLImageElement) {
+      const anchor = target?.parentNode;
+
+      if (anchor && anchor instanceof HTMLAnchorElement) {
+        e.preventDefault();
+
+        const url = anchor.getAttribute('href');
+
+        if (url) {
+          history.pushState(null, '', url);
+          this.router();
+        }
       }
     }
   }
