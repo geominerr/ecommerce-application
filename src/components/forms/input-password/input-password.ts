@@ -101,6 +101,11 @@ class InputPassword extends BaseComponent {
     this.errorHint.showErrorText(this.hintNotCorfimPassword);
   }
 
+  public hideHintNotConfirmPass(): void {
+    this.input.classList.remove(Styles.INPUT_ERROR);
+    this.errorHint.hideErrorText();
+  }
+
   private addInputHadler(input: HTMLInputElement): void {
     input.addEventListener(Events.INPUT, (): void => {
       const inputValue: string = input.value;
