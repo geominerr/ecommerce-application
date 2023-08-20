@@ -1,11 +1,6 @@
 import { AccessTokenResponse, IPassFlow } from './api-interfaces';
 
-import {
-  USER_CTP_CLIENT_ID,
-  USER_CTP_CLIENT_SECRET,
-  USER_CTP_SCOPES,
-  CTP_AUTH_URL,
-} from './api-env-constants';
+import { CTP_CLIENT_ID, CTP_CLIENT_SECRET, CTP_SCOPES, CTP_AUTH_URL } from './api-env-constants';
 
 export class APIAcceesToken {
   public CTP_CLIENT_ID: string;
@@ -25,9 +20,9 @@ export class APIAcceesToken {
   private keyExpireTime: string = '_cyber_(^-^)_punk_T';
 
   constructor() {
-    this.CTP_CLIENT_ID = USER_CTP_CLIENT_ID;
-    this.CTP_CLIENT_SECRET = USER_CTP_CLIENT_SECRET;
-    this.CTP_SCOPES = USER_CTP_SCOPES;
+    this.CTP_CLIENT_ID = CTP_CLIENT_ID;
+    this.CTP_CLIENT_SECRET = CTP_CLIENT_SECRET;
+    this.CTP_SCOPES = CTP_SCOPES;
     this.CTP_AUTH_URL = CTP_AUTH_URL;
 
     this.AUTH_URL = `${this.CTP_AUTH_URL}/oauth/token`;
