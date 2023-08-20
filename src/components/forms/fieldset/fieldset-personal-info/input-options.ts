@@ -2,7 +2,7 @@ import { InputOptions } from './fieldset-interfaces';
 
 const emailOptions: InputOptions = {
   ID: 'registartion-email',
-  TYPE: 'email',
+  TYPE: 'text',
   NAME: 'registartion-email',
   PLACEHOLDER: 'Enter email',
   CONTENT_LABEL: 'Email',
