@@ -18,12 +18,6 @@ export class APIAcceesToken {
 
   public AUTH_URL: string;
 
-  private keyAccessToken: string = '_cyber_(^-^)_punk_A';
-
-  private keyRefreshToken: string = '_cyber_(^-^)_punk_R';
-
-  private keyExpireTime: string = '_cyber_(^-^)_punk_T';
-
   constructor() {
     this.CTP_CLIENT_ID = USER_CTP_CLIENT_ID;
     this.CTP_CLIENT_SECRET = USER_CTP_CLIENT_SECRET;
@@ -88,68 +82,6 @@ export class APIAcceesToken {
     } catch (error) {
       console.error('Error obtaining access token:', error);
       throw error;
-    }
-  }
-
-  public saveTokensToLocalStorage(data: AccessTokenResponse): void {
-    const accessToken: string = data.access_token;
-    const refreshToken: string | undefined = data.refresh_token;
-    const timeAction: number = data.expires_in;
-    const currentTime: number = Math.floor(Date.now() / 1000);
-    const tokenExpirationTime: string = (currentTime + timeAction - 3600).toString();
-
-    if (accessToken && timeAction) {
-      localStorage.setItem(this.keyAccessToken, accessToken);
-      localStorage.setItem(this.keyExpireTime, tokenExpirationTime);
-
-      if (refreshToken) {
-        localStorage.setItem(this.keyRefreshToken, refreshToken);
-      }
-    }
-  }
-
-  public getTokenFromLocalStorage(): string | null {
-    const accessToken: string | null = localStorage.getItem(this.keyAccessToken);
-    const tokenExpirateTime: number | null = Number(localStorage.getItem(this.keyExpireTime));
-    const currentTime: number = Math.floor(Date.now() / 1000);
-
-    if (accessToken && tokenExpirateTime && tokenExpirateTime < currentTime) {
-      return accessToken;
-    }
-
-    return null;
-  }
-
-  public async refreshAccessToken(): Promise<string | undefined> {
-    const url = `https://auth.europe-west1.gcp.commercetools.com/oauth/token`;
-    const credentials = `${this.CTP_CLIENT_ID}:${this.CTP_CLIENT_SECRET}`;
-    const authHeader = 'Basic ' + btoa(credentials);
-    const refreshToken = localStorage.getItem(this.keyRefreshToken);
-
-    if (refreshToken) {
-      const data = new URLSearchParams();
-      data.append('grant_type', 'refresh_token');
-      data.append('refresh_token', refreshToken);
-
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            Authorization: authHeader,
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: data,
-        });
-
-        const responseData = (await response.json()) as AccessTokenResponse;
-
-        return responseData.access_token;
-      } catch (error) {
-        console.error('Error obtaining access token:', error);
-        throw error;
-      }
-    } else {
-      console.log('You need autorization');
     }
   }
 }
