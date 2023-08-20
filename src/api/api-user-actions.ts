@@ -1,6 +1,7 @@
 import { Customer } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY } from './api-env-constants';
+import { IUserData } from './api-interfaces';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
 
@@ -23,26 +24,7 @@ export class APIUserActions {
     this.STORE_KEY = STORE_KEY;
   }
 
-  // eslint-disable-next-line max-lines-per-function
-  public async registerUser(
-    // поля нужно будет добавить, если возникнет необходимость
-    // https://docs.commercetools.com/api/projects/customers#ctp:api:type:CustomerDraft
-    streetName_shipping: string,
-    streetNumber_shipping: string,
-    city_shipping: string,
-    postalCode_shipping: string,
-    country_shipping: string, // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-    streetName_billing: string,
-    streetNumber_billing: string,
-    city_billing: string,
-    postalCode_billing: string,
-    country_billing: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    dateOfBirth: string, // YYYY-MM-DD
-    password: string
-  ): Promise<void> {
+  public async registerUser(userData: IUserData): Promise<void> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
     const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/in-store/key=${this.STORE_KEY}/me/signup`;
 
@@ -51,32 +33,6 @@ export class APIUserActions {
     const headers = {
       Authorization: `Bearer ${ACCESS_TOKEN}`,
       'Content-Type': 'application/json',
-    };
-
-    const userData = {
-      addresses: [
-        {
-          streetName: streetName_shipping,
-          streetNumber: streetNumber_shipping,
-          city: city_shipping,
-          postalCode: postalCode_shipping,
-          country: country_shipping,
-        },
-        {
-          streetName: streetName_billing,
-          streetNumber: streetNumber_billing,
-          city: city_billing,
-          postalCode: postalCode_billing,
-          country: country_billing,
-        },
-      ],
-      email,
-      firstName,
-      lastName,
-      dateOfBirth,
-      shippingAddresses: [0],
-      billingAddresses: [1],
-      password,
     };
 
     try {
@@ -88,6 +44,7 @@ export class APIUserActions {
 
       if (response.status === 201) {
         console.log('User registration successful.');
+        this.saveTokensToLocalStorage(ACCESS_TOKEN);
       } else {
         const errorMessage = await response.text();
         throw new Error(JSON.parse(errorMessage).message);
@@ -128,7 +85,7 @@ export class APIUserActions {
 
       if (response.status === 200) {
         const data = await response.json();
-        console.log('User log in successful.');
+        this.saveTokensToLocalStorage(ACCESS_TOKEN);
         localStorage.setItem('userID', data.customer.id);
         return data.customer;
       } else {
@@ -174,6 +131,7 @@ export class APIUserActions {
       if (response.status === 200) {
         const data = await response.json();
         localStorage.setItem('userID', data.customer.id);
+        this.saveTokensToLocalStorage(ACCESS_TOKEN);
 
         return data.customer;
       } else {
@@ -191,6 +149,12 @@ export class APIUserActions {
       localStorage.removeItem(this.keyAccessToken);
       localStorage.removeItem(this.keyRefreshToken);
       localStorage.removeItem(this.keyExpireTime);
+    }
+  }
+
+  private saveTokensToLocalStorage(accessToken: string): void {
+    if (accessToken) {
+      localStorage.setItem(this.keyAccessToken, accessToken);
     }
   }
 }

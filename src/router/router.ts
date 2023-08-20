@@ -165,11 +165,6 @@ export class Router {
 
       errorPage.setTitle();
     }
-
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
   }
 
   public handleClick(e: Event): void {

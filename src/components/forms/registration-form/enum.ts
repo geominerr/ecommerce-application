@@ -17,8 +17,8 @@ enum Content {
   TITLE = 'Register account',
   TITLE_HINT = 'Already have an account? Join us now!',
   LABEL = 'Set default address',
-  DEFAULT_SHIP_ADDRESS = 'Attention! You have set a default shipping address. All invoices will be sent to this address',
-  DEFAULT_BILL_ADDRESS = 'Attention! You have set a default account address. All deliveries will be to this address.',
+  LABEL_ONE = 'Select only this address',
+  ONLY_ONE_ADDRESS = 'Attention! You have set only one address. All invoices and deliveries will be sent to this address.',
 }
 
 enum Events {
@@ -33,8 +33,10 @@ enum FormFields {
 enum Attributes {
   ID = 'id',
   ID_VALUE_FORM = 'registration-form',
-  ID_VALUE_CHECKBOX_SHIP = 'shipping-checkbox',
-  ID_VALUE_CHECKBOX_BILL = 'billing-checkbox',
+  ID_VALUE_SHIP = 'shipping-checkbox',
+  ID_VALUE_BILL = 'billing-checkbox',
+  ID_VALUE_SHIP_DEF = 'shipping-checkbox-default',
+  ID_VALUE_BILL_DEF = 'billing-checkbox-default',
 }
 
 enum TypeButton {

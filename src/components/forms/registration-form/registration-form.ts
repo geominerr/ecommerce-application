@@ -3,12 +3,14 @@ import FieldsetPersonal from '../fieldset/fieldset-personal-info/fieldset-person
 import FieldsetShip from '../fieldset/fieldset-shipping-address/fieldset-shipping-address';
 import FieldsetBill from '../fieldset/fieldset-billing-address/fieldset-billing-address';
 import Button from '../button/button';
+import Popup from '../../popup/popup';
 import CheckboxComponent from '../checkbox/checkbox';
 import StateManager from '../../../state-manager/state-manager';
 import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
 import { AddressCheck } from '../../../utils/address_check';
+import { IAddress, IUserData } from '../../../types/general/general';
 import { TagNames, Styles, Content, Events, Attributes, TypeButton } from './enum';
 import './registration-form.scss';
 
@@ -25,7 +27,11 @@ class RegistrationForm extends BaseComponent {
 
   private button: Button;
 
+  private checkboxShipDef: CheckboxComponent;
+
   private checkboxShipping: CheckboxComponent;
+
+  private checkboxBillDef: CheckboxComponent;
 
   private checkboxBilling: CheckboxComponent;
 
@@ -34,6 +40,8 @@ class RegistrationForm extends BaseComponent {
   private titleHint: HTMLHeadElement;
 
   private buttonLogin: Button;
+
+  private popup: Popup;
 
   private api: APIUserActions;
 
@@ -57,11 +65,14 @@ class RegistrationForm extends BaseComponent {
     this.fieldSetShipping = new FieldsetShip(validatorAddress);
     this.fieldSetBilling = new FieldsetBill(validatorAddress);
     this.button = new Button(TypeButton.SIGN_UP);
-    this.checkboxShipping = new CheckboxComponent(Content.LABEL, Attributes.ID_VALUE_CHECKBOX_SHIP);
-    this.checkboxBilling = new CheckboxComponent(Content.LABEL, Attributes.ID_VALUE_CHECKBOX_BILL);
+    this.checkboxShipping = new CheckboxComponent(Content.LABEL_ONE, Attributes.ID_VALUE_SHIP);
+    this.checkboxShipDef = new CheckboxComponent(Content.LABEL, Attributes.ID_VALUE_SHIP_DEF);
+    this.checkboxBilling = new CheckboxComponent(Content.LABEL_ONE, Attributes.ID_VALUE_BILL);
+    this.checkboxBillDef = new CheckboxComponent(Content.LABEL, Attributes.ID_VALUE_BILL_DEF);
     this.loginContainer = this.createElement(TagNames.DIV, Styles.LOGIN_WRAPPER);
     this.titleHint = this.createElement(TagNames.H5, Styles.TITLE_HINT);
     this.buttonLogin = new Button(TypeButton.LOGIN);
+    this.popup = new Popup();
     this.api = api;
 
     this.createComponent();
@@ -90,10 +101,19 @@ class RegistrationForm extends BaseComponent {
     const buttonElement: HTMLElement = button.getElement();
     const buttonLoginElem: HTMLElement = buttonLogin.getElement();
 
+    const checkboxShip: HTMLElement = this.checkboxShipping.getElement();
+    const checkboxBill: HTMLElement = this.checkboxBilling.getElement();
+    const checkboxBillDef: HTMLElement = this.checkboxBillDef.getElement();
+    const checkboxShipDef: HTMLElement = this.checkboxShipDef.getElement();
+    const checkboxShipInput: HTMLInputElement = this.checkboxShipping.getCheckboxElement();
+    const checkboxBillInput: HTMLInputElement = this.checkboxBilling.getCheckboxElement();
+
     title.innerText = Content.TITLE;
     titleHint.innerText = Content.TITLE_HINT;
-    fieldSetShippingElement.append(this.checkboxShipping.getElement());
-    fieldSetBillingElement.append(this.checkboxBilling.getElement());
+    fieldSetShippingElement.append(checkboxShipDef);
+    fieldSetShippingElement.append(checkboxShip);
+    fieldSetBillingElement.append(checkboxBillDef);
+    fieldSetBillingElement.append(checkboxBill);
 
     [titleHint, buttonLoginElem].forEach((el: HTMLElement): void => loginContainer.append(el));
 
@@ -106,53 +126,98 @@ class RegistrationForm extends BaseComponent {
       loginContainer,
     ].forEach((el: HTMLElement): void => form.append(el));
 
-    const checkboxShip: HTMLInputElement = this.checkboxShipping.getCheckboxElement();
-    const checkboxBill: HTMLInputElement = this.checkboxBilling.getCheckboxElement();
-
     this.addSubmitHandler(buttonElement);
     this.addClickHandler(buttonLoginElem);
-    this.addChangeCheckboxHandler(checkboxShip, checkboxBill);
+    this.addChangeCheckboxHandler(checkboxShipInput, checkboxBillInput);
   }
 
   private addSubmitHandler(button: HTMLElement): void {
     button.addEventListener(Events.CLICK, (e: Event): void => {
       e.preventDefault();
 
-      const isValidPersonal: boolean = this.fieldSetPersonal.isValidData();
-      const isValidBilling: boolean = this.fieldSetBilling.isValidData();
-      const isValidShipping: boolean = this.fieldSetShipping.isValidData();
+      const isValidForm: boolean = this.isValidForm();
 
-      if (isValidPersonal && isValidBilling && isValidShipping) {
-        const personalData: string[] = this.fieldSetPersonal.getData();
-        const email: string = personalData[0];
-        const password: string = personalData[4];
-        let billingData: string[] | null = this.fieldSetBilling.getData();
-        let shippingData: string[] | null = this.fieldSetShipping.getData();
-        let dataUser: string[] = [];
+      if (isValidForm) {
+        const userData: IUserData = this.getData();
 
-        if (billingData && !shippingData) {
-          shippingData = billingData;
-        } else if (!billingData && shippingData) {
-          billingData = shippingData;
-        }
-
-        if (billingData && shippingData) {
-          dataUser = [...shippingData, ...billingData, ...personalData];
-        }
-        // eslint-disable-next-line
-        this.api // @ts-ignore
-          .registerUser(...dataUser) // <= c этим надо что то делать :-)
+        this.api
+          .registerUser(userData)
           .then(() => {
-            this.api
-              .loginUser(email, password)
-              .then(() => this.redirectToMain())
-              .catch();
+            this.popup.showRegistrationMessage();
+            this.redirectToMain();
           })
           .catch(() => {
+            this.popup.showRegistrationErrorMessage();
             this.fieldSetPersonal.showHintUserExist();
           });
       }
     });
+  }
+
+  // eslint-disable-next-line
+  private getData(): IUserData {
+    const personalData: string[] = this.fieldSetPersonal.getData();
+    const billingData: string[] | null = this.fieldSetBilling.getData();
+    const shippingData: string[] | null = this.fieldSetShipping.getData();
+
+    const userData: IUserData = {
+      addresses: [],
+      email: personalData[0],
+      firstName: personalData[1],
+      lastName: personalData[2],
+      dateOfBirth: personalData[3],
+      password: personalData[4],
+      shippingAddresses: [0],
+      billingAddresses: [0],
+    };
+
+    if (shippingData) {
+      const shippingAddress: IAddress = this.createAdrress(shippingData);
+
+      if (this.checkboxShipDef.getCheckboxElement().checked) {
+        userData.defaultShippingAddress = 0;
+      }
+
+      userData.addresses.push(shippingAddress);
+    }
+
+    if (billingData) {
+      const billingAddress: IAddress = this.createAdrress(billingData);
+
+      if (shippingData) {
+        userData.billingAddresses = [1];
+
+        if (this.checkboxBillDef.getCheckboxElement().checked) {
+          userData.defaultBillingAddress = 1;
+        }
+      } else {
+        if (this.checkboxBillDef.getCheckboxElement().checked) {
+          userData.defaultBillingAddress = 0;
+        }
+      }
+
+      userData.addresses.push(billingAddress);
+    }
+
+    return userData;
+  }
+
+  private createAdrress(address: string[]): IAddress {
+    return {
+      streetName: address[0],
+      streetNumber: address[1],
+      city: address[2],
+      postalCode: address[3],
+      country: address[4],
+    };
+  }
+
+  private isValidForm(): boolean {
+    const isValidPersonal: boolean = this.fieldSetPersonal.isValidData();
+    const isValidBilling: boolean = this.fieldSetBilling.isValidData();
+    const isValidShipping: boolean = this.fieldSetShipping.isValidData();
+
+    return isValidPersonal && isValidBilling && isValidShipping;
   }
 
   private addClickHandler(button: HTMLElement): void {
@@ -170,7 +235,7 @@ class RegistrationForm extends BaseComponent {
     checkboxShipping.addEventListener(Events.CLICK, (): void => {
       if (checkboxShipping.checked) {
         this.fieldSetBilling.hideFromScreen();
-        this.checkboxShipping.showHintDefaultAddress(Content.DEFAULT_SHIP_ADDRESS);
+        this.checkboxShipping.showHintDefaultAddress(Content.ONLY_ONE_ADDRESS);
       } else {
         this.fieldSetBilling.showOnScreen();
         this.checkboxShipping.hideHintDefaultAddress();
@@ -179,7 +244,7 @@ class RegistrationForm extends BaseComponent {
     checkboxBilling.addEventListener(Events.CLICK, (): void => {
       if (checkboxBilling.checked) {
         this.fieldSetShipping.hideFromScreen();
-        this.checkboxBilling.showHintDefaultAddress(Content.DEFAULT_BILL_ADDRESS);
+        this.checkboxBilling.showHintDefaultAddress(Content.ONLY_ONE_ADDRESS);
       } else {
         this.fieldSetShipping.showOnScreen();
         this.checkboxBilling.hideHintDefaultAddress();

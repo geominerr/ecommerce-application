@@ -32,8 +32,8 @@ class FieldsetPersonal extends BaseComponent {
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
     this.inputMail = new InputBase(validatorPass.emailCheck, OPTIONS[0]);
-    this.inputFirstName = new InputBase(validatorAdrress.mainCheck, OPTIONS[1]);
-    this.inputLastName = new InputBase(validatorAdrress.mainCheck, OPTIONS[2]);
+    this.inputFirstName = new InputBase(validatorAdrress.firstNameCheck, OPTIONS[1]);
+    this.inputLastName = new InputBase(validatorAdrress.lastNameCheck, OPTIONS[2]);
     this.inputDateBirth = new InputBase(validatorAdrress.ageCheck, OPTIONS[3]);
     this.inputPassword = new InputPassword(validatorPass, OPTIONS[4]);
     this.inputPasswordRepeat = new InputPassword(validatorPass, OPTIONS[5]);

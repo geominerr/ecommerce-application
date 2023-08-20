@@ -31,7 +31,7 @@ class FieldsetShip extends BaseComponent {
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
     this.select = new SelectComponent('shipping');
     this.inputPostal = new InputPostal(validator.postalCodeCheck, OPTIONS[3]);
-    this.inputCity = new InputBase(validator.mainCheck, OPTIONS[0]);
+    this.inputCity = new InputBase(validator.cityCheck, OPTIONS[0]);
     this.inputStreet = new InputBase(validator.streetCheck, OPTIONS[1]);
     this.inputStreetNumber = new InputBase(validator.streetCheck, OPTIONS[2]);
     this.select.setInputPostal(this.inputPostal);
