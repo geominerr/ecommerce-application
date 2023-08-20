@@ -5,11 +5,31 @@ export class AddressCheck {
     this.constructorHolder = '';
   }
 
-  public mainCheck(word: string): string | null {
+  public cityCheck(word: string): string | null {
     // Используй для проверки города, имени и фамилии.
     const regex = /^[a-zA-Z]*[a-zA-Z][a-zA-Z]*$/;
     if (!regex.test(word)) {
-      return 'The name / surname / city must contain at least one letter and no no special characters or numbers.';
+      return 'The city must contain at least one letter and no special characters or numbers.';
+    }
+    // Все ок? - null
+    return null;
+  }
+
+  public firstNameCheck(word: string): string | null {
+    // Используй для проверки города, имени и фамилии.
+    const regex = /^[a-zA-Z]*[a-zA-Z][a-zA-Z]*$/;
+    if (!regex.test(word)) {
+      return 'The firstname must contain at least one letter and no special characters or numbers.';
+    }
+    // Все ок? - null
+    return null;
+  }
+
+  public lastNameCheck(word: string): string | null {
+    // Используй для проверки города, имени и фамилии.
+    const regex = /^[a-zA-Z]*[a-zA-Z][a-zA-Z]*$/;
+    if (!regex.test(word)) {
+      return 'The lastname must contain at least one letter and no special characters or numbers.';
     }
     // Все ок? - null
     return null;
@@ -23,7 +43,7 @@ export class AddressCheck {
     const ageInYears = ageInMilliseconds / (365 * 24 * 60 * 60 * 1000);
 
     if (ageInYears < 13) {
-      return 'Get out of here, little sucker.';
+      return 'Unfortunately, you cannot register on this platform as the minimum age is 13.';
     } else if (ageInYears > 100) {
       return 'You should be dead.';
     }
@@ -41,53 +61,55 @@ export class AddressCheck {
 
   // eslint-disable-next-line max-lines-per-function
   public postalCodeCheck(code: string, country: string): string | null {
-    let length = 1;
+    let message: string = '';
+    let regex: RegExp;
+
     switch (country) {
+      case 'BY':
+        regex = /^\d{6}$/;
+        if (!regex.test(code)) {
+          message = 'The zip code must be formatted like XXXXXX, X - number';
+        }
+        break;
+
       case 'LT':
-        length = 7;
+        regex = /^LT-\d{5}$/;
+        if (!regex.test(code)) {
+          message = 'The zip code must be formatted like LT-XXXXX, X - number';
+        }
         break;
 
       case 'LV':
-      case 'MD':
-      case 'RO':
-      case 'RU':
-      case 'BY':
-      case 'CN':
-        length = 6;
+        regex = /^LV-\d{4}$/;
+        if (!regex.test(code)) {
+          message = 'The zip code must be formatted like LV-XXXX, X - number';
+        }
         break;
 
-      case 'US':
-      case 'MX':
-      case 'UA':
       case 'PL':
-      case 'SK':
-      case 'FI':
-      case 'FR':
-      case 'GR':
-      case 'IT':
-      case 'TR':
-      case 'ES':
-        length = 5;
+        regex = /^\d{2}-\d{3}$/;
+        if (!regex.test(code)) {
+          message = 'The zip code must be formatted like XX-XXX, X - number';
+        }
         break;
 
-      case 'HU':
-      case 'NO':
-      case 'PT':
-      case 'CH':
-      case 'SI':
-        length = 4;
+      case 'RU':
+        regex = /^\d{6}$/;
+        if (!regex.test(code)) {
+          message = 'The zip code must be formatted like XXXXXX, X - number';
+        }
         break;
 
-      case 'DE':
-      case 'GB':
-        length = 2;
+      case 'UA':
+        regex = /^\d{5}$/;
+        if (!regex.test(code)) {
+          message = 'The zip code must be formatted like XXXXX, X - number';
+        }
         break;
-
-      default:
-        length = 1;
     }
-    if (code.length < length) {
-      return `Zip code required length ${length} characters!`;
+
+    if (message) {
+      return message;
     }
     // Все ок? - null
     return null;

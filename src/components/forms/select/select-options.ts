@@ -2,29 +2,11 @@ import { SelectOptions } from './select-interfaces';
 
 const COUNTRIES: Record<string, string> = {
   Belarus: 'BY',
-  China: 'CN',
-  Germany: 'DE',
-  Spain: 'ES',
-  Finland: 'FI',
-  France: 'FR',
-  Greece: 'GR',
-  Hungary: 'HU',
-  Italy: 'IT',
   Lithuania: 'LT',
   Latvia: 'LV',
-  Moldova: 'MD',
-  Mexico: 'MX',
-  Norway: 'NO',
   Poland: 'PL',
-  Portugal: 'PT',
-  Romania: 'RO',
   Russia: 'RU',
-  Slovakia: 'SK',
-  Slovenia: 'SI',
-  Turkey: 'TR',
   Ukraine: 'UA',
-  'United Kingdom': 'GB',
-  'United States': 'US',
 };
 
 const SHIPPING_OPTIONS: SelectOptions = {

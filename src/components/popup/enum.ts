@@ -9,6 +9,8 @@ enum Styles {
   POPUP_DESCRIPTION = 'popup__description',
   BTN_CLOSE = 'popup__btn-close',
   POPUP_VISIBLE = 'popup-container--visible',
+  POPUP_ERROR = 'popup__description--error',
+  POPUP_SUCCESS = 'popup__description--success',
 }
 
 enum Events {

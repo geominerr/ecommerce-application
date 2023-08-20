@@ -32,6 +32,8 @@ export class Router {
 
   public routes: Route[];
 
+  private keyAccessToken: string = '_cyber_(^-^)_punk_A';
+
   constructor(
     // pages
     main: Main,
@@ -63,7 +65,7 @@ export class Router {
     const amplifiersLink = this.createLink('/amplifiers', 'Amplifiers');
     const soundbarsLink = this.createLink('/soundbars', 'Soundbars');
     const controllersLink = this.createLink('/controllers', 'Controllers');
-    const authorizationLink = this.createLink('/authorization', 'Authorization');
+    const authorizationLink = this.createLink('/authorization', 'Login');
     const registrationLink = this.createLink('/registration', 'Registration');
     const aboutUsLink = this.createLink('/about_us', 'About Us');
     const profileLink = this.createLink('/profile', 'Profile', '../assets/svg/profile.svg');
@@ -134,7 +136,15 @@ export class Router {
   }
 
   public async router(): Promise<void> {
-    const currentPath = location.pathname;
+    let currentPath = location.pathname;
+
+    if (localStorage.getItem(this.keyAccessToken)) {
+      if (currentPath === '/authorization' || currentPath === '/registration') {
+        history.replaceState(null, '', '/');
+        currentPath = '/';
+      }
+    }
+
     const route = this.routes.find((r) => r.path === currentPath);
 
     if (route) {

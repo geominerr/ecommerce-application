@@ -12,10 +12,10 @@ import Soundbars from '../pages/soundbars/soundbars';
 import Controllers from '../pages/controllers/controllers';
 import Profile from '../pages/profile/profile';
 import Cart from '../pages/cart/cart';
-import { API } from '../api/api';
 import { APIUserActions } from '../api/api-user-actions';
 import { EmailPasswordCheck } from '../utils/email_password_check';
 import { AddressCheck } from '../utils/address_check';
+import StateManager from '../state-manager/state-manager';
 
 class App {
   private main: Main;
@@ -52,6 +52,8 @@ class App {
 
   private validatorAddress: AddressCheck;
 
+  private stateManager: StateManager;
+
   constructor() {
     this.api = new APIUserActions();
     this.validatorEmail = new EmailPasswordCheck();
@@ -84,29 +86,13 @@ class App {
       this.profile,
       this.cart
     );
+    this.stateManager = new StateManager(this.api, this.router);
   }
 
   public start(): void {
     this.router.start();
-    this.registration.setRouter(this.router);
-    this.authorization.setRouter(this.router);
-
-    const api = new API();
-
-    async function getData(): Promise<void> {
-      try {
-        const DATA_FULL = await api.getProjectData('categories');
-        const DATA_BY_ID = await api.searchByCategoryId('58b8811c-48c4-4b65-92ef-55607b7d0deb');
-        console.log('Data from Api in App FULL', DATA_FULL);
-        console.log('Data from Api in App BY_ID', DATA_BY_ID);
-        // TEST_DATA.results.forEach(element => {
-        //   console.log(element);
-        // });
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-    getData();
+    this.registration.setRouter(this.router).setStateManager(this.stateManager);
+    this.authorization.setRouter(this.router).setStateManager(this.stateManager);
   }
 }
 

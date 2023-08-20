@@ -9,14 +9,16 @@ class Popup extends BaseComponent {
 
   private popupDescription: HTMLDivElement;
 
-  // private buttonClose: HTMLButtonElement;
+  private buttonClose: HTMLButtonElement;
+
+  private delayTime: number = 3800;
 
   constructor() {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.POPUP_CONTAINER);
     this.popupElement = this.createElement(TagNames.DIV, Styles.POPUP);
     this.popupDescription = this.createElement(TagNames.DIV, Styles.POPUP_DESCRIPTION);
-    // this.buttonClose = this.createElement(TagNames.BUTTON, Styles.BTN_CLOSE);
+    this.buttonClose = this.createElement(TagNames.BUTTON, Styles.BTN_CLOSE);
 
     this.createComponent();
   }
@@ -27,25 +29,56 @@ class Popup extends BaseComponent {
 
   public showAuthorizationMessage(): void {
     this.popupDescription.innerText = `Welcome! Your account has been successfully logged in. We are glad to see you again!`;
+    this.popupDescription.classList.add(Styles.POPUP_SUCCESS);
+    this.container.classList.add(Styles.POPUP_VISIBLE);
+
+    this.removeStylesWithDelay();
+  }
+
+  public showRegistrationMessage(): void {
+    this.popupDescription.innerText = `We are glad to welcome you, to our Universe. Your account has been successfully created!`;
+    this.popupDescription.classList.add(Styles.POPUP_SUCCESS);
+    this.container.classList.add(Styles.POPUP_VISIBLE);
+
+    this.removeStylesWithDelay();
+  }
+
+  public showAuthorizationErrorMessage(): void {
+    this.popupDescription.innerText =
+      "Sorry, we couldn't find the account. Please check that your email address and password are correct!";
+    this.popupDescription.classList.add(Styles.POPUP_ERROR);
     this.container.classList.add(Styles.POPUP_VISIBLE);
   }
 
-  public showRegistrationMessage(userName: string): void {
-    this.popupDescription.innerText = `We are glad to welcome you, ${userName}, to our Universe. Your account has been successfully created!`;
+  public showRegistrationErrorMessage(): void {
+    this.popupDescription.innerText = `Account with the provided email already exists. 
+    Please use a different email address to proceed, 
+    or you can try signing in with the existing account.`;
+    this.popupDescription.classList.add(Styles.POPUP_ERROR);
     this.container.classList.add(Styles.POPUP_VISIBLE);
   }
 
   private createComponent(): void {
-    const { container, popupElement, popupDescription } = this;
+    const { container, popupElement, popupDescription, buttonClose } = this;
 
-    [popupDescription].forEach((el: HTMLElement): void => popupElement.append(el));
+    [buttonClose, popupDescription].forEach((el: HTMLElement): void => popupElement.append(el));
     container.append(popupElement);
+    document.body.append(container);
 
-    this.addClickHandler(container);
+    this.addClickHandler();
   }
 
-  private addClickHandler(container: HTMLElement): void {
-    container.addEventListener(Events.CLICK, (e: Event): void => {
+  private removeStylesWithDelay(): void {
+    setTimeout((): void => {
+      this.container.classList.remove(Styles.POPUP_VISIBLE);
+    }, this.delayTime - 300);
+    setTimeout((): void => {
+      this.popupDescription.classList.remove(Styles.POPUP_SUCCESS);
+    }, this.delayTime);
+  }
+
+  private addClickHandler(): void {
+    document.addEventListener(Events.CLICK, (e: Event): void => {
       const { target } = e;
 
       if (target instanceof HTMLButtonElement) {
@@ -57,7 +90,7 @@ class Popup extends BaseComponent {
           !target.classList.contains(Styles.POPUP) &&
           !target.classList.contains(Styles.POPUP_DESCRIPTION)
         ) {
-          container.classList.remove(Styles.POPUP_VISIBLE);
+          this.container.classList.remove(Styles.POPUP_VISIBLE);
         }
       }
     });

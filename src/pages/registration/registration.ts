@@ -6,6 +6,7 @@ import { AddressCheck } from '../../utils/address_check';
 import { EmailPasswordCheck } from '../../utils/email_password_check';
 import { TagNames, Styles } from './enum';
 import './registration.scss';
+import StateManager from '../../state-manager/state-manager';
 
 class Registration extends TemplateView {
   private container: HTMLDivElement;
@@ -30,8 +31,16 @@ class Registration extends TemplateView {
     document.title = this.documentTitle;
   }
 
-  public setRouter(router: Router): void {
+  public setRouter(router: Router): this {
     this.registrationForm.setRouter(router);
+
+    return this;
+  }
+
+  public setStateManager(state: StateManager): this {
+    this.registrationForm.setStateManager(state);
+
+    return this;
   }
 
   private createComponent(): void {

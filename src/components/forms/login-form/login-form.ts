@@ -2,6 +2,8 @@ import BaseComponent from '../../base/base-component/base-component';
 import InputBase from '../input-base/input-base';
 import InputPassword from '../input-password/input-password';
 import Button from '../button/button';
+import Popup from '../../popup/popup';
+import StateManager from '../../../state-manager/state-manager';
 import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
@@ -26,9 +28,13 @@ class LoginForm extends BaseComponent {
 
   private buttonSignup: Button;
 
+  private popup: Popup;
+
   private api: APIUserActions;
 
   private router: Router | null = null;
+
+  private stateManager: StateManager | null = null;
 
   private pathToMain: string = '/';
 
@@ -44,6 +50,7 @@ class LoginForm extends BaseComponent {
     this.signupContainer = this.createElement(TagNames.DIV, Styles.SUBMIT_WRAPPER);
     this.titleHint = this.createElement(TagNames.H5, Styles.TITLE_HINT);
     this.buttonSignup = new Button(TypeButton.SIGN_UP);
+    this.popup = new Popup();
     this.api = apiUser;
 
     this.createComponent();
@@ -55,6 +62,10 @@ class LoginForm extends BaseComponent {
 
   public setRouter(router: Router): void {
     this.router = router;
+  }
+
+  public setStateManager(state: StateManager): void {
+    this.stateManager = state;
   }
 
   private createComponent(): void {
@@ -107,12 +118,14 @@ class LoginForm extends BaseComponent {
         this.api
           .loginUserPassFlow(email, password)
           .then(() => {
+            this.popup.showAuthorizationMessage();
             this.redirectToMain();
           })
           .catch(() =>
-            [this.inputMail, this.inputPassword].forEach((input): void =>
-              input.showHintNotFoundUser()
-            )
+            [this.inputMail, this.inputPassword].forEach((input): void => {
+              this.popup.showAuthorizationErrorMessage();
+              input.showHintNotFoundUser();
+            })
           );
       } else {
         this.inputMail.showHintRequiredFieldIsEmpty();
@@ -130,9 +143,11 @@ class LoginForm extends BaseComponent {
   }
 
   private redirectToMain(): void {
-    if (this.router) {
+    if (this.router && this.stateManager) {
       history.pushState(null, '', this.pathToMain);
-      this.router.router();
+      this.router.router().then(() => {
+        this.stateManager?.changeAuthorizationStatus();
+      });
     }
   }
 
