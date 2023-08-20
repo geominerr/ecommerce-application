@@ -14,9 +14,7 @@ export class APIUserActions {
 
   private keyAccessToken: string = '_cyber_(^-^)_punk_A';
 
-  private keyRefreshToken: string = '_cyber_(^-^)_punk_R';
-
-  private keyExpireTime: string = '_cyber_(^-^)_punk_T';
+  private keyUserId: string = 'userID';
 
   constructor() {
     this.CTP_PROJECT_KEY = CTP_PROJECT_KEY;
@@ -26,7 +24,7 @@ export class APIUserActions {
 
   public async registerUser(userData: IUserData): Promise<void> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
-    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/in-store/key=${this.STORE_KEY}/me/signup`;
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/signup`;
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
 
@@ -61,7 +59,7 @@ export class APIUserActions {
     anonymousCart?: { id: string; typeId: string }
   ): Promise<Customer> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
-    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/in-store/key=${this.STORE_KEY}/me/login`;
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
 
@@ -86,7 +84,7 @@ export class APIUserActions {
       if (response.status === 200) {
         const data = await response.json();
         this.saveTokensToLocalStorage(ACCESS_TOKEN);
-        localStorage.setItem('userID', data.customer.id);
+        localStorage.setItem(this.keyUserId, data.customer.id);
         return data.customer;
       } else {
         throw new Error(`${await response.json().then((data) => data.message)}`);
@@ -106,7 +104,7 @@ export class APIUserActions {
       username: email,
       password: password,
     });
-    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/in-store/key=${this.STORE_KEY}/me/login`;
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
 
@@ -147,8 +145,7 @@ export class APIUserActions {
 
     if (accessToken) {
       localStorage.removeItem(this.keyAccessToken);
-      localStorage.removeItem(this.keyRefreshToken);
-      localStorage.removeItem(this.keyExpireTime);
+      localStorage.removeItem(this.keyUserId);
     }
   }
 

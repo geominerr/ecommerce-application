@@ -129,20 +129,24 @@ class FieldsetPersonal extends BaseComponent {
     const inputPass: HTMLInputElement = this.inputPassword.getInputElement();
     const inputConfirm: HTMLInputElement = this.inputPasswordRepeat.getInputElement();
 
-    inputConfirm.addEventListener(Events.INPUT, (): void => {
+    const checkPasswords = (): void => {
       const valueInputPass: string = inputPass.value;
       const valueInputConfirm: string = inputConfirm.value;
-      const isSameLength: boolean = valueInputPass.length === valueInputConfirm.length;
       const isIndenticalValue: boolean = valueInputPass === valueInputConfirm;
+      const inputLength: boolean = valueInputPass.length >= 8 && valueInputConfirm.length >= 8;
 
       if (
-        this.inputPassword.isValid() &&
-        this.inputPasswordRepeat.isValid() &&
-        !(isSameLength || isIndenticalValue)
+        isIndenticalValue &&
+        (this.inputPassword.isValid() || this.inputPasswordRepeat.isValid())
       ) {
+        this.inputPasswordRepeat.hideHintNotConfirmPass();
+      } else if (inputLength && !isIndenticalValue) {
         this.inputPasswordRepeat.showHintNotConfirmPass();
       }
-    });
+    };
+
+    inputPass.addEventListener(Events.INPUT, checkPasswords);
+    inputConfirm.addEventListener(Events.INPUT, checkPasswords);
   }
 }
 
