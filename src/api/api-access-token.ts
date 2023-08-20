@@ -53,7 +53,6 @@ export class APIAcceesToken {
       });
 
       const responseData = (await response.json()) as AccessTokenResponse;
-      this.saveTokensToLocalStorage(responseData);
 
       return responseData.access_token;
     } catch (error) {
@@ -84,7 +83,6 @@ export class APIAcceesToken {
       });
 
       const responseData = (await response.json()) as AccessTokenResponse;
-      this.saveTokensToLocalStorage(responseData);
 
       return responseData.access_token;
     } catch (error) {
@@ -93,7 +91,7 @@ export class APIAcceesToken {
     }
   }
 
-  private saveTokensToLocalStorage(data: AccessTokenResponse): void {
+  public saveTokensToLocalStorage(data: AccessTokenResponse): void {
     const accessToken: string = data.access_token;
     const refreshToken: string | undefined = data.refresh_token;
     const timeAction: number = data.expires_in;
@@ -144,7 +142,6 @@ export class APIAcceesToken {
         });
 
         const responseData = (await response.json()) as AccessTokenResponse;
-        this.saveTokensToLocalStorage(responseData);
 
         return responseData.access_token;
       } catch (error) {

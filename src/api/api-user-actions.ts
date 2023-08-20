@@ -44,6 +44,7 @@ export class APIUserActions {
 
       if (response.status === 201) {
         console.log('User registration successful.');
+        this.saveTokensToLocalStorage(ACCESS_TOKEN);
       } else {
         const errorMessage = await response.text();
         throw new Error(JSON.parse(errorMessage).message);
@@ -84,7 +85,7 @@ export class APIUserActions {
 
       if (response.status === 200) {
         const data = await response.json();
-        console.log('User log in successful.');
+        this.saveTokensToLocalStorage(ACCESS_TOKEN);
         localStorage.setItem('userID', data.customer.id);
         return data.customer;
       } else {
@@ -130,6 +131,7 @@ export class APIUserActions {
       if (response.status === 200) {
         const data = await response.json();
         localStorage.setItem('userID', data.customer.id);
+        this.saveTokensToLocalStorage(ACCESS_TOKEN);
 
         return data.customer;
       } else {
@@ -147,6 +149,12 @@ export class APIUserActions {
       localStorage.removeItem(this.keyAccessToken);
       localStorage.removeItem(this.keyRefreshToken);
       localStorage.removeItem(this.keyExpireTime);
+    }
+  }
+
+  private saveTokensToLocalStorage(accessToken: string): void {
+    if (accessToken) {
+      localStorage.setItem(this.keyAccessToken, accessToken);
     }
   }
 }
