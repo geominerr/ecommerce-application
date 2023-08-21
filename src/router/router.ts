@@ -18,15 +18,7 @@ import Cart from '../pages/cart/cart';
 export class Router {
   public container: HTMLElement;
 
-  public header: HTMLElement;
-
   public main: HTMLElement;
-
-  public footer: HTMLElement;
-
-  public navigation: HTMLElement;
-
-  public navContainer: HTMLElement;
 
   public content: HTMLElement;
 
@@ -51,44 +43,10 @@ export class Router {
     cart: Cart
   ) {
     this.container = createElement('div', 'container');
-    this.header = createElement('header', 'header');
     this.main = createElement('main', 'main');
-    this.footer = createElement('footer', 'footer');
-    this.navigation = createElement('nav', 'navigation');
     this.content = createElement('div', 'content');
-    this.navContainer = createElement('div', 'nav-container');
-
-    const mainLink = this.createLink('/', 'Main', '../assets/svg/music-universe.svg');
-    const headphonesLink = this.createLink('/headphones', 'Headphones');
-    const speakersLink = this.createLink('/speakers', 'Speakers');
-    const turntablesLink = this.createLink('/turntables', 'Turntables');
-    const amplifiersLink = this.createLink('/amplifiers', 'Amplifiers');
-    const soundbarsLink = this.createLink('/soundbars', 'Soundbars');
-    const controllersLink = this.createLink('/controllers', 'Controllers');
-    const authorizationLink = this.createLink('/authorization', 'Login');
-    const registrationLink = this.createLink('/registration', 'Registration');
-    const aboutUsLink = this.createLink('/about_us', 'About Us');
-    const profileLink = this.createLink('/profile', 'Profile', '../assets/svg/profile.svg');
-    const cartLink = this.createLink('/cart', 'Cart', '../assets/svg/cart.svg');
-
-    this.header.append(this.navContainer);
-    this.navContainer.append(this.navigation);
-    this.navigation.append(
-      mainLink,
-      headphonesLink,
-      speakersLink,
-      turntablesLink,
-      amplifiersLink,
-      soundbarsLink,
-      controllersLink,
-      authorizationLink,
-      registrationLink,
-      profileLink,
-      cartLink
-    );
     this.main.append(this.content);
-    this.footer.append(aboutUsLink);
-    this.container.append(this.header, this.main, this.footer);
+    this.container.append(this.main);
 
     const body = document.querySelector('body');
     body?.appendChild(this.container);
