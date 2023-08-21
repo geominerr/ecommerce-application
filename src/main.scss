@@ -17,8 +17,9 @@ body {
 .content {
   display: flex;
   flex-direction: column;
-  width: 100%;
   justify-content: center;
+  width: 100%;
+  min-height: 30vh;
 }
 
 .main {
@@ -84,7 +85,7 @@ body {
   }
 
   .container {
-   width: 100%;
+    width: 100%;
   }
 }
 
