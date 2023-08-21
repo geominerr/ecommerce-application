@@ -41,14 +41,12 @@ export class APIUserActions {
       });
 
       if (response.status === 201) {
-        console.log('User registration successful.');
         this.saveTokensToLocalStorage(ACCESS_TOKEN);
       } else {
         const errorMessage = await response.text();
         throw new Error(JSON.parse(errorMessage).message);
       }
     } catch (error) {
-      console.error('Error registering user:', error);
       throw error;
     }
   }
