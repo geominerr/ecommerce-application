@@ -16,8 +16,14 @@ import { APIUserActions } from '../api/api-user-actions';
 import { EmailPasswordCheck } from '../utils/email_password_check';
 import { AddressCheck } from '../utils/address_check';
 import StateManager from '../state-manager/state-manager';
+import Header from '../components/header/header';
+import Footer from '../components/footer/footer';
 
 class App {
+  private header: Header;
+
+  private footer: Footer;
+
   private main: Main;
 
   private authorization: Authorization;
@@ -58,6 +64,7 @@ class App {
     this.api = new APIUserActions();
     this.validatorEmail = new EmailPasswordCheck();
     this.validatorAddress = new AddressCheck();
+    this.header = new Header();
     this.main = new Main();
     this.authorization = new Authorization(this.api, this.validatorEmail);
     this.registration = new Registration(this.api, this.validatorEmail, this.validatorAddress);
@@ -87,6 +94,7 @@ class App {
       this.cart
     );
     this.stateManager = new StateManager(this.api, this.router);
+    this.footer = new Footer();
   }
 
   public start(): void {
