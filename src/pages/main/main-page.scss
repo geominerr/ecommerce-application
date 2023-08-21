@@ -1,0 +1,225 @@
+.main-banner {
+  margin-top: 90px;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: #FFF;
+  font-size: 120px;
+  font-style: normal;
+  font-weight: 700;
+  height: 750px;
+
+  p {
+    position: relative;
+    padding: 50px 0 0 100px;
+  }
+}
+
+.learn-more {
+  a {
+    color: #FFF;
+    text-align: center;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  position: relative;
+  width: 190px;
+  height: 50px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.40);
+  // backdrop-filter: blur(4px);
+  top: 25%;
+  left: 10%;
+}
+
+.main-categories {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 100px;
+  margin-bottom: 78px;
+}
+
+.title {
+  text-align: center;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 86.023%;
+  letter-spacing: 1px;
+}
+
+.main-follow {
+  max-width: 1130px;
+  height: 650px;
+  margin-bottom: 150px;
+
+  p {
+    width: 400px;
+    color: #000;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 114%;
+    margin-left: 920px;
+    padding-top: 50px;
+  }
+}
+
+.women {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.main-advantages-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 86.023%;
+  letter-spacing: 1.6px;
+  margin-bottom: 121px;
+}
+
+.main-advantages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.prices,
+.advice,
+.delivery,
+.package,
+.ambient,
+.loyalty {
+  min-width: 25%;
+}
+
+.list {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  text-align: center;
+  padding: 3rem 2rem 10rem;
+  gap: 15rem;
+  font-size: 24px;
+  letter-spacing: 1.2px;
+}
+
+.main-holiday {
+  height: 950px;
+  padding: 100px 0 0 100px;
+
+  p {
+    color: #FFF;
+    font-size: 60px;
+    font-weight: 700;
+    line-height: 114%;
+  }
+}
+
+@media (max-width: 1325px) {
+  .main-follow {
+    p {
+      margin-left: 30px;
+    }
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {}
+
+@media (min-width: 768px) and (max-width: 1023px) {}
+
+@media (max-width: 800px) {
+  .list {
+    gap: 8rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .main-banner {
+    font-size: 8vw;
+    height: 500px;
+
+    p {
+      top: 14%;
+      max-width: 600px;
+      padding: 0;
+      margin: 5% 0 0 5%;
+    }
+  }
+
+  .learn-more {
+    a {
+      color: #FFF;
+      text-align: center;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    top: 26rem;
+    width: 130px;
+    height: 35px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.40);
+  }
+
+  .main-categories {
+    margin-top: 50px;
+    margin-bottom: 78px;
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    img {
+      width: 150px;
+    }
+  }
+
+  .main-follow {
+    max-width: 1130px;
+    height: 650px;
+    margin-bottom: 150px;
+
+    p {
+      width: 70%;
+      font-size: 8vw;
+      line-height: 100%;
+      margin-left: 30px;
+      padding-top: 60px;
+      color: #333;
+    }
+  }
+
+  .women {
+    background-position-x: -100px;
+  }
+
+  .main-advantages-title {
+    font-size: 6vw;
+  }
+
+  .list {
+    font-size: 18px;
+  }
+
+  .main-holiday {
+    display: flex;
+    justify-content: center;
+    height: 600px;
+    padding: 100px 0;
+    background-position-x: -190px;
+
+    p {
+      font-size: 9vw;
+    }
+  }
+
+}

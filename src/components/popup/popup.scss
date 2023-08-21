@@ -1,0 +1,122 @@
+.popup-container {
+  display: flex;
+  position: fixed;
+  align-self: center;
+  top: -50rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 1rem;
+  z-index: 12;
+
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(255, 255, 255, 0);
+
+  transition: all 1s;
+
+  &--visible {
+    top: 2rem;
+  }
+}
+
+.popup {
+  position: relative;
+  width: 30rem;
+  padding: 3rem;
+
+  border: 0.1rem solid rgb(20, 20, 20);
+  background-color: rgb(255, 255, 255);
+
+  &__description {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    text-align: center;
+
+    &--error {
+      &::before {
+        content: "";
+        background-image: url('./../../assets/icons/icon-error.png');
+        background-size: 4rem 4rem;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: -2rem;
+        width: 4rem;
+        height: 4rem;
+      }
+    }
+
+    &--success {
+      &::before {
+        content: "";
+        background-image: url('./../../assets/icons/icon-success.png');
+        background-size: 4rem 4rem;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: -2rem;
+        width: 4rem;
+        height: 4rem;
+      }
+    }
+  }
+
+  &__btn-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.3rem;
+    width: 3rem;
+    height: 3rem;
+
+    outline: none;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0.2rem;
+      height: 2rem;
+      background-color: rgb(14, 14, 14);
+      top: 0.5rem;
+      left: 1rem;
+    }
+
+    &::before {
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform: rotate(-45deg);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        &::after {
+          transform: scale(1.1) rotate(-45deg);
+        }
+
+        &::before {
+          transform: scale(1.1) rotate(45deg);
+        }
+      }
+    }
+
+
+    &:active {
+      &::after {
+        transform: scale(1) rotate(-45deg);
+      }
+
+      &::before {
+        transform: scale(1) rotate(45deg);
+      }
+    }
+  }
+}
