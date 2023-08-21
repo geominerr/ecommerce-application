@@ -33,7 +33,8 @@ class Profile extends TemplateView {
       const api = new API();
       const userData = await api.getUserById();
       const firstName = userData.firstName;
-      this.title.innerHTML = firstName;
+      //   const lastName = userData.lastName;
+      this.title.innerHTML = `Hi, ${firstName}`;
     } catch (error) {
       console.error('Error retrieving user data:', error);
     }
