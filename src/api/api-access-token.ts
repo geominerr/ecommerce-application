@@ -50,7 +50,6 @@ export class APIAcceesToken {
 
       return responseData.access_token;
     } catch (error) {
-      console.error('Error obtaining access token:', error);
       throw error;
     }
   }
@@ -80,7 +79,6 @@ export class APIAcceesToken {
 
       return responseData.access_token;
     } catch (error) {
-      console.error('Error obtaining access token:', error);
       throw error;
     }
   }
