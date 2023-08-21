@@ -53,7 +53,7 @@ class StateManager {
   }
 
   private updateSignupLink(isLogin: boolean): void {
-    const displayValue: string = isLogin ? 'none' : 'inline-flex';
+    const displayValue: string = isLogin ? 'inline-flex' : 'inline-flex';
 
     this.signupLink.style.display = displayValue;
   }
