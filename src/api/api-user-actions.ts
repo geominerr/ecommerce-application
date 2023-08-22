@@ -51,6 +51,7 @@ export class APIUserActions {
     }
   }
 
+  // eslint-disable-next-line max-lines-per-function
   public async loginUser(
     email: string,
     password: string,
@@ -150,6 +151,35 @@ export class APIUserActions {
   private saveTokensToLocalStorage(accessToken: string): void {
     if (accessToken) {
       localStorage.setItem(this.keyAccessToken, accessToken);
+    }
+  }
+
+  public async getCustomer(): Promise<Customer> {
+    const ACCESS_TOKEN_LOCAL = localStorage.getItem(this.keyAccessToken);
+
+    if (!ACCESS_TOKEN_LOCAL) throw new Error('Failed to obtain access token.');
+
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
+
+    const headers = {
+      Authorization: `Bearer ${ACCESS_TOKEN_LOCAL}`,
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers,
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error(`${await response.json().then((data) => data.message)}`);
+      }
+    } catch (error) {
+      throw error;
     }
   }
 }
