@@ -9,6 +9,9 @@ export const CTP_SCOPES = 'manage_project:cyberpunk';
 // OUR STORE KEY
 export const STORE_KEY = 'music_universe_key';
 
+// LOCAL KEY
+export const LOCAL_KEY = '_cyber_(^-^)_punk_A';
+
 // USER SCOPE
 export const USER_CTP_CLIENT_SECRET = 'IrPxOP8yMzOtUpTxg4Y-MCoHZwu6xUH1';
 export const USER_CTP_CLIENT_ID = 'ZSEwGPS9H3y9up-tkA3SRiht';

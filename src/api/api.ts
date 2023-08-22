@@ -1,6 +1,6 @@
 import { Customer, ProjectData } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
-import { CTP_PROJECT_KEY, CTP_API_URL } from './api-env-constants';
+import { CTP_PROJECT_KEY, CTP_API_URL, LOCAL_KEY } from './api-env-constants';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
 
@@ -13,12 +13,15 @@ export class API {
 
   public OFFSET: number;
 
+  private LOCAL_KEY: string;
+
   constructor(LIMIT = 20, OFFSET = 0) {
     this.LIMIT = LIMIT;
     this.OFFSET = OFFSET;
 
     this.CTP_PROJECT_KEY = CTP_PROJECT_KEY;
     this.CTP_API_URL = CTP_API_URL;
+    this.LOCAL_KEY = LOCAL_KEY;
   }
 
   public async getProjectData(data_of: string = ''): Promise<ProjectData> {
@@ -79,13 +82,22 @@ export class API {
 
   public async getCustomer(): Promise<Customer> {
     // const userId = localStorage.getItem('userID');
-    const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
+
+    const ACCESS_TOKEN = await API_ACCESS_TOKEN.getCustomerAccessToken({
+      password: 'Password!1',
+      username: 'a@a1.com',
+    }); // Это можешь удалить
+
+    const ACCESS_TOKEN_LOCAL = localStorage.getItem(this.LOCAL_KEY);
+
+    console.log('Свежезапрощенный: ', ACCESS_TOKEN, '\n', 'Localstorage: ', ACCESS_TOKEN_LOCAL);
+
     const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
 
-    if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
+    if (!ACCESS_TOKEN_LOCAL) throw new Error('Failed to obtain access token.');
 
     const headers = {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      Authorization: `Bearer ${ACCESS_TOKEN_LOCAL}`,
       'Content-Type': 'application/json',
     };
 

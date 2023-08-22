@@ -1,6 +1,6 @@
 import { Customer } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
-import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY } from './api-env-constants';
+import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY, LOCAL_KEY } from './api-env-constants';
 import { IUserData } from './api-interfaces';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
@@ -12,7 +12,7 @@ export class APIUserActions {
 
   public STORE_KEY: string;
 
-  private keyAccessToken: string = '_cyber_(^-^)_punk_A';
+  private keyAccessToken: string = LOCAL_KEY;
 
   private keyUserId: string = 'userID';
 
