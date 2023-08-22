@@ -71,28 +71,6 @@ export class Router {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  public createLink(path: string, label: string, imagePath?: string): HTMLAnchorElement {
-    const link = document.createElement('a');
-    link.classList.add('link');
-    link.href = path;
-
-    if (imagePath) {
-      const image = document.createElement('img');
-      image.src = imagePath;
-      link.appendChild(image);
-
-      image.addEventListener('click', (e: Event) => {
-        e.preventDefault();
-        history.pushState(null, '', path);
-        this.router();
-      });
-    } else {
-      link.textContent = label;
-    }
-
-    return link;
-  }
-
   public async router(): Promise<void> {
     let currentPath = location.pathname;
 
@@ -100,6 +78,12 @@ export class Router {
       if (currentPath === '/authorization' || currentPath === '/registration') {
         history.replaceState(null, '', '/');
         currentPath = '/';
+      }
+    }
+    if (!localStorage.getItem(this.keyAccessToken)) {
+      if (currentPath === '/profile') {
+        history.replaceState(null, '', '/authorization');
+        currentPath = '/authorization';
       }
     }
 

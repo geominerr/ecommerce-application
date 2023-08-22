@@ -46,17 +46,6 @@ beforeEach(() => {
   );
 });
 
-test('should create a link element with the provided path and label', () => {
-  const path = '/test';
-  const label = 'Test Link';
-  const link = router.createLink(path, label);
-
-  expect(link.tagName).toBe('A');
-  expect(link.classList.contains('link')).toBe(true);
-  expect(link.getAttribute('href')).toBe(path);
-  expect(link.textContent).toBe(label);
-});
-
 test('should render valid page for a valid route', async () => {
   const validView = {
     getHtml: jest.fn().mockResolvedValue('<div>This is valid page</div>'),

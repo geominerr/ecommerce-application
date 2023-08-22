@@ -1,4 +1,4 @@
-import { ProjectData } from './api-interfaces';
+import { Customer, ProjectData } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL } from './api-env-constants';
 
@@ -42,7 +42,6 @@ export class API {
       );
 
       const projectData = await response.json();
-
       return projectData as ProjectData;
     } catch (error) {
       console.error('Error fetching Project data:', error);
@@ -74,6 +73,35 @@ export class API {
       return projectData as ProjectData;
     } catch (error) {
       console.error('Error fetching Project data:', error);
+      throw error;
+    }
+  }
+
+  public async getCustomer(): Promise<Customer> {
+    // const userId = localStorage.getItem('userID');
+    const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
+
+    if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
+
+    const headers = {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers,
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error(`${await response.json().then((data) => data.message)}`);
+      }
+    } catch (error) {
       throw error;
     }
   }
