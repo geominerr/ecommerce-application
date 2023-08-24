@@ -13,6 +13,7 @@ import Controllers from '../pages/controllers/controllers';
 import Profile from '../pages/profile/profile';
 import Cart from '../pages/cart/cart';
 import { APIUserActions } from '../api/api-user-actions';
+import { APIProductActions } from '../api/product-actions/api-product-actions';
 import { EmailPasswordCheck } from '../utils/email_password_check';
 import { AddressCheck } from '../utils/address_check';
 import StateManager from '../state-manager/state-manager';
@@ -54,6 +55,8 @@ class App {
 
   private api: APIUserActions;
 
+  private apiProducts: APIProductActions;
+
   private validatorEmail: EmailPasswordCheck;
 
   private validatorAddress: AddressCheck;
@@ -62,6 +65,7 @@ class App {
 
   constructor() {
     this.api = new APIUserActions();
+    this.apiProducts = new APIProductActions();
     this.validatorEmail = new EmailPasswordCheck();
     this.validatorAddress = new AddressCheck();
     this.header = new Header();
@@ -70,12 +74,12 @@ class App {
     this.registration = new Registration(this.api, this.validatorEmail, this.validatorAddress);
     this.aboutUs = new AboutUs();
     this.notFound = new NotFound();
-    this.headphones = new Headphones();
-    this.speakers = new Speakers();
-    this.turntables = new Turntables();
-    this.amplifiers = new Amplifiers();
-    this.soundbars = new Soundbars();
-    this.controllers = new Controllers();
+    this.headphones = new Headphones(this.apiProducts);
+    this.speakers = new Speakers(this.apiProducts);
+    this.turntables = new Turntables(this.apiProducts);
+    this.amplifiers = new Amplifiers(this.apiProducts);
+    this.soundbars = new Soundbars(this.apiProducts);
+    this.controllers = new Controllers(this.apiProducts);
     this.profile = new Profile();
     this.cart = new Cart();
     this.router = new Router(
