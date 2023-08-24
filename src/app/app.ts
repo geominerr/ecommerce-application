@@ -76,7 +76,7 @@ class App {
     this.amplifiers = new Amplifiers();
     this.soundbars = new Soundbars();
     this.controllers = new Controllers();
-    this.profile = new Profile();
+    this.profile = new Profile(this.api, this.validatorEmail, this.validatorAddress);
     this.cart = new Cart();
     this.router = new Router(
       this.main,
