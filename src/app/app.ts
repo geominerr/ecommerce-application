@@ -80,7 +80,7 @@ class App {
     this.amplifiers = new Amplifiers(this.apiProducts);
     this.soundbars = new Soundbars(this.apiProducts);
     this.controllers = new Controllers(this.apiProducts);
-    this.profile = new Profile();
+    this.profile = new Profile(this.api, this.validatorEmail, this.validatorAddress);
     this.cart = new Cart();
     this.router = new Router(
       this.main,

@@ -1,0 +1,28 @@
+.registration-form {
+  margin-top: 10rem;
+  padding: 1.5rem;
+  width: 35rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+.login-btn-wrapper {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-hint {
+  margin-bottom: -1rem;
+  padding: 0;
+
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  color: rgb(75, 75, 75);
+}
