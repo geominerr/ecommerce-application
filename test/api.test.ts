@@ -1,8 +1,8 @@
-import { API } from '../src/api/api';
+import { APIProductActions } from '../src/api/product-actions/api-product-actions';
 
 // API test
 test('getProjectData should fetch project data successfully', async () => {
-  const api = new API();
+  const api = new APIProductActions();
   const projectData = {
     name: 'Cyberpunk',
     key: 'cyberpunk',
