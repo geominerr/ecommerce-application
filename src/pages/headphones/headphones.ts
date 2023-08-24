@@ -1,7 +1,15 @@
 import TemplateView from '../template-view/template-view';
 import './headphones.scss';
+import { APIProductActions } from '../../api/product-actions/api-product-actions';
 
 export default class Headphones extends TemplateView {
+  private api: APIProductActions;
+
+  constructor(api: APIProductActions) {
+    super();
+    this.api = api;
+  }
+
   private documentTitle: string = 'Headphones';
 
   public async getHtml(): Promise<string> {
@@ -10,5 +18,12 @@ export default class Headphones extends TemplateView {
 
   public setTitle(): void {
     document.title = this.documentTitle;
+    this.getData();
+  }
+
+  private getData(): void {
+    this.api
+      .searchByCategoryName('Headphones', 10, 0)
+      .then((data) => console.log('Headphones data: ', data));
   }
 }
