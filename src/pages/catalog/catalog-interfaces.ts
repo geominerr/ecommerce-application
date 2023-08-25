@@ -5,7 +5,7 @@ export interface RawProductData {
 }
 
 interface MasterVariant {
-  images: [];
+  images: IProductImage[];
   prices: Price[];
 }
 
@@ -15,9 +15,18 @@ interface Price {
   };
 }
 
+export interface IProductImage {
+  url: string;
+  label: string;
+  dimensions: {
+    w: number;
+    h: number;
+  };
+}
+
 export interface ProductData {
   id: string;
   name: string;
-  img: [];
-  price: number;
+  img: string[];
+  price: string;
 }
