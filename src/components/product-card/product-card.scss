@@ -44,10 +44,12 @@
   }
 
   &__price {
+    padding-top: 1rem;
     font-size: 1.6rem;
     align-self: start;
 
     &--disabled {
+      padding-top: 0.1rem;
       font-size: 1.1rem;
       color: rgba(69, 69, 69, 0.6);
       text-decoration: line-through;
@@ -77,6 +79,14 @@
 
     transition: all 0.3s;
     cursor: pointer;
+  }
+
+  .price-wrapper {
+    min-height: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    gap: 0.5rem
   }
 
   @media screen and (hover: hover) {

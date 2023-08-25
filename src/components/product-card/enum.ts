@@ -15,6 +15,7 @@ enum Styles {
   IMG_WRAPPER = 'card__img-wrapper',
   IMG = 'card__img',
   TITLE = 'card__title',
+  PRICE_WRAPPER = 'price-wrapper',
   PRICE = 'card__price',
   PRICE_DISCOUNT = 'card__price-discount',
   PRICE_DISABLED = 'card__price--disabled',

@@ -12,6 +12,8 @@ class ProductCard extends BaseComponent {
 
   private title: HTMLHeadElement;
 
+  private priceWrapper: HTMLDivElement;
+
   private price: HTMLParagraphElement;
 
   private discountPrice: HTMLParagraphElement;
@@ -28,6 +30,7 @@ class ProductCard extends BaseComponent {
     this.imgWrapper = this.createElement(TagNames.DIV, Styles.IMG_WRAPPER);
     this.img = this.createElement(TagNames.IMG, Styles.IMG);
     this.title = this.createElement(TagNames.H4, Styles.TITLE);
+    this.priceWrapper = this.createElement(TagNames.DIV, Styles.PRICE_WRAPPER);
     this.price = this.createElement(TagNames.P, Styles.PRICE);
     this.discountPrice = this.createElement(TagNames.P, Styles.PRICE_DISCOUNT);
     this.buttonCart = this.createElement(TagNames.P, Styles.BUTTON_CART);
@@ -42,9 +45,9 @@ class ProductCard extends BaseComponent {
     return this.card;
   }
 
-  /*добавил ParentNode, чтобы при создании карточки каждый раз не вызывать querySelector**/
   private createComponent(data: ProductData): void {
-    const { card, imgWrapper, img, title, price, discountPrice, buttonCart, hiddenLink } = this;
+    const { card, imgWrapper, img, title, buttonCart, hiddenLink } = this;
+    const { priceWrapper, price, discountPrice } = this;
 
     hiddenLink.setAttribute(Attributes.HREF, `${Attributes.HREF_VALUE_DETAIL_PRODUCT}/${data.id}`);
     hiddenLink.setAttribute(Attributes.ID, data.id);
@@ -59,13 +62,16 @@ class ProductCard extends BaseComponent {
       discountPrice.innerText = data.discountPrice;
     } else {
       // сейчас это чисто для примера, этого не будет если не будет discount
-      price.classList.add(Styles.PRICE_DISABLED);
-      discountPrice.innerText = '€ 777';
+      if (Math.random() > 0.5) {
+        price.classList.add(Styles.PRICE_DISABLED);
+        discountPrice.innerText = '€ 777';
+      }
     }
 
     imgWrapper.append(img);
-    [hiddenLink, imgWrapper, title, price, discountPrice, buttonCart].forEach(
-      (el: HTMLElement): void => card.append(el)
+    [price, discountPrice].forEach((el: HTMLElement): void => priceWrapper.append(el));
+    [hiddenLink, imgWrapper, title, priceWrapper, buttonCart].forEach((el: HTMLElement): void =>
+      card.append(el)
     );
 
     this.addClickHandler();
