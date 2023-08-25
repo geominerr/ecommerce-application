@@ -12,6 +12,7 @@ import Turntables from '../pages/turntables/turntables';
 import Amplifiers from '../pages/amplifiers/amplifiers';
 import Soundbars from '../pages/soundbars/soundbars';
 import Controllers from '../pages/controllers/controllers';
+import Catalog from '../pages/catalog/catalog';
 import Profile from '../pages/profile/profile';
 import Cart from '../pages/cart/cart';
 
@@ -39,6 +40,7 @@ export class Router {
     amplifiers: Amplifiers,
     soundbars: Soundbars,
     conrollers: Controllers,
+    catalog: Catalog,
     profile: Profile,
     cart: Cart
   ) {
@@ -62,6 +64,7 @@ export class Router {
       { path: '/amplifiers', view: amplifiers },
       { path: '/soundbars', view: soundbars },
       { path: '/controllers', view: conrollers },
+      { path: '/catalog', view: catalog },
       { path: '/error/404', view: notFound },
       { path: '/profile', view: profile },
       { path: '/cart', view: cart },
