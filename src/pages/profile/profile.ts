@@ -45,8 +45,7 @@ class Profile extends TemplateView {
       const fetchUserData = async (): Promise<void> => {
         if (localStorage.getItem(this.keyAccessToken)) {
           const api = new APIUserActions();
-          const userData = await api.getCustomer();
-          const firstName = userData.firstName;
+          const { firstName } = await api.getCustomer();
           this.title.innerHTML = `Hi ${firstName}`;
         }
       };

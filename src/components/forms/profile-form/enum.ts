@@ -6,8 +6,8 @@ enum TagNames {
 }
 
 enum Styles {
-  FORM = 'registration-form',
-  TITLE = 'registration__title',
+  FORM = 'profile-form',
+  TITLE = 'profile__title',
   INPUT_ERROR = 'input--error',
   LOGIN_WRAPPER = 'login-btn-wrapper',
   TITLE_HINT = 'title-hint',
@@ -32,7 +32,7 @@ enum FormFields {
 
 enum Attributes {
   ID = 'id',
-  ID_VALUE_FORM = 'registration-form',
+  ID_VALUE_FORM = 'profile-form',
   ID_VALUE_SHIP = 'shipping-checkbox',
   ID_VALUE_BILL = 'billing-checkbox',
   ID_VALUE_SHIP_DEF = 'shipping-checkbox-default',
