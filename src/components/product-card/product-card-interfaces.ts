@@ -1,6 +1,7 @@
 export interface ProductData {
   id: string;
   name: string;
-  img: [];
-  price: number;
+  img: string[];
+  price: string;
+  discountPrice?: string;
 }
