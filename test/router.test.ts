@@ -3,6 +3,7 @@ import Amplifiers from '../src/pages/amplifiers/amplifiers';
 import Authorization from '../src/pages/authorization/authorization';
 import Cart from '../src/pages/cart/cart';
 import Controllers from '../src/pages/controllers/controllers';
+import Catalog from '../src/pages/catalog/catalog';
 import Headphones from '../src/pages/headphones/headphones';
 import Main from '../src/pages/main/main';
 import NotFound from '../src/pages/not-found/not-found';
@@ -25,6 +26,7 @@ let turntables: Turntables;
 let amplifiers: Amplifiers;
 let soundbars: Soundbars;
 let controllers: Controllers;
+let catalog: Catalog;
 let profile: Profile;
 let cart: Cart;
 
@@ -41,6 +43,7 @@ beforeEach(() => {
     amplifiers,
     soundbars,
     controllers,
+    catalog,
     profile,
     cart
   );

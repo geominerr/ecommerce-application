@@ -7,6 +7,7 @@ const LINKS_OPTIONS: ILinkOptions[] = [
   { href: '/amplifiers', content: 'Amplifiers' },
   { href: '/controllers', content: 'Controllers' },
   { href: '/soundbars', content: 'Soundbars' },
+  { href: '/catalog', content: 'Catalog' },
 ];
 
 const LINKS_OPTIONS_USER: ILinkOptions[] = [

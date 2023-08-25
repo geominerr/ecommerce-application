@@ -10,6 +10,7 @@ import Turntables from '../pages/turntables/turntables';
 import Amplifiers from '../pages/amplifiers/amplifiers';
 import Soundbars from '../pages/soundbars/soundbars';
 import Controllers from '../pages/controllers/controllers';
+import Catalog from '../pages/catalog/catalog';
 import Profile from '../pages/profile/profile';
 import Cart from '../pages/cart/cart';
 import { APIUserActions } from '../api/api-user-actions';
@@ -47,6 +48,8 @@ class App {
 
   private controllers: Controllers;
 
+  private catalog: Catalog;
+
   private profile: Profile;
 
   private cart: Cart;
@@ -80,6 +83,7 @@ class App {
     this.amplifiers = new Amplifiers(this.apiProducts);
     this.soundbars = new Soundbars(this.apiProducts);
     this.controllers = new Controllers(this.apiProducts);
+    this.catalog = new Catalog(this.apiProducts);
     this.profile = new Profile(this.api, this.validatorEmail, this.validatorAddress);
     this.cart = new Cart();
     this.router = new Router(
@@ -94,6 +98,7 @@ class App {
       this.amplifiers,
       this.soundbars,
       this.controllers,
+      this.catalog,
       this.profile,
       this.cart
     );
