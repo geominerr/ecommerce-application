@@ -1,6 +1,9 @@
 import TemplateView from '../template-view/template-view';
 import './catalog.scss';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
+import { RawProductData, ProductData } from './catalog-interfaces';
+
+import ProductCard from '../../components/product-card/product-card';
 
 export default class Catalog extends TemplateView {
   private api: APIProductActions;
@@ -18,12 +21,28 @@ export default class Catalog extends TemplateView {
 
   public setTitle(): void {
     document.title = this.documentTitle;
-    this.getData();
+    this.makeCard();
   }
 
-  private getData(): void {
-    this.api
-      .searchByCategoryName('placeholder', 10, 0)
-      .then((data) => console.log('Catalog data: ', data));
+  private async makeCard(): Promise<void> {
+    const CARD_DATA = await this.api.getProjectData('product-projections', 20, 0);
+
+    CARD_DATA.results.forEach((res) => {
+      console.log('transformed', this.transform(res));
+      new ProductCard(this.transform(res));
+    });
+  }
+
+  private transform(data: RawProductData): ProductData {
+    const { id, name, masterVariant } = data;
+
+    const transformed: ProductData = {
+      id,
+      name: name.en,
+      img: masterVariant.images,
+      price: masterVariant.prices[0].value.centAmount / 100,
+    };
+
+    return transformed;
   }
 }

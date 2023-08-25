@@ -1,5 +1,19 @@
 interface Result {
   [key: string]: unknown;
+  id: string;
+  name: { en: string };
+  masterVariant: MasterVariant;
+}
+
+interface MasterVariant {
+  images: [];
+  prices: Price[];
+}
+
+interface Price {
+  value: {
+    centAmount: number;
+  };
 }
 
 export interface ProjectData {

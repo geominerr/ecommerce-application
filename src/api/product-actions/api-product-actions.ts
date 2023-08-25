@@ -43,7 +43,7 @@ export class APIProductActions {
     }
   }
 
-  public async searchByCategoryId(
+  private async searchByCategoryId(
     product_id: string = '',
     limit = 20,
     offset = 0
