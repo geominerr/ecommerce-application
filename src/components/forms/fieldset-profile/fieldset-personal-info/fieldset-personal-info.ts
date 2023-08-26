@@ -1,9 +1,10 @@
 import BaseComponent from '../../../base/base-component/base-component';
-import InputBase from '../../input-base/input-base';
+import InputBase from '../../input-profile/input-base/input-base';
 import { AddressCheck } from '../../../../utils/address_check';
 import { EmailPasswordCheck } from '../../../../utils/email_password_check';
 import { TagNames, Styles, Contents } from './enum';
 import { OPTIONS } from './input-options';
+import { APIUserActions } from '../../../../api/api-user-actions';
 import './fieldset.scss';
 
 class FieldsetPersonal extends BaseComponent {
@@ -19,6 +20,8 @@ class FieldsetPersonal extends BaseComponent {
 
   private inputDateBirth: InputBase;
 
+  private keyAccessToken: string = '_cyber_(^-^)_punk_A';
+
   private allInputs: InputBase[] = [];
 
   constructor(validatorPass: EmailPasswordCheck, validatorAdrress: AddressCheck) {
@@ -32,6 +35,33 @@ class FieldsetPersonal extends BaseComponent {
     this.inputDateBirth = new InputBase(validatorAdrress.ageCheck, OPTIONS[3]);
 
     this.createComponent();
+    this.getUserData();
+  }
+
+  public async getUserData(): Promise<void> {
+    try {
+      const navLinks = Array.from(document.querySelectorAll('a.nav-link'));
+      const profileLink = navLinks.find((link) => link.getAttribute('href') === '/profile');
+
+      const fetchUserData = async (): Promise<void> => {
+        if (localStorage.getItem(this.keyAccessToken)) {
+          const api = new APIUserActions();
+          const { firstName, lastName, email } = await api.getCustomer();
+          this.setInputValues(firstName, lastName, email);
+        }
+      };
+
+      if (profileLink) {
+        profileLink.addEventListener('click', async (event) => {
+          event.preventDefault();
+          await fetchUserData();
+        });
+      }
+
+      await fetchUserData();
+    } catch (error) {
+      console.error('Failed to fetch customer data:', error);
+    }
   }
 
   public getElement(): HTMLElement {
@@ -88,6 +118,12 @@ class FieldsetPersonal extends BaseComponent {
       allInputs.push(input);
       fieldsetElement.append(input.getElement());
     });
+  }
+
+  private setInputValues(firstName: string, lastName: string, email: string): void {
+    this.inputMail.setValue(email);
+    this.inputFirstName.setValue(firstName);
+    this.inputLastName.setValue(lastName);
   }
 }
 
