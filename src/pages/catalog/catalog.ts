@@ -8,17 +8,25 @@ import ProductCard from '../../components/product-card/product-card';
 export default class Catalog extends TemplateView {
   private container: HTMLDivElement;
 
+  private card_container: HTMLDivElement;
+
+  private nav_sidebar: HTMLDivElement;
+
   private api: APIProductActions;
 
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement('div', 'catalog-content');
+    this.card_container = this.createElement('div', 'card-container');
+    this.nav_sidebar = this.createElement('div', 'nav-sidebar');
     this.api = api;
   }
 
   private documentTitle: string = 'Catalog';
 
   public async getHtml(): Promise<HTMLElement> {
+    this.container.append(this.card_container);
+    this.container.append(this.nav_sidebar);
     return this.container;
   }
 
@@ -33,14 +41,14 @@ export default class Catalog extends TemplateView {
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
     if (CARD_DATA) {
       // чистим контейнер а иначе там будут сотни карточек при каждом новом клике по catalog link
-      this.container.innerHTML = '';
+      this.card_container.innerHTML = '';
 
       CARD_DATA.results.forEach((res) => {
         console.log('transformed', this.transform(res));
         //  типа вот так new ProductCard(converteResponseData(rec)
 
         const card = new ProductCard(this.transform(res)).getElement();
-        this.container.append(card);
+        this.card_container.append(card);
       });
     }
   }
