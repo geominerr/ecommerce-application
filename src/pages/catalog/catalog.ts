@@ -25,8 +25,8 @@ export default class Catalog extends TemplateView {
   private documentTitle: string = 'Catalog';
 
   public async getHtml(): Promise<HTMLElement> {
-    this.container.append(this.card_container);
     this.container.append(this.nav_sidebar);
+    this.container.append(this.card_container);
     return this.container;
   }
 
