@@ -6,12 +6,6 @@ import Authorization from '../pages/authorization/authorization';
 import Registration from '../pages/registration/registration';
 import AboutUs from '../pages/abouts-us/about-us';
 import NotFound from '../pages/not-found/not-found';
-import Headphones from '../pages/headphones/headphones';
-import Speakers from '../pages/speakers/speakers';
-import Turntables from '../pages/turntables/turntables';
-import Amplifiers from '../pages/amplifiers/amplifiers';
-import Soundbars from '../pages/soundbars/soundbars';
-import Controllers from '../pages/controllers/controllers';
 import Catalog from '../pages/catalog/catalog';
 import Profile from '../pages/profile/profile';
 import Cart from '../pages/cart/cart';
@@ -40,12 +34,6 @@ export class Router {
     registration: Registration,
     aboutUs: AboutUs,
     notFound: NotFound,
-    headphones: Headphones,
-    speakers: Speakers,
-    turntables: Turntables,
-    amplifiers: Amplifiers,
-    soundbars: Soundbars,
-    conrollers: Controllers,
     catalog: Catalog,
     profile: Profile,
     cart: Cart
@@ -65,12 +53,6 @@ export class Router {
       { path: '/authorization', view: authorization },
       { path: '/registration', view: registration },
       { path: '/about_us', view: aboutUs },
-      { path: '/headphones', view: headphones },
-      { path: '/speakers', view: speakers },
-      { path: '/turntables', view: turntables },
-      { path: '/amplifiers', view: amplifiers },
-      { path: '/soundbars', view: soundbars },
-      { path: '/controllers', view: conrollers },
       { path: '/catalog', view: catalog },
       { path: '/error/404', view: notFound },
       { path: '/profile', view: profile },
@@ -105,6 +87,7 @@ export class Router {
         currentPath = '/';
       }
     }
+
     if (!localStorage.getItem(this.keyAccessToken)) {
       if (currentPath === '/profile') {
         history.replaceState(null, '', '/authorization');
@@ -126,6 +109,8 @@ export class Router {
       }
 
       view.setTitle();
+
+      document.documentElement.scrollTop = 0;
     } else {
       const errorPage = new NotFound();
       this.content.innerHTML = await errorPage.getHtml();

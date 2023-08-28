@@ -4,12 +4,6 @@ import Authorization from '../pages/authorization/authorization';
 import Registration from '../pages/registration/registration';
 import AboutUs from '../pages/abouts-us/about-us';
 import NotFound from '../pages/not-found/not-found';
-import Headphones from '../pages/headphones/headphones';
-import Speakers from '../pages/speakers/speakers';
-import Turntables from '../pages/turntables/turntables';
-import Amplifiers from '../pages/amplifiers/amplifiers';
-import Soundbars from '../pages/soundbars/soundbars';
-import Controllers from '../pages/controllers/controllers';
 import Catalog from '../pages/catalog/catalog';
 import Profile from '../pages/profile/profile';
 import Cart from '../pages/cart/cart';
@@ -35,18 +29,6 @@ class App {
   private aboutUs: AboutUs;
 
   private notFound: NotFound;
-
-  private headphones: Headphones;
-
-  private speakers: Speakers;
-
-  private turntables: Turntables;
-
-  private amplifiers: Amplifiers;
-
-  private soundbars: Soundbars;
-
-  private controllers: Controllers;
 
   private catalog: Catalog;
 
@@ -77,12 +59,6 @@ class App {
     this.registration = new Registration(this.api, this.validatorEmail, this.validatorAddress);
     this.aboutUs = new AboutUs();
     this.notFound = new NotFound();
-    this.headphones = new Headphones(this.apiProducts);
-    this.speakers = new Speakers(this.apiProducts);
-    this.turntables = new Turntables(this.apiProducts);
-    this.amplifiers = new Amplifiers(this.apiProducts);
-    this.soundbars = new Soundbars(this.apiProducts);
-    this.controllers = new Controllers(this.apiProducts);
     this.catalog = new Catalog(this.apiProducts);
     this.profile = new Profile(this.api, this.validatorEmail, this.validatorAddress);
     this.cart = new Cart();
@@ -92,12 +68,6 @@ class App {
       this.registration,
       this.aboutUs,
       this.notFound,
-      this.headphones,
-      this.speakers,
-      this.turntables,
-      this.amplifiers,
-      this.soundbars,
-      this.controllers,
       this.catalog,
       this.profile,
       this.cart
