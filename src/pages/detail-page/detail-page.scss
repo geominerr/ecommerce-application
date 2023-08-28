@@ -1,5 +1,4 @@
 .detail-page {
-  margin-top: 120px;
   padding: 0rem 2rem;
   display: flex;
   flex-direction: column;
@@ -7,12 +6,11 @@
 
 .navbar-breadcrumb {
   width: 100%;
-  min-height: 4rem;
+  min-height: 6rem;
   display: flex;
-  justify-content: start;
+  align-items: center;
   gap: 1rem;
   border-bottom: 0.1rem solid rgb(54, 54, 54, 0.6);
-
 }
 
 .sidebar-container {
