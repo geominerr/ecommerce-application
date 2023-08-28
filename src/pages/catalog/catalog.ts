@@ -2,6 +2,7 @@ import TemplateView from '../template-view/template-view';
 import './catalog.scss';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
 import { RawProductData, ProductData, IProductImage } from './catalog-interfaces';
+import { TagNames, Styles, Events } from './enum';
 
 import ProductCard from '../../components/product-card/product-card';
 
@@ -12,14 +13,18 @@ export default class Catalog extends TemplateView {
 
   private nav_sidebar: HTMLDivElement;
 
+  private applySortBtn: HTMLButtonElement;
+
   private api: APIProductActions;
 
   constructor(api: APIProductActions) {
     super();
-    this.container = this.createElement('div', 'catalog-content');
-    this.card_container = this.createElement('div', 'card-container');
-    this.nav_sidebar = this.createElement('div', 'nav-sidebar');
+    this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
+    this.card_container = this.createElement(TagNames.DIV, Styles.CARD_CONTAINER);
+    this.nav_sidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
+    this.applySortBtn = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.api = api;
+    this.createSorting();
   }
 
   private documentTitle: string = 'Catalog';
@@ -77,5 +82,20 @@ export default class Catalog extends TemplateView {
     element.classList.add(style);
 
     return element;
+  }
+
+  private createSorting(): void {
+    this.nav_sidebar.append(this.applySortBtn);
+    this.applySortBtn.innerText = 'Apply sort';
+    this.addClickHandler(this.applySortBtn);
+  }
+
+  private addClickHandler(applySortBtn: HTMLElement): void {
+    applySortBtn.addEventListener(Events.CLICK, () => {
+      // sort
+      this.makeCard(); // Оно будет принимать параметры, но это позже
+
+      console.log('sort clicked');
+    });
   }
 }

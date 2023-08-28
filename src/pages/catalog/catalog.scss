@@ -9,13 +9,38 @@
 }
 
 .nav-sidebar {
-	border: 0.1rem solid rgb(207, 207, 207);
-	// margin-top: 120px; // Проставлен в main.scss
+	display: flex;
+	justify-content: center;
+	align-items: start;
+	padding: 1rem;
+	background-color: #fafafa;
 	width: 100rem;
+
+	.catalog-sort__button {
+    position: relative;
+    min-width: 15rem;
+    padding: 1rem;
+
+    text-align: center;
+    color: rgb(202, 202, 202);
+
+    background-color: rgb(14, 14, 14);
+    border: 0.1rem solid rgb(14, 14, 14);
+
+    transition: all 0.3s;
+    cursor: pointer;
+
+		&:hover {
+			transform: scale(1.05);
+		}
+
+		&:active {
+			transform: scale(1);
+		}
+	}
 }
 
 .card-container {
-	// margin-top: 120px; // Проставлен в main.scss
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
@@ -28,4 +53,8 @@
 	align-items: center;
 	gap: 1rem;
 	border-bottom: 0.1rem solid rgb(54, 54, 54, 0.6);
+}
+
+.catalog-sort__button {
+
 }
