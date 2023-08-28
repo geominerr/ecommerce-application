@@ -40,11 +40,12 @@ export default class Catalog extends TemplateView {
     this.makeCard();
   }
 
-  private async makeCard(): Promise<void> {
-    const CARD_DATA = await this.api.getProjectData('product-projections', 20, 0);
+  private async makeCard(searchParam: string = ''): Promise<void> {
+    const CARD_DATA = await this.api.getProjectData('product-projections', 20, 0, searchParam);
+    console.log(CARD_DATA);
 
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
-    if (CARD_DATA) {
+    if (CARD_DATA.limit) {
       // чистим контейнер а иначе там будут сотни карточек при каждом новом клике по catalog link
       this.card_container.innerHTML = '';
 
@@ -90,12 +91,23 @@ export default class Catalog extends TemplateView {
     this.addClickHandler(this.applySortBtn);
   }
 
-  private addClickHandler(applySortBtn: HTMLElement): void {
-    applySortBtn.addEventListener(Events.CLICK, () => {
-      // sort
-      this.makeCard(); // Оно будет принимать параметры, но это позже
+  private async sortByCategory(categoryName: string): Promise<void> {
+    const categories = await this.api.getProjectData('categories', 20, 0);
+    console.log(categories.results[0]);
+    categories.results.forEach((data) => {
+      if (data.externalId === categoryName) {
+        console.log('h');
+        this.makeCard(`filter=categories.id:"${data.id}"`);
+      }
+    });
+  }
 
-      console.log('sort clicked');
+  private addClickHandler(applySortBtn: HTMLElement): void {
+    applySortBtn.addEventListener(Events.CLICK, async () => {
+      this.sortByCategory('amplifiers');
+
+      // sort
+      // this.makeCard('filter=categories.id:"dd16b771-7a85-4390-bb50-8e44194cd73a"'); // Оно будет принимать параметры, но это позже
     });
   }
 }
