@@ -1,5 +1,6 @@
 import BaseComponent from '../../base/base-component/base-component';
 import FieldsetPersonal from '../fieldset-profile/fieldset-personal-info/fieldset-personal-info';
+import FieldsetShip from '../fieldset-profile/fieldset-shipping-address/fieldset-shipping-address';
 import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
@@ -12,6 +13,8 @@ class ProfileForm extends BaseComponent {
   private form: HTMLFormElement;
 
   private fieldSetPersonal: FieldsetPersonal;
+
+  private fieldSetShipping: FieldsetShip;
 
   private api: APIUserActions;
 
@@ -26,6 +29,7 @@ class ProfileForm extends BaseComponent {
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
 
     this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
+    this.fieldSetShipping = new FieldsetShip(validatorAddress);
     this.api = api;
 
     this.createComponent();
@@ -40,11 +44,14 @@ class ProfileForm extends BaseComponent {
   }
 
   private createComponent(): void {
-    const { form, fieldSetPersonal } = this;
+    const { form, fieldSetPersonal, fieldSetShipping } = this;
 
     const fieldsetPersonalElement: HTMLElement = fieldSetPersonal.getElement();
+    const fieldSetShippingElement: HTMLElement = fieldSetShipping.getElement();
 
-    [fieldsetPersonalElement].forEach((el: HTMLElement): void => form.append(el));
+    [fieldsetPersonalElement, fieldSetShippingElement].forEach((el: HTMLElement): void =>
+      form.append(el)
+    );
   }
 
   // eslint-disable-next-line

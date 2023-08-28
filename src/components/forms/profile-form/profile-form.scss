@@ -1,14 +1,15 @@
 .profile-form {
   margin-top: 3rem;
   padding: 1.5rem;
-  width: 35rem;
 
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  background-color: rgb(250, 250, 250);
+  padding: 3rem;
 
   align-items: center;
-  gap: 3rem;
-  background-color: rgb(250, 250, 250);
+  gap: 10rem;
 }
 
 .login-btn-wrapper {
