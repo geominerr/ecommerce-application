@@ -1,7 +1,7 @@
 import TemplateView from '../template-view/template-view';
 import './catalog.scss';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
-import { RawProductData, ProductData, IProductImage } from './catalog-interfaces';
+import { transform } from '../../utils/response-converter/response-converter';
 import { TagNames, Styles, Events } from './enum';
 
 import ProductCard from '../../components/product-card/product-card';
@@ -25,6 +25,7 @@ export default class Catalog extends TemplateView {
     this.applySortBtn = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.api = api;
     this.createSorting();
+    this.load();
   }
 
   private documentTitle: string = 'Catalog';
@@ -35,9 +36,18 @@ export default class Catalog extends TemplateView {
     return this.container;
   }
 
+  // Отсюда начинается загрузка
+  private load(): void {
+    if (!window.location.href.split('/')[4]) {
+      // запускается, если просто catalog, без категории
+      this.makeCard();
+    } else {
+      this.sortByCategory();
+    }
+  }
+
   public setTitle(): void {
     document.title = this.documentTitle;
-    this.makeCard();
   }
 
   private async makeCard(searchParam: string = ''): Promise<void> {
@@ -50,32 +60,13 @@ export default class Catalog extends TemplateView {
       this.card_container.innerHTML = '';
 
       CARD_DATA.results.forEach((res) => {
-        console.log('transformed', this.transform(res));
+        console.log('transformed', transform(res));
         //  типа вот так new ProductCard(converteResponseData(rec)
 
-        const card = new ProductCard(this.transform(res)).getElement();
+        const card = new ProductCard(transform(res)).getElement();
         this.card_container.append(card);
       });
     }
-  }
-
-  // по хорошему может это отдельно повыносить в helpers/utils типа converteResponseData() и вызывть в методе выше
-  private transform(data: RawProductData): ProductData {
-    const { id, name, masterVariant } = data;
-    const images: string[] = data.masterVariant.images.map(
-      (imageData: IProductImage): string => imageData.url
-    );
-    const priceNumber: number = masterVariant.prices[0].value.centAmount;
-    const price: string = `€ ${(priceNumber / 100).toFixed(2)}`;
-
-    const transformed: ProductData = {
-      id,
-      name: name.en,
-      img: images,
-      price: price,
-    };
-
-    return transformed;
   }
 
   private createElement<T extends HTMLElement>(tagName: string, style: string): T {
@@ -91,12 +82,12 @@ export default class Catalog extends TemplateView {
     this.addClickHandler(this.applySortBtn);
   }
 
-  private async sortByCategory(categoryName: string): Promise<void> {
+  private async sortByCategory(): Promise<void> {
+    const currentURLCategory = window.location.href.split('/')[4]; // если undefined, то будет пустой каталог
     const categories = await this.api.getProjectData('categories', 20, 0);
-    console.log(categories.results[0]);
+
     categories.results.forEach((data) => {
-      if (data.externalId === categoryName) {
-        console.log('h');
+      if (data.externalId === currentURLCategory) {
         this.makeCard(`filter=categories.id:"${data.id}"`);
       }
     });
@@ -104,8 +95,7 @@ export default class Catalog extends TemplateView {
 
   private addClickHandler(applySortBtn: HTMLElement): void {
     applySortBtn.addEventListener(Events.CLICK, async () => {
-      this.sortByCategory('amplifiers');
-
+      console.log('Sort pushed');
       // sort
       // this.makeCard('filter=categories.id:"dd16b771-7a85-4390-bb50-8e44194cd73a"'); // Оно будет принимать параметры, но это позже
     });
