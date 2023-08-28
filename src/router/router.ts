@@ -15,6 +15,7 @@ import Controllers from '../pages/controllers/controllers';
 import Catalog from '../pages/catalog/catalog';
 import Profile from '../pages/profile/profile';
 import Cart from '../pages/cart/cart';
+import DetailPage from '../pages/detail-page/detail-page';
 
 export class Router {
   public container: HTMLElement;
@@ -24,6 +25,11 @@ export class Router {
   public content: HTMLElement;
 
   public routes: Route[];
+
+  // это костыль, переделаю в новой ветке
+  private pathLocation: string = '/detail-product';
+
+  private detailedPage: DetailPage;
 
   private keyAccessToken: string = '_cyber_(^-^)_punk_A';
 
@@ -50,6 +56,7 @@ export class Router {
     this.main.append(this.content);
     this.container.append(this.main);
 
+    this.detailedPage = new DetailPage();
     const body = document.querySelector('body');
     body?.appendChild(this.container);
 
@@ -76,6 +83,21 @@ export class Router {
 
   public async router(): Promise<void> {
     let currentPath = location.pathname;
+
+    /**костыль исключительно для примера, буду переделывать в отдельной ветке
+     будет отдельный class IDPathMap в которой будем передавать пути со страницы catalog,
+     чтобы в роутере мы были уверены что это валидный путь, сейчас можно любой ID вести
+     в строке браузера и роутер нас оправить на страницу несуществeющего товара*/
+    if (currentPath.includes(this.pathLocation)) {
+      const id: string = currentPath.split('/')[2];
+
+      this.content.innerHTML = '';
+      const element = await this.detailedPage.getElement(id);
+
+      this.content.append(element);
+
+      return;
+    }
 
     if (localStorage.getItem(this.keyAccessToken)) {
       if (currentPath === '/authorization' || currentPath === '/registration') {
