@@ -20,3 +20,12 @@
 	justify-content: center;
 	flex-wrap: wrap;
 }
+
+.navbar-breadcrumb {
+	width: 100%;
+	min-height: 6rem;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	border-bottom: 0.1rem solid rgb(54, 54, 54, 0.6);
+}
