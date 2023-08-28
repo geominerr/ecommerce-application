@@ -3,11 +3,20 @@
 }
 
 .catalog-content {
-	/* необходим в root ( который у нас .content поставить этот margin = 120px
-  и не тягать его по всем страницам ))))))  **/
-	margin-top: 120px;
+	display: flex;
+	justify-content: center;
+	padding: 1rem;
+}
+
+.nav-sidebar {
+	border: 0.1rem solid rgb(207, 207, 207);
+	// margin-top: 120px; // Проставлен в main.scss
+	width: 100rem;
+}
+
+.card-container {
+	// margin-top: 120px; // Проставлен в main.scss
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
-	padding: 1rem;
 }
