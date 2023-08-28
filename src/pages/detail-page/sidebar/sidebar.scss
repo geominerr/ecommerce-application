@@ -90,9 +90,7 @@
         transform: scale(1);
       }
     }
-
   }
-
 }
 
 .stars {
@@ -102,7 +100,6 @@
   gap: 0.1rem;
 
   font-size: 2.2rem;
-
 
   .star {
     color: rgb(93, 93, 93, 0.8);
@@ -157,6 +154,7 @@
     align-self: end;
     align-items: center;
     justify-content: start;
+
     border-bottom: 0.1rem dotted rgba(148, 148, 148, 0.6);
   }
 
@@ -164,7 +162,6 @@
     max-width: 35%;
     font-size: 1.4rem;
     font-weight: 400;
-
   }
 }
 
@@ -193,6 +190,7 @@
 
 @media screen and (max-width: 700px) {
   .sidebar {
+    padding: 2rem 0rem 2rem;
     gap: 0.8rem
   }
 
@@ -248,7 +246,6 @@
       line-height: 1.2;
     }
   }
-
 }
 
 @media screen and (max-width: 400px) {
