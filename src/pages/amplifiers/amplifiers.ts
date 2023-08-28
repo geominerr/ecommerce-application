@@ -13,7 +13,7 @@ export default class Amplifiers extends TemplateView {
   private documentTitle: string = 'Amplifiers';
 
   public async getHtml(): Promise<string> {
-    return `<div class="amplifiers">This is Amplifiers page</div>`;
+    return `<h2>This is Amplifiers page</h2>`;
   }
 
   public setTitle(): void {

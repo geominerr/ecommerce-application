@@ -1,6 +1,7 @@
 import { ProjectData } from '../api-interfaces';
 import { APIAcceesToken } from '../api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL } from '../api-env-constants';
+import { IProductResponse } from '../api-interfaces';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
 
@@ -94,5 +95,31 @@ export class APIProductActions {
     });
 
     return result;
+  }
+
+  public async getProductByID(id: string): Promise<IProductResponse> {
+    const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
+
+    if (!ACCESS_TOKEN) {
+      throw new Error('Failed to obtain access token.');
+    }
+
+    const url: string = `https://api.europe-west1.gcp.commercetools.com/cyberpunk/product-projections/${id}`;
+
+    try {
+      const headers = {
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      };
+
+      const response: Response = await fetch(url, {
+        method: 'GET',
+        headers: headers,
+      });
+      const projectData: IProductResponse = await response.json();
+
+      return projectData;
+    } catch (error) {
+      throw error;
+    }
   }
 }
