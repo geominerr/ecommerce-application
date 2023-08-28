@@ -34,35 +34,34 @@ class Profile extends TemplateView {
     // this.userAddresses = this.createElement(TagNames.DIV, Styles.USER_ADRESSES);
 
     this.createComponent();
-    this.getUserData();
+    // this.getUserData();
   }
 
-  public async getUserData(): Promise<void> {
-    try {
-      const navLinks = Array.from(document.querySelectorAll('a.nav-link'));
-      const profileLink = navLinks.find((link) => link.getAttribute('href') === '/profile');
+  // public async getUserData(): Promise<void> {
+  //   try {
+  //     const navLinks = Array.from(document.querySelectorAll('a.nav-link'));
+  //     const profileLink = navLinks.find((link) => link.getAttribute('href') === '/profile');
 
-      const fetchUserData = async (): Promise<void> => {
-        if (localStorage.getItem(this.keyAccessToken)) {
-          const api = new APIUserActions();
-          const userData = await api.getCustomer();
-          const firstName = userData.firstName;
-          this.title.innerHTML = `Hi ${firstName}`;
-        }
-      };
+  //     const fetchUserData = async (): Promise<void> => {
+  //       if (localStorage.getItem(this.keyAccessToken)) {
+  //         const api = new APIUserActions();
+  //         const { firstName } = await api.getCustomer();
+  //         this.title.innerHTML = `Hi ${firstName}`;
+  //       }
+  //     };
 
-      if (profileLink) {
-        profileLink.addEventListener('click', async (event) => {
-          event.preventDefault();
-          await fetchUserData();
-        });
-      }
+  //     if (profileLink) {
+  //       profileLink.addEventListener('click', async (event) => {
+  //         event.preventDefault();
+  //         await fetchUserData();
+  //       });
+  //     }
 
-      await fetchUserData();
-    } catch (error) {
-      console.error('Failed to fetch customer data:', error);
-    }
-  }
+  //     await fetchUserData();
+  //   } catch (error) {
+  //     console.error('Failed to fetch customer data:', error);
+  //   }
+  // }
 
   public async getHtml(): Promise<string | HTMLElement> {
     return this.container;
@@ -76,11 +75,11 @@ class Profile extends TemplateView {
 
   private createComponent(): void {
     const { container } = this;
-    const registrationFormElement: HTMLElement = this.profileForm.getElement();
+    const profileFormElement: HTMLElement = this.profileForm.getElement();
     // const { info } = this;
 
     container.append(this.title, this.info);
-    this.info.append(registrationFormElement);
+    this.info.append(profileFormElement);
     // info.append(this.userInformation, this.userAddresses);
   }
 

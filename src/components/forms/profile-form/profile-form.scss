@@ -1,12 +1,14 @@
-.registration-form {
-  margin-top: 10rem;
+.profile-form {
+  margin-top: 3rem;
   padding: 1.5rem;
   width: 35rem;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+
   align-items: center;
   gap: 3rem;
+  background-color: rgb(250, 250, 250);
 }
 
 .login-btn-wrapper {

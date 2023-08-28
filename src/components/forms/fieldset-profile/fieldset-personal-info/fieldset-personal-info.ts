@@ -1,10 +1,10 @@
 import BaseComponent from '../../../base/base-component/base-component';
-import InputBase from '../../input-base/input-base';
-import InputPassword from '../../input-password/input-password';
+import InputBase from '../../input-profile/input-base/input-base';
 import { AddressCheck } from '../../../../utils/address_check';
 import { EmailPasswordCheck } from '../../../../utils/email_password_check';
-import { TagNames, Styles, Contents, Events } from './enum';
+import { TagNames, Styles, Contents } from './enum';
 import { OPTIONS } from './input-options';
+import { APIUserActions } from '../../../../api/api-user-actions';
 import './fieldset.scss';
 
 class FieldsetPersonal extends BaseComponent {
@@ -20,11 +20,9 @@ class FieldsetPersonal extends BaseComponent {
 
   private inputDateBirth: InputBase;
 
-  private inputPassword: InputPassword;
+  private keyAccessToken: string = '_cyber_(^-^)_punk_A';
 
-  private inputPasswordRepeat: InputPassword;
-
-  private allInputs: (InputBase | InputPassword)[] = [];
+  private allInputs: InputBase[] = [];
 
   constructor(validatorPass: EmailPasswordCheck, validatorAdrress: AddressCheck) {
     super();
@@ -35,10 +33,38 @@ class FieldsetPersonal extends BaseComponent {
     this.inputFirstName = new InputBase(validatorAdrress.firstNameCheck, OPTIONS[1]);
     this.inputLastName = new InputBase(validatorAdrress.lastNameCheck, OPTIONS[2]);
     this.inputDateBirth = new InputBase(validatorAdrress.ageCheck, OPTIONS[3]);
-    this.inputPassword = new InputPassword(validatorPass, OPTIONS[4]);
-    this.inputPasswordRepeat = new InputPassword(validatorPass, OPTIONS[5]);
 
     this.createComponent();
+    this.getUserData();
+  }
+
+  public async getUserData(): Promise<void> {
+    try {
+      const navLinks = Array.from(document.querySelectorAll('a.nav-link'));
+      const profileLink = navLinks.find((link) => link.getAttribute('href') === '/profile');
+      [this.inputFirstName, this.inputLastName, this.inputMail, this.inputDateBirth].forEach(
+        (input) => input.inputDisable()
+      );
+
+      const fetchUserData = async (): Promise<void> => {
+        if (localStorage.getItem(this.keyAccessToken)) {
+          const api = new APIUserActions();
+          const { firstName, lastName, email, dateOfBirth } = await api.getCustomer();
+          this.setInputValues(firstName, lastName, email, dateOfBirth);
+        }
+      };
+
+      if (profileLink) {
+        profileLink.addEventListener('click', async (event) => {
+          event.preventDefault();
+          await fetchUserData();
+        });
+      }
+
+      await fetchUserData();
+    } catch (error) {
+      console.error('Failed to fetch customer data:', error);
+    }
   }
 
   public getElement(): HTMLElement {
@@ -50,45 +76,28 @@ class FieldsetPersonal extends BaseComponent {
   }
 
   public getData(): string[] {
-    const { inputMail, inputFirstName, inputLastName, inputDateBirth, inputPassword } = this;
+    const { inputMail, inputFirstName, inputLastName, inputDateBirth } = this;
 
     const result: string[] = [];
 
-    [inputMail, inputFirstName, inputLastName, inputDateBirth, inputPassword].forEach(
-      (input): number => result.push(input.getValue())
+    [inputMail, inputFirstName, inputLastName, inputDateBirth].forEach((input): number =>
+      result.push(input.getValue())
     );
 
     return result;
   }
 
   public isValidData(): boolean {
-    const {
-      inputMail,
-      inputFirstName,
-      inputLastName,
-      inputDateBirth,
-      inputPassword,
-      inputPasswordRepeat,
-    } = this;
+    const { inputMail, inputFirstName, inputLastName, inputDateBirth } = this;
 
-    const isValid: boolean = [
-      inputMail,
-      inputFirstName,
-      inputLastName,
-      inputDateBirth,
-      inputPassword,
-      inputPasswordRepeat,
-    ].every((input): boolean => input.isValid());
+    const isValid: boolean = [inputMail, inputFirstName, inputLastName, inputDateBirth].every(
+      (input): boolean => input.isValid()
+    );
 
     if (!isValid) {
-      [
-        inputMail,
-        inputFirstName,
-        inputLastName,
-        inputDateBirth,
-        inputPassword,
-        inputPasswordRepeat,
-      ].forEach((input): void => input.showHintRequiredFieldIsEmpty());
+      [inputMail, inputFirstName, inputLastName, inputDateBirth].forEach((input): void =>
+        input.showHintRequiredFieldIsEmpty()
+      );
     }
 
     return isValid;
@@ -102,51 +111,28 @@ class FieldsetPersonal extends BaseComponent {
       inputFirstName,
       inputLastName,
       inputDateBirth,
-      inputPassword,
-      inputPasswordRepeat,
       allInputs,
     } = this;
 
     legendElement.innerText = Contents.LEGEND;
     fieldsetElement.append(legendElement);
 
-    [
-      inputMail,
-      inputFirstName,
-      inputLastName,
-      inputDateBirth,
-      inputPassword,
-      inputPasswordRepeat,
-    ].forEach((input: InputBase | InputPassword): void => {
+    [inputMail, inputFirstName, inputLastName, inputDateBirth].forEach((input: InputBase): void => {
       allInputs.push(input);
       fieldsetElement.append(input.getElement());
     });
-
-    this.addCheckIndentityPasswords();
   }
 
-  private addCheckIndentityPasswords(): void {
-    const inputPass: HTMLInputElement = this.inputPassword.getInputElement();
-    const inputConfirm: HTMLInputElement = this.inputPasswordRepeat.getInputElement();
-
-    const checkPasswords = (): void => {
-      const valueInputPass: string = inputPass.value;
-      const valueInputConfirm: string = inputConfirm.value;
-      const isIndenticalValue: boolean = valueInputPass === valueInputConfirm;
-      const inputLength: boolean = valueInputPass.length >= 8 && valueInputConfirm.length >= 8;
-
-      if (
-        isIndenticalValue &&
-        (this.inputPassword.isValid() || this.inputPasswordRepeat.isValid())
-      ) {
-        this.inputPasswordRepeat.hideHintNotConfirmPass();
-      } else if (inputLength && !isIndenticalValue) {
-        this.inputPasswordRepeat.showHintNotConfirmPass();
-      }
-    };
-
-    inputPass.addEventListener(Events.INPUT, checkPasswords);
-    inputConfirm.addEventListener(Events.INPUT, checkPasswords);
+  private setInputValues(
+    firstName: string,
+    lastName: string,
+    email: string,
+    dateOfBirth: string
+  ): void {
+    this.inputMail.setValue(email);
+    this.inputFirstName.setValue(firstName);
+    this.inputLastName.setValue(lastName);
+    this.inputDateBirth.setValue(dateOfBirth);
   }
 }
 
