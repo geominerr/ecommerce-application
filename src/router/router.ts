@@ -110,11 +110,7 @@ export class Router {
 
       view.setTitle();
 
-      // при переходе на другую страницу плавная прокрутка в верх страницы
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
+      document.documentElement.scrollTop = 0;
     } else {
       const errorPage = new NotFound();
       this.content.innerHTML = await errorPage.getHtml();
