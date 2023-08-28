@@ -1,4 +1,4 @@
-import { Customer } from './api-interfaces';
+import { Customer, CustomerResponse } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY, LOCAL_KEY } from './api-env-constants';
 import { IUserData } from './api-interfaces';
@@ -154,7 +154,7 @@ export class APIUserActions {
     }
   }
 
-  public async getCustomer(): Promise<Customer> {
+  public async getCustomer(): Promise<CustomerResponse> {
     const ACCESS_TOKEN_LOCAL = localStorage.getItem(this.keyAccessToken);
 
     if (!ACCESS_TOKEN_LOCAL) throw new Error('Failed to obtain access token.');

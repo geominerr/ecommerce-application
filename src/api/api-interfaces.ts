@@ -39,6 +39,42 @@ export interface Customer {
   versionModifiedAt: string;
 }
 
+export interface CustomerResponse {
+  id: string;
+  version: number;
+  versionModifiedAt: string;
+  lastMessageSequenceNumber: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  lastModifiedBy: {
+    clientId: string;
+    isPlatformClient: boolean;
+  };
+  createdBy: {
+    clientId: string;
+    isPlatformClient: boolean;
+  };
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  password: string;
+  addresses: {
+    id: string;
+    streetName: string;
+    streetNumber: string;
+    postalCode: string;
+    city: string;
+    country: string;
+  }[];
+  defaultShippingAddressId: string;
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
+  isEmailVerified: boolean;
+  stores: string[];
+  authenticationMode: string;
+}
+
 export interface IPassFlow {
   password: string;
   username: string;

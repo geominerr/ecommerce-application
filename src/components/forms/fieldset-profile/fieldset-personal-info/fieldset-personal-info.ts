@@ -42,12 +42,15 @@ class FieldsetPersonal extends BaseComponent {
     try {
       const navLinks = Array.from(document.querySelectorAll('a.nav-link'));
       const profileLink = navLinks.find((link) => link.getAttribute('href') === '/profile');
+      [this.inputFirstName, this.inputLastName, this.inputMail, this.inputDateBirth].forEach(
+        (input) => input.inputDisable()
+      );
 
       const fetchUserData = async (): Promise<void> => {
         if (localStorage.getItem(this.keyAccessToken)) {
           const api = new APIUserActions();
-          const { firstName, lastName, email } = await api.getCustomer();
-          this.setInputValues(firstName, lastName, email);
+          const { firstName, lastName, email, dateOfBirth } = await api.getCustomer();
+          this.setInputValues(firstName, lastName, email, dateOfBirth);
         }
       };
 
@@ -120,10 +123,16 @@ class FieldsetPersonal extends BaseComponent {
     });
   }
 
-  private setInputValues(firstName: string, lastName: string, email: string): void {
+  private setInputValues(
+    firstName: string,
+    lastName: string,
+    email: string,
+    dateOfBirth: string
+  ): void {
     this.inputMail.setValue(email);
     this.inputFirstName.setValue(firstName);
     this.inputLastName.setValue(lastName);
+    this.inputDateBirth.setValue(dateOfBirth);
   }
 }
 
