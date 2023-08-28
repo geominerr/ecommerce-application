@@ -1,38 +1,20 @@
 import TemplateView from '../template-view/template-view';
 import Sidebar from './sidebar/sidebar';
+import Slider from '../../components/slider/slider';
 import converteResponseData from '../../utils/response-converter/response-converter';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
-import { IProductData } from './detail-page-interfaces';
 import { TagNames, Styles } from './enum';
 import './detail-page.scss';
 
-const testObject: IProductData = {
-  title: 'Test title Pioneer',
-  id: 'dsfdslfkjsdflkjsdf87873298423',
-  description: `Основные особенности NOVATION Launchpad Mini MK3: 64 пэда RGB — идеально отражают сессию на Ableton Live, облегчая просмотр клипов. Интеграция с Ableton Live — быстрый запуск клипов и сцен одним нажатием кнопки. Stop, Solo, Mute облегчает и ускоряет управление выступлением — мышка не нужна. 3 пользовательских режима Custom — благодаря Novation Components есть возможность настроить мапинг и  считанные минуты.`,
-  price: '$ 123.23',
-  discountPrice: '$ 99.99',
-  images: [
-    'https://814486673bc6ecc6fe13-b83f982f78fa32fc8630af54f313f31e.ssl.cf3.rackcdn.com/ezgif.com-webp-to-jp-L36X-Piq.jpg',
-    'https://814486673bc6ecc6fe13-b83f982f78fa32fc8630af54f313f31e.ssl.cf3.rackcdn.com/ezgif.com-webp-to-jp-lSKu54x2.jpg',
-    'https://814486673bc6ecc6fe13-b83f982f78fa32fc8630af54f313f31e.ssl.cf3.rackcdn.com/ezgif.com-webp-to-jp-rmeCBdSu.jpg',
-    'https://814486673bc6ecc6fe13-b83f982f78fa32fc8630af54f313f31e.ssl.cf3.rackcdn.com/ezgif.com-webp-to-jp-8cZMoCOA.jpg',
-  ],
-  attributes: [
-    {
-      name: 'nameTestsdfdsf',
-      value: 'value Tsdf sdfsdfd',
-    },
-    { name: 'nameTes df ', value: 'valuefds f t' },
-    { name: 'nameTest', value: 'vas df dslueTest' },
-    { name: 'nameTsdfdsf  sf sdfest', value: 'valueTssf sest' },
-    { name: 'namedfdfdfTest', value: 'valueTs df sfest' },
-    { name: 'nameT s dfsdf  est', value: 'values df sTest' },
-  ],
-};
+// swiper
+import Swiper from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/scss';
+import 'swiper/scss/navigation';
+import 'swiper/scss/pagination';
 
 class DetailPage extends TemplateView {
-  private container: HTMLDivElement;
+  private container: HTMLElement;
 
   private navigation: HTMLElement;
 
@@ -44,6 +26,8 @@ class DetailPage extends TemplateView {
 
   private api: APIProductActions;
 
+  private swiper: Swiper | null = null;
+
   constructor() {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
@@ -52,31 +36,88 @@ class DetailPage extends TemplateView {
     this.slider = this.createElement(TagNames.DIV, Styles.SLIDER);
     this.sidebar = this.createElement(TagNames.DIV, Styles.SIDEBAR);
     this.api = new APIProductActions();
-
-    this.createComponent();
   }
 
-  public getElement(): HTMLElement {
+  public async getElement(id: string): Promise<HTMLElement> {
+    let container = this.container;
+
+    this.createComponent(id)
+      .then((element) => (container = element))
+      .catch((err) => console.log(err)); // здесь отловим ошибки некорректных данных и не дай бог Swiper )пока в консоль, потом можно через popup сообщение ...
+
+    return container;
+  }
+
+  private setTitleProduct(title: string): void {
+    document.title = title;
+  }
+
+  private async createComponent(id: string): Promise<HTMLElement> {
+    const { container, navigation, productWrapper, slider, sidebar } = this;
+
+    slider.innerHTML = '';
+    sidebar.innerHTML = '';
+
+    let productData;
+
+    try {
+      const responseData = await this.api.getProductByID(id).catch();
+      productData = converteResponseData(responseData);
+    } catch {
+      throw Error('Invalid Product Data');
+    }
+
+    const sidebarElement = new Sidebar(productData).getElement();
+    const sliderSwiper = new Slider(productData.images).getElement();
+    this.setTitleProduct(productData.title);
+
+    // пока заглушка...
+    navigation.innerText = 'Navigation - breadcrumb';
+
+    sidebar.append(sidebarElement);
+    slider.append(sliderSwiper);
+    setTimeout(() => this.initSwiper(), 10);
+
+    [slider, sidebar].forEach((el: HTMLElement): void => productWrapper.append(el));
+    [navigation, productWrapper].forEach((el: HTMLElement): void => container.append(el));
+
     return this.container;
   }
 
-  private async createComponent(): Promise<void> {
-    const { container, navigation, productWrapper, slider, sidebar } = this;
+  private initSwiper(): void {
+    /* проверяем создавали мы уже Swiper, если true 
+    (крашем наш старый swiper, что бы не было конфликтов на новоотрисованом slider,
+      на всякий случай вкинул try/catch пару раз была ошибка, когда инициализация происходила
+      раньше, чем наш slider отрисовался в DOM, решил через иниwиализацию с setTimeout,
+      похорошему необходимо использовать MutationObserver, и инициализировать swiper после изменения в DOM,
+      но моя реализация observer почему-то не корректно работала... оставил setTimeout )*/
+    if (this.swiper) {
+      try {
+        this.swiper.destroy();
+      } catch {
+        throw Error('Swiper problem');
+      }
+    }
 
-    const responseData = await this.api
-      .getProductByID('214b1b4f-8d0d-4d88-b045-03d05011e408')
-      .catch();
-    const productData = converteResponseData(responseData);
-    console.log(productData);
+    try {
+      this.swiper = new Swiper('.swiper', {
+        modules: [Navigation, Pagination],
+        loop: true,
 
-    const sidebarElement = new Sidebar(testObject).getElement();
-    //
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+          dynamicBullets: true,
+        },
 
-    navigation.innerText = 'Navigation - breadcrumb';
-    slider.innerText = 'SLIDER';
-    sidebar.append(sidebarElement);
-    [slider, sidebar].forEach((el: HTMLElement): void => productWrapper.append(el));
-    [navigation, productWrapper].forEach((el: HTMLElement): void => container.append(el));
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      });
+    } catch {
+      throw Error('Swiper problem');
+    }
   }
 
   private createElement<T extends HTMLElement>(tagName: string, style: string): T {

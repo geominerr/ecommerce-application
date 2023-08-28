@@ -3,8 +3,6 @@
   padding: 0rem 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
-  align-items: stretch;
 }
 
 .navbar-breadcrumb {
@@ -18,7 +16,7 @@
 }
 
 .sidebar-container {
-  width: 60%;
+  width: 50%;
   min-height: 50rem;
   display: flex;
   flex-direction: column;
@@ -27,15 +25,15 @@
 
 .slider-container {
   width: 50%;
-  min-height: 50rem;
+  padding: 3rem 2rem 1rem;
+
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   font-size: 5rem;
 }
 
 .product-container {
-  height: 50vh;
   display: flex;
   justify-content: center;
   flex: 1;
@@ -48,6 +46,7 @@
 
   .slider-container {
     width: 100%;
+    padding: 2.5rem 0rem 1rem;
   }
 
   .sidebar-container {
