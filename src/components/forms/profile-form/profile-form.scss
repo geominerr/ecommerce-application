@@ -1,14 +1,15 @@
 .profile-form {
   margin-top: 3rem;
+  margin-bottom: 3rem;
   padding: 1.5rem;
 
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content:center;
   background-color: rgb(250, 250, 250);
   padding: 3rem;
-
-  align-items: center;
   gap: 10rem;
 }
 
@@ -28,4 +29,10 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   color: rgb(75, 75, 75);
+}
+
+@media (max-width: 450px) {
+  .profile-form{
+    padding: 1rem;
+  }
 }

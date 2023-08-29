@@ -3,7 +3,7 @@ import ErrorHint from '../../error-hint/error-hint';
 import { TagNames, Styles, Attributes, Events } from './enum';
 import { InputOptions } from './input-postal-interfaces';
 import { ValidationPostal } from '../../../../types/general/general';
-import SelectComponent from '../../select/select';
+import SelectComponentProfile from '../../select-profile/select';
 import './input-postal.scss';
 
 class InputPostal extends BaseComponent {
@@ -17,7 +17,7 @@ class InputPostal extends BaseComponent {
 
   private validator: ValidationPostal;
 
-  private selectComponent: SelectComponent | null = null;
+  private selectComponent: SelectComponentProfile | null = null;
 
   private hintRequiredField: string = 'This is a required field';
 
@@ -52,6 +52,16 @@ class InputPostal extends BaseComponent {
 
   public getElement(): HTMLElement {
     return this.container;
+  }
+
+  public inputDisable(): void {
+    // Set the value of the input element
+    this.input.disabled = true;
+  }
+
+  public setValue(value: string): void {
+    // Set the value of the input element
+    this.input.value = value;
   }
 
   public isValid(): boolean {
@@ -94,7 +104,7 @@ class InputPostal extends BaseComponent {
     this.errorHint.showErrorText(this.hintUserNotFound);
   }
 
-  public setSelectComponent(select: SelectComponent): void {
+  public setSelectComponent(select: SelectComponentProfile): void {
     this.selectComponent = select;
   }
 

@@ -154,7 +154,7 @@ export class APIUserActions {
     }
   }
 
-  public async getCustomer(): Promise<CustomerResponse> {
+  public async getPersonalInfo(): Promise<CustomerResponse> {
     const ACCESS_TOKEN_LOCAL = localStorage.getItem(this.keyAccessToken);
 
     if (!ACCESS_TOKEN_LOCAL) throw new Error('Failed to obtain access token.');
