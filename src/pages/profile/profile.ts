@@ -18,8 +18,6 @@ class Profile extends TemplateView {
 
   private documentTitle: string = 'Profile';
 
-  private keyAccessToken: string = '_cyber_(^-^)_punk_A';
-
   constructor(api: APIUserActions, validator1: EmailPasswordCheck, validator2: AddressCheck) {
     super();
     this.profileForm = new ProfileForm(api, validator1, validator2);

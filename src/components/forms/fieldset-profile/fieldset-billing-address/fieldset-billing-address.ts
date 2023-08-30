@@ -43,6 +43,16 @@ class FieldsetBill extends BaseComponent {
     return this.fieldsetElement;
   }
 
+  public inputDisable(): void {
+    [
+      this.select,
+      this.inputPostal,
+      this.inputCity,
+      this.inputStreet,
+      this.inputStreetNumber,
+    ].forEach((input) => input.inputDisable());
+  }
+
   public getData(): string[] | null {
     const { inputCity, inputPostal, inputStreet, inputStreetNumber, select } = this;
 

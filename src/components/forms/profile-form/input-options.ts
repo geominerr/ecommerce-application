@@ -1,4 +1,4 @@
-import { InputOptions } from '../input-base/input-base-interfaces';
+import { InputOptions } from '../input-profile/input-base/input-base-interfaces';
 
 const emailOptions: InputOptions = {
   ID: 'login-email',

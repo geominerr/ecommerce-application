@@ -8,16 +8,21 @@ import { EmailPasswordCheck } from '../../../utils/email_password_check';
 import { AddressCheck } from '../../../utils/address_check';
 import { TagNames, Styles } from './enum';
 import './profile-form.scss';
-//
 
 class ProfileForm extends BaseComponent {
   private form: HTMLFormElement;
 
+  private personalInfo: HTMLDivElement;
+
+  private shippingAddresses: HTMLDivElement;
+
+  private billingAddresses: HTMLDivElement;
+
   private fieldSetPersonal: FieldsetPersonal;
 
-  private fieldSetShipping: FieldsetShip;
+  private fieldSetShippingList: FieldsetShip[];
 
-  private fieldSetBilling: FieldsetBill;
+  private fieldSetBillingList: FieldsetBill[];
 
   private api: APIUserActions;
 
@@ -25,17 +30,21 @@ class ProfileForm extends BaseComponent {
 
   private keyAccessToken: string = '_cyber_(^-^)_punk_A';
 
+  private hasFetchedData: boolean = false;
+
   constructor(
     api: APIUserActions,
     validatorEmail: EmailPasswordCheck,
-    validatorAddress: AddressCheck
+    private validatorAddress: AddressCheck
   ) {
     super();
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
-
+    this.personalInfo = this.createElement(TagNames.DIV, Styles.INFO);
+    this.shippingAddresses = this.createElement(TagNames.DIV, Styles.SHIPPING);
+    this.billingAddresses = this.createElement(TagNames.DIV, Styles.BILLING);
     this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
-    this.fieldSetShipping = new FieldsetShip(validatorAddress);
-    this.fieldSetBilling = new FieldsetBill(validatorAddress);
+    this.fieldSetShippingList = [];
+    this.fieldSetBillingList = [];
     this.api = api;
 
     this.createComponent();
@@ -45,29 +54,16 @@ class ProfileForm extends BaseComponent {
   public async getUserData(): Promise<void> {
     try {
       const profileLink = document.querySelector(`a[href="/profile"]`) as HTMLAnchorElement;
-      if (profileLink) {
+      if (profileLink && !this.hasFetchedData) {
         profileLink.addEventListener('click', async (event) => {
           event.preventDefault();
-          await this.fetchUserData();
+          if (!this.hasFetchedData) {
+            await this.fetchUserData();
+          }
         });
       }
       await this.fetchUserData();
-      [
-        this.fieldSetPersonal.inputFirstName,
-        this.fieldSetPersonal.inputLastName,
-        this.fieldSetPersonal.inputMail,
-        this.fieldSetPersonal.inputDateBirth,
-        this.fieldSetShipping.select,
-        this.fieldSetShipping.inputStreet,
-        this.fieldSetShipping.inputStreetNumber,
-        this.fieldSetShipping.inputPostal,
-        this.fieldSetShipping.inputCity,
-        this.fieldSetBilling.select,
-        this.fieldSetBilling.inputStreet,
-        this.fieldSetBilling.inputStreetNumber,
-        this.fieldSetBilling.inputPostal,
-        this.fieldSetBilling.inputCity,
-      ].forEach((input) => input.inputDisable());
+      this.disableAllInputs();
     } catch (error) {
       console.error('Failed to fetch customer data:', error);
     }
@@ -87,43 +83,29 @@ class ProfileForm extends BaseComponent {
         billingAddressIds,
       } = await api.getPersonalInfo();
       this.fieldSetPersonal.setInputValues(firstName, lastName, email, dateOfBirth);
-      if (shippingAddressIds.length > 0 && billingAddressIds.length > 0) {
-        const shippingAddressId = shippingAddressIds[0];
-        const billingAddressId = billingAddressIds[0];
 
+      shippingAddressIds.forEach((shippingAddressId) => {
         const shippingAddress = addresses.find((address) => address.id === shippingAddressId);
-        const billingAddress = addresses.find((address) => address.id === billingAddressId);
-
-        if (shippingAddress && billingAddress) {
+        if (shippingAddress) {
           const { streetName, streetNumber, postalCode, city, country } = shippingAddress;
-          this.fieldSetShipping.setInputValues(streetName, streetNumber, postalCode, city, country);
-
-          if (shippingAddressId === billingAddressId) {
-            this.fieldSetBilling.setInputValues(
-              streetName,
-              streetNumber,
-              postalCode,
-              city,
-              country
-            );
-          } else {
-            const {
-              streetName: billingStreetName,
-              streetNumber: billingStreetNumber,
-              postalCode: billingPostalCode,
-              city: billingCity,
-              country: billingCountry,
-            } = billingAddress;
-            this.fieldSetBilling.setInputValues(
-              billingStreetName,
-              billingStreetNumber,
-              billingPostalCode,
-              billingCity,
-              billingCountry
-            );
-          }
+          const fieldSetShipping = new FieldsetShip(this.validatorAddress);
+          fieldSetShipping.setInputValues(streetName, streetNumber, postalCode, city, country);
+          this.fieldSetShippingList.push(fieldSetShipping);
+          this.shippingAddresses.append(fieldSetShipping.getElement());
         }
-      }
+      });
+
+      billingAddressIds.forEach((billingAddressId) => {
+        const billingAddress = addresses.find((address) => address.id === billingAddressId);
+        if (billingAddress) {
+          const { streetName, streetNumber, postalCode, city, country } = billingAddress;
+          const fieldSetBilling = new FieldsetBill(this.validatorAddress);
+          fieldSetBilling.setInputValues(streetName, streetNumber, postalCode, city, country);
+          this.fieldSetBillingList.push(fieldSetBilling);
+          this.billingAddresses.append(fieldSetBilling.getElement());
+        }
+      });
+      this.hasFetchedData = true;
     }
   }
 
@@ -136,15 +118,30 @@ class ProfileForm extends BaseComponent {
   }
 
   private createComponent(): void {
-    const { form, fieldSetPersonal, fieldSetShipping, fieldSetBilling } = this;
+    const { form, personalInfo, shippingAddresses, billingAddresses } = this;
 
-    const fieldsetPersonalElement: HTMLElement = fieldSetPersonal.getElement();
-    const fieldSetShippingElement: HTMLElement = fieldSetShipping.getElement();
-    const fieldSetBillingElement: HTMLElement = fieldSetBilling.getElement();
+    const fieldsetPersonalElement: HTMLElement = this.fieldSetPersonal.getElement();
 
-    [fieldsetPersonalElement, fieldSetShippingElement, fieldSetBillingElement].forEach(
-      (el: HTMLElement): void => form.append(el)
-    );
+    form.append(personalInfo, shippingAddresses, billingAddresses);
+
+    personalInfo.append(fieldsetPersonalElement);
+  }
+
+  private disableAllInputs(): void {
+    [
+      this.fieldSetPersonal.inputFirstName,
+      this.fieldSetPersonal.inputLastName,
+      this.fieldSetPersonal.inputMail,
+      this.fieldSetPersonal.inputDateBirth,
+    ].forEach((input) => input.inputDisable());
+
+    this.fieldSetShippingList.forEach((fieldSetShipping) => {
+      fieldSetShipping.inputDisable();
+    });
+
+    this.fieldSetBillingList.forEach((fieldSetBilling) => {
+      fieldSetBilling.inputDisable();
+    });
   }
 }
 
