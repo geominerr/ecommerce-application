@@ -82,6 +82,7 @@ export interface CustomerResponse {
     country: string;
   }[];
   defaultShippingAddressId: string;
+  defaultBillingAddressId: string;
   shippingAddressIds: string[];
   billingAddressIds: string[];
   isEmailVerified: boolean;

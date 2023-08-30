@@ -23,7 +23,7 @@ class FieldsetShip extends BaseComponent {
 
   public inputStreetNumber: InputBase;
 
-  private checkboxShipDef: CheckboxComponent;
+  public checkboxShipDef: CheckboxComponent;
 
   constructor(validator: AddressCheck) {
     super();

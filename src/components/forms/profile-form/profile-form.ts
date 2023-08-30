@@ -81,6 +81,8 @@ class ProfileForm extends BaseComponent {
         addresses,
         shippingAddressIds,
         billingAddressIds,
+        defaultShippingAddressId,
+        defaultBillingAddressId,
       } = await api.getPersonalInfo();
       this.fieldSetPersonal.setInputValues(firstName, lastName, email, dateOfBirth);
 
@@ -90,6 +92,9 @@ class ProfileForm extends BaseComponent {
           const { streetName, streetNumber, postalCode, city, country } = shippingAddress;
           const fieldSetShipping = new FieldsetShip(this.validatorAddress);
           fieldSetShipping.setInputValues(streetName, streetNumber, postalCode, city, country);
+          if (shippingAddressId === defaultShippingAddressId) {
+            fieldSetShipping.checkboxShipDef.setChecked(true);
+          }
           this.fieldSetShippingList.push(fieldSetShipping);
           this.shippingAddresses.append(fieldSetShipping.getElement());
         }
@@ -101,6 +106,9 @@ class ProfileForm extends BaseComponent {
           const { streetName, streetNumber, postalCode, city, country } = billingAddress;
           const fieldSetBilling = new FieldsetBill(this.validatorAddress);
           fieldSetBilling.setInputValues(streetName, streetNumber, postalCode, city, country);
+          if (billingAddressId === defaultBillingAddressId) {
+            fieldSetBilling.checkboxBillDef.setChecked(true);
+          }
           this.fieldSetBillingList.push(fieldSetBilling);
           this.billingAddresses.append(fieldSetBilling.getElement());
         }

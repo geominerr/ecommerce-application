@@ -24,7 +24,7 @@ class FieldsetBill extends BaseComponent {
 
   public inputStreetNumber: InputBase;
 
-  private checkboxBillDef: CheckboxComponent;
+  public checkboxBillDef: CheckboxComponent;
 
   constructor(validatorAdrress: AddressCheck) {
     super();
