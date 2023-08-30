@@ -11,6 +11,11 @@ enum Styles {
 
 enum Contents {
   LEGEND = 'Billing address',
+  LABEL = 'Set default billing address',
 }
 
-export { TagNames, Styles, Contents };
+enum Attributes {
+  ID_VALUE_BILL_DEF = 'billing-checkbox-default',
+}
+
+export { TagNames, Styles, Contents, Attributes };

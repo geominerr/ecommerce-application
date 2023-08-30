@@ -11,6 +11,11 @@ enum Styles {
 
 enum Contents {
   LEGEND = 'Shipping address',
+  LABEL = 'Set default shipping address',
 }
 
-export { TagNames, Styles, Contents };
+enum Attributes {
+  ID_VALUE_SHIP_DEF = 'shipping-checkbox-default',
+}
+
+export { TagNames, Styles, Contents, Attributes };
