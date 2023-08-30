@@ -133,6 +133,13 @@ class ProfileForm extends BaseComponent {
     form.append(personalInfo, shippingAddresses, billingAddresses);
 
     personalInfo.append(fieldsetPersonalElement);
+    this.changeUserData();
+  }
+
+  private changeUserData(): void {
+    this.fieldSetPersonal.edit.addEventListener('click', () => {
+      this.enablePersonalInputs();
+    });
   }
 
   private disableAllInputs(): void {
@@ -150,6 +157,10 @@ class ProfileForm extends BaseComponent {
     this.fieldSetBillingList.forEach((fieldSetBilling) => {
       fieldSetBilling.inputDisable();
     });
+  }
+
+  private enablePersonalInputs(): void {
+    this.fieldSetPersonal.inputEnable();
   }
 }
 

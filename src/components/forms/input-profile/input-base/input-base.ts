@@ -76,6 +76,11 @@ class InputBase extends BaseComponent {
     this.input.disabled = true;
   }
 
+  public inputEnable(): void {
+    // Set the value of the input element
+    this.input.disabled = false;
+  }
+
   public showHintRequiredFieldIsEmpty(): void {
     if (!this.input.value) {
       this.input.classList.add(Styles.INPUT_ERROR);

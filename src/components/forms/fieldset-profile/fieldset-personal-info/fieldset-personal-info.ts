@@ -9,7 +9,11 @@ import './fieldset.scss';
 class FieldsetPersonal extends BaseComponent {
   private fieldsetElement: HTMLFieldSetElement;
 
+  private titleContainer: HTMLDivElement;
+
   private legendElement: HTMLLegendElement;
+
+  public edit: HTMLImageElement;
 
   public inputMail: InputBase;
 
@@ -25,7 +29,10 @@ class FieldsetPersonal extends BaseComponent {
     super();
 
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
+    this.titleContainer = this.createElement(TagNames.DIV, Styles.TITLE_CONTAINER);
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
+    this.edit = this.createElement(TagNames.IMG, Styles.EDIT);
+    this.edit.setAttribute('src', '../../../../assets/svg/edit.svg');
     this.inputMail = new InputBase(validatorPass.emailCheck, OPTIONS[0]);
     this.inputFirstName = new InputBase(validatorAdrress.firstNameCheck, OPTIONS[1]);
     this.inputLastName = new InputBase(validatorAdrress.lastNameCheck, OPTIONS[2]);
@@ -37,6 +44,12 @@ class FieldsetPersonal extends BaseComponent {
   public inputDisable(): void {
     [this.inputFirstName, this.inputLastName, this.inputMail, this.inputDateBirth].forEach(
       (input) => input.inputDisable()
+    );
+  }
+
+  public inputEnable(): void {
+    [this.inputFirstName, this.inputLastName, this.inputMail, this.inputDateBirth].forEach(
+      (input) => input.inputEnable()
     );
   }
 
@@ -88,7 +101,8 @@ class FieldsetPersonal extends BaseComponent {
     } = this;
 
     legendElement.innerText = Contents.LEGEND;
-    fieldsetElement.append(legendElement);
+    this.titleContainer.append(legendElement, this.edit);
+    fieldsetElement.append(this.titleContainer);
 
     [inputMail, inputFirstName, inputLastName, inputDateBirth].forEach((input: InputBase): void => {
       allInputs.push(input);
