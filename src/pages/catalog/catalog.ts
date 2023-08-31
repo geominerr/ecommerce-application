@@ -42,7 +42,7 @@ export default class Catalog extends TemplateView {
       // запускается, если просто catalog, без категории
       this.makeCard();
     } else {
-      this.sortByMaxPrice('100000', '');
+      this.sortByCategory();
     }
   }
 
@@ -82,13 +82,32 @@ export default class Catalog extends TemplateView {
     this.addClickHandler(this.applySortBtn);
   }
 
-  private sortByMaxPrice(price: string = '', additionalSortParam: string = ''): void {
-    price = String(+price * 100);
+  // Сортирует по минимальной цене. По умолчанию ноль.
+  // Принимает минимальную цену, максимальную цену и дополнительный параметр поиска/фильтра/сортирвки.
+  private sortByMinPrice(
+    min_price: string = '0',
+    max_price: string = '1000000',
+    additionalSortParam: string = ''
+  ): void {
+    const price = String(+min_price * 100);
+
+    this.sortByMaxPrice(
+      max_price,
+      `filter=variants.price.centAmount:range (${price} to *)&${additionalSortParam}`
+    );
+  }
+
+  // Сортирует по максимальной цене. По умолчанию миллион долларов.
+  // Принимает максимальную цену и дополнительный параметр поиска/фильтра/сортирвки.
+  private sortByMaxPrice(max_price: string = '1000000', additionalSortParam: string = ''): void {
+    const price = String(+max_price * 100);
+
     this.sortByCategory(
       `filter=variants.price.centAmount:range (* to ${price})&${additionalSortParam}`
     );
   }
 
+  // Сортирует по категории, если она есть после "/". Принимает дополнительный параметр поиска/фильтра/сортирвки.
   private async sortByCategory(additionalSortParam: string = ''): Promise<void> {
     const currentURLCategory = window.location.href.split('/')[4]; // если undefined, то будет пустой каталог
     const categories = await this.api.getProjectData('categories', 20, 0);
@@ -108,7 +127,7 @@ export default class Catalog extends TemplateView {
     applySortBtn.addEventListener(Events.CLICK, async () => {
       console.log('Sort pushed');
 
-      this.sortByMaxPrice('1000', '');
+      this.sortByMinPrice('1000', '2000', '');
     });
   }
 }
