@@ -17,6 +17,10 @@ export default class Catalog extends TemplateView {
 
   private api: APIProductActions;
 
+  private default_min_price: string;
+
+  private default_max_price: string;
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
@@ -24,6 +28,8 @@ export default class Catalog extends TemplateView {
     this.nav_sidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
     this.applySortBtn = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.api = api;
+    this.default_min_price = '0'; // $
+    this.default_max_price = '1000000'; // $
     this.createSorting();
     this.load();
   }
@@ -42,7 +48,7 @@ export default class Catalog extends TemplateView {
       // запускается, если просто catalog, без категории
       this.makeCard();
     } else {
-      this.sortByCategory();
+      this.filterByCategory();
     }
   }
 
@@ -82,16 +88,39 @@ export default class Catalog extends TemplateView {
     this.addClickHandler(this.applySortBtn);
   }
 
+  // Сортирует по стране бренда. По умолчанию пустая строка.
+  // Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
+  // Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов.
+  // Принимает
+  private filterByRegistrationCountry(
+    country: string = '',
+    min_price: string = this.default_min_price,
+    max_price = this.default_max_price,
+    additionalSortParam = ''
+  ): void {
+    if (!country) {
+      country = 'exists';
+    } else {
+      country = `"${country}"`;
+    }
+
+    this.filterByMinPrice(
+      min_price,
+      max_price,
+      `filter=variants.attributes.brand-registration-country:${country}&${additionalSortParam}`
+    );
+  }
+
   // Сортирует по минимальной цене. По умолчанию ноль.
   // Принимает минимальную цену, максимальную цену и дополнительный параметр поиска/фильтра/сортирвки.
-  private sortByMinPrice(
-    min_price: string = '0',
-    max_price: string = '1000000',
+  private filterByMinPrice(
+    min_price: string = this.default_min_price,
+    max_price: string = this.default_max_price,
     additionalSortParam: string = ''
   ): void {
     const price = String(+min_price * 100);
 
-    this.sortByMaxPrice(
+    this.filterByMaxPrice(
       max_price,
       `filter=variants.price.centAmount:range (${price} to *)&${additionalSortParam}`
     );
@@ -99,16 +128,19 @@ export default class Catalog extends TemplateView {
 
   // Сортирует по максимальной цене. По умолчанию миллион долларов.
   // Принимает максимальную цену и дополнительный параметр поиска/фильтра/сортирвки.
-  private sortByMaxPrice(max_price: string = '1000000', additionalSortParam: string = ''): void {
+  private filterByMaxPrice(
+    max_price: string = this.default_max_price,
+    additionalSortParam: string = ''
+  ): void {
     const price = String(+max_price * 100);
 
-    this.sortByCategory(
+    this.filterByCategory(
       `filter=variants.price.centAmount:range (* to ${price})&${additionalSortParam}`
     );
   }
 
   // Сортирует по категории, если она есть после "/". Принимает дополнительный параметр поиска/фильтра/сортирвки.
-  private async sortByCategory(additionalSortParam: string = ''): Promise<void> {
+  private async filterByCategory(additionalSortParam: string = ''): Promise<void> {
     const currentURLCategory = window.location.href.split('/')[4]; // если undefined, то будет пустой каталог
     const categories = await this.api.getProjectData('categories', 20, 0);
 
@@ -127,7 +159,8 @@ export default class Catalog extends TemplateView {
     applySortBtn.addEventListener(Events.CLICK, async () => {
       console.log('Sort pushed');
 
-      this.sortByMinPrice('1000', '2000', '');
+      // this.filterByMinPrice('1000', '2000', '');
+      this.filterByRegistrationCountry('Japan', '100', '9000', '');
     });
   }
 }
