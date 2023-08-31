@@ -42,7 +42,7 @@ export default class Catalog extends TemplateView {
       // запускается, если просто catalog, без категории
       this.makeCard();
     } else {
-      this.sortByCategory();
+      this.sortByMaxPrice('100000', '');
     }
   }
 
@@ -82,22 +82,33 @@ export default class Catalog extends TemplateView {
     this.addClickHandler(this.applySortBtn);
   }
 
-  private async sortByCategory(): Promise<void> {
+  private sortByMaxPrice(price: string = '', additionalSortParam: string = ''): void {
+    price = String(+price * 100);
+    this.sortByCategory(
+      `filter=variants.price.centAmount:range (* to ${price})&${additionalSortParam}`
+    );
+  }
+
+  private async sortByCategory(additionalSortParam: string = ''): Promise<void> {
     const currentURLCategory = window.location.href.split('/')[4]; // если undefined, то будет пустой каталог
     const categories = await this.api.getProjectData('categories', 20, 0);
 
-    categories.results.forEach((data) => {
-      if (data.externalId === currentURLCategory) {
-        this.makeCard(`filter=categories.id:"${data.id}"`);
-      }
-    });
+    if (!currentURLCategory) {
+      this.makeCard(`${additionalSortParam}`);
+    } else {
+      categories.results.forEach((data) => {
+        if (data.externalId === currentURLCategory) {
+          this.makeCard(`filter=categories.id:"${data.id}"&${additionalSortParam}`);
+        }
+      });
+    }
   }
 
   private addClickHandler(applySortBtn: HTMLElement): void {
     applySortBtn.addEventListener(Events.CLICK, async () => {
       console.log('Sort pushed');
-      // sort
-      // this.makeCard('filter=categories.id:"dd16b771-7a85-4390-bb50-8e44194cd73a"'); // Оно будет принимать параметры, но это позже
+
+      this.sortByMaxPrice('1000', '');
     });
   }
 }
