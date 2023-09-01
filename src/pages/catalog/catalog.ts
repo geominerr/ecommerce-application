@@ -203,12 +203,19 @@ export default class Catalog extends TemplateView {
     }
   }
 
+  // Ищет по любой строке. регистронезависим.
+  private search(search_string = ''): void {
+    this.makeCard(`text.en="${search_string}"`);
+  }
+
   private addClickHandler(applySortBtn: HTMLElement): void {
     applySortBtn.addEventListener(Events.CLICK, async () => {
       console.log('Sort pushed');
 
-      // this.filterByMinPrice('1000', '2000', '');
-      this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000', '');
+      // ∠( ᐛ 」∠)_ Сортировку и поиск, разумеется, стоит навесить на отдельные кнопки. ∠( ᐛ 」∠)_
+
+      // this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000');
+      this.search('orban');
     });
   }
 }
