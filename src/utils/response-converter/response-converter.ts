@@ -3,6 +3,8 @@ import {
   IProductData,
   IProductImage,
   IProductAttribute,
+  ProductData,
+  RawProductData,
 } from './response-converter-interfaces';
 
 function normalizeAttributeName(name: string): string {
@@ -52,4 +54,23 @@ function converteResponseData(response: IProductResponse): IProductData {
   return productData;
 }
 
+function transform(data: RawProductData): ProductData {
+  const { id, name, masterVariant } = data;
+  const images: string[] = data.masterVariant.images.map(
+    (imageData: IProductImage): string => imageData.url
+  );
+  const priceNumber: number = masterVariant.prices[0].value.centAmount;
+  const price: string = `€ ${(priceNumber / 100).toFixed(2)}`;
+
+  const transformed: ProductData = {
+    id,
+    name: name.en,
+    img: images,
+    price: price,
+  };
+
+  return transformed;
+}
+
 export default converteResponseData;
+export { transform };
