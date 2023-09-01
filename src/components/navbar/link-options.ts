@@ -6,7 +6,7 @@ const LINKS_OPTIONS: ILinkOptionsNav[] = [
   { id: 'controllers', href: '/catalog/controllers', content: 'Controllers' },
   { id: 'headphones', href: '/catalog/headphones', content: 'Headphones' },
   { id: 'turntables', href: '/catalog/turntables', content: 'Turntables' },
-  { id: 'sound-system', href: '/catalog/sound-system', content: 'Sound systems' },
+  { id: 'sound-systems', href: '/catalog/sound-systems', content: 'Sound systems' },
 ];
 
 export default LINKS_OPTIONS;

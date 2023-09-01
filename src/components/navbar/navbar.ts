@@ -21,7 +21,8 @@ class Navbar extends BaseComponent {
   }
 
   public updateStateLinks(): void {
-    const categoriaName = location.pathname.split('/')[1];
+    const categoriaNameArr = location.pathname.split('/');
+    const categoriaName = categoriaNameArr[categoriaNameArr.length - 1];
 
     this.links.forEach((link) => {
       if (link.id === categoriaName) {
