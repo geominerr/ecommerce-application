@@ -88,6 +88,27 @@ export default class Catalog extends TemplateView {
     this.addClickHandler(this.applySortBtn);
   }
 
+  private filterByBrand(
+    brand: string = '',
+    country: string = '',
+    min_price: string = this.default_min_price,
+    max_price = this.default_max_price,
+    additionalSortParam = ''
+  ): void {
+    if (!brand) {
+      brand = 'exists';
+    } else {
+      brand = `"${brand}"`;
+    }
+
+    this.filterByRegistrationCountry(
+      country,
+      min_price,
+      max_price,
+      `filter=variants.attributes.brand:${brand}&${additionalSortParam}`
+    );
+  }
+
   // Сортирует по стране бренда. По умолчанию пустая строка.
   // Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
   // Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов.
@@ -160,7 +181,7 @@ export default class Catalog extends TemplateView {
       console.log('Sort pushed');
 
       // this.filterByMinPrice('1000', '2000', '');
-      this.filterByRegistrationCountry('Japan', '100', '9000', '');
+      this.filterByBrand('Pioneer', '', '100', '9000', '');
     });
   }
 }
