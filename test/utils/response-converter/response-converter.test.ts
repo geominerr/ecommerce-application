@@ -14,9 +14,9 @@ describe('converteResponseData function', () => {
       images: ['testImage1', 'testImage2', 'testImage3'],
       price: `€ ${(273900 / 100).toFixed(2)}`,
       attributes: [
-        { name: 'test1', value: 'test1' },
-        { name: 'test2', value: 'test2' },
-        { name: 'test3', value: 'test3' },
+        { name: 'Test1', value: 'test1' },
+        { name: 'Test2', value: 'test2' },
+        { name: 'Test3', value: 'test3' },
       ],
     };
 
