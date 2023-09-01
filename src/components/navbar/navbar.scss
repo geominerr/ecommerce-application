@@ -1,0 +1,45 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgb(252, 252, 252);
+}
+
+.navigation-link {
+  position: relative;
+  width: 100%;
+  padding: 1rem 2rem;
+
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  color: rgb(55, 55, 55);
+  transition: all 0.2s;
+
+  // ◁
+  &::after {
+    content: '◁';
+    position: absolute;
+    right: 2rem;
+    color: rgb(252, 252, 252);
+    transition: all 0.3s;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: rgba(31, 31, 31, 0.8);
+      color: rgb(233, 233, 233);
+    }
+
+    &:active {
+      &::after {
+        right: 3rem;
+      }
+    }
+  }
+
+  &--active {
+    background: rgb(36, 36, 36);
+    color: rgb(233, 233, 233);
+  }
+}
