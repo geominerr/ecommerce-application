@@ -8,7 +8,9 @@ import { TagNames, Styles } from './enum';
 import './detail-page.scss';
 
 // swiper
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Swiper from 'swiper';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/scss';
 import 'swiper/scss/navigation';

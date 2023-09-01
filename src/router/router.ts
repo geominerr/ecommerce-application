@@ -57,6 +57,12 @@ export class Router {
       { path: '/error/404', view: notFound },
       { path: '/profile', view: profile },
       { path: '/cart', view: cart },
+      { path: '/catalog/amplifiers', view: catalog },
+      { path: '/catalog/headphones', view: catalog },
+      { path: '/catalog/turntables', view: catalog },
+      { path: '/catalog/sound-systems', view: catalog },
+      { path: '/catalog/controllers', view: catalog },
+      { path: '/catalog/soundbars', view: catalog },
     ];
 
     this.router = this.router.bind(this);
