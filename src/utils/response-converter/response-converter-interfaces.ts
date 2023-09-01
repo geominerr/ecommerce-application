@@ -58,6 +58,7 @@ interface ProductData {
   name: string;
   img: string[];
   price: string;
+  discountPrice?: string;
 }
 
 interface RawProductData {
@@ -74,6 +75,13 @@ interface MasterVariant {
 interface Price {
   value: {
     centAmount: number;
+  };
+  discounted?: {
+    value: {
+      currencyCode: string;
+      centAmount: number;
+      fractionDigits: number;
+    };
   };
 }
 

@@ -61,6 +61,8 @@ function transform(data: RawProductData): ProductData {
   );
   const priceNumber: number = masterVariant.prices[0].value.centAmount;
   const price: string = `€ ${(priceNumber / 100).toFixed(2)}`;
+  const discountPriceNumber: number | undefined =
+    masterVariant.prices[0]?.discounted?.value?.centAmount;
 
   const transformed: ProductData = {
     id,
@@ -68,6 +70,11 @@ function transform(data: RawProductData): ProductData {
     img: images,
     price: price,
   };
+
+  if (discountPriceNumber) {
+    const discountPrice: string = `€ ${(discountPriceNumber / 100).toFixed(2)}`;
+    transformed.discountPrice = discountPrice;
+  }
 
   return transformed;
 }
