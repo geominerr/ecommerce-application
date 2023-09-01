@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgb(252, 252, 252);
 }
 
 .navigation-link {
@@ -18,7 +17,7 @@
 
   // ◁
   &::after {
-    content: '◁';
+    content: '▷';
     position: absolute;
     right: 2rem;
     color: rgb(252, 252, 252);
@@ -27,19 +26,19 @@
 
   @media (hover: hover) {
     &:hover {
-      background: rgba(31, 31, 31, 0.8);
+      background: rgba(38, 87, 84, 0.6);
       color: rgb(233, 233, 233);
     }
 
     &:active {
       &::after {
-        right: 3rem;
+        right: 1rem;
       }
     }
   }
 
   &--active {
-    background: rgb(36, 36, 36);
+    background: rgba(34, 34, 34, 0.9);
     color: rgb(233, 233, 233);
   }
 }
