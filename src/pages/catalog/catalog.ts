@@ -1,19 +1,26 @@
 import TemplateView from '../template-view/template-view';
-import './catalog.scss';
+import ProductCard from '../../components/product-card/product-card';
+import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcrumb';
+import Navbar from '../../components/navbar/navbar';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
 import { transform } from '../../utils/response-converter/response-converter';
 import { TagNames, Styles, Events } from './enum';
-
-import ProductCard from '../../components/product-card/product-card';
+import './catalog.scss';
 
 export default class Catalog extends TemplateView {
   private container: HTMLDivElement;
 
-  private card_container: HTMLDivElement;
+  private prodContainer: HTMLDivElement;
 
-  private nav_sidebar: HTMLDivElement;
+  private cardContainer: HTMLDivElement;
+
+  private navSidebar: HTMLDivElement;
 
   private applySortBtn: HTMLButtonElement;
+
+  private navbarBreadcrumb: NavbarBreadcrumb;
+
+  private navbar: Navbar;
 
   private api: APIProductActions;
 
@@ -24,9 +31,12 @@ export default class Catalog extends TemplateView {
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
-    this.card_container = this.createElement(TagNames.DIV, Styles.CARD_CONTAINER);
-    this.nav_sidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
+    this.prodContainer = this.createElement(TagNames.DIV, Styles.PROD_CONTAINER);
+    this.cardContainer = this.createElement(TagNames.DIV, Styles.CARD_CONTAINER);
+    this.navSidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
     this.applySortBtn = this.createElement(TagNames.BUTTON, Styles.BUTTON);
+    this.navbarBreadcrumb = new NavbarBreadcrumb();
+    this.navbar = new Navbar();
     this.api = api;
     this.default_min_price = '0'; // $
     this.default_max_price = '1000000'; // $
@@ -37,9 +47,21 @@ export default class Catalog extends TemplateView {
   private documentTitle: string = 'Catalog';
 
   public async getHtml(): Promise<HTMLElement> {
-    this.container.append(this.nav_sidebar);
-    this.container.append(this.card_container);
-    return this.container;
+    const { container, prodContainer, navbarBreadcrumb, navbar, navSidebar, cardContainer } = this;
+    const breadcrumbElement = navbarBreadcrumb.getElement();
+    const navigationElement = navbar.getElement();
+
+    navbarBreadcrumb.clearContainer();
+    navbarBreadcrumb.updateNavbar([{ href: '/catalog', content: 'All' }]);
+
+    navSidebar.append(navigationElement);
+    [navSidebar, cardContainer].forEach((el) => prodContainer.append(el));
+    [breadcrumbElement, prodContainer].forEach((el) => container.append(el));
+
+    navbar.updateStateLinks();
+    this.load();
+
+    return container;
   }
 
   // Отсюда начинается загрузка
@@ -63,14 +85,14 @@ export default class Catalog extends TemplateView {
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
     if (CARD_DATA.limit) {
       // чистим контейнер а иначе там будут сотни карточек при каждом новом клике по catalog link
-      this.card_container.innerHTML = '';
+      this.cardContainer.innerHTML = '';
 
       CARD_DATA.results.forEach((res) => {
         console.log('transformed', transform(res));
         //  типа вот так new ProductCard(converteResponseData(rec)
 
         const card = new ProductCard(transform(res)).getElement();
-        this.card_container.append(card);
+        this.cardContainer.append(card);
       });
     }
   }
@@ -83,7 +105,7 @@ export default class Catalog extends TemplateView {
   }
 
   private createSorting(): void {
-    this.nav_sidebar.append(this.applySortBtn);
+    this.navSidebar.append(this.applySortBtn);
     this.applySortBtn.innerText = 'Apply sort';
     this.addClickHandler(this.applySortBtn);
   }

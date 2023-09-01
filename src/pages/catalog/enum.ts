@@ -8,6 +8,7 @@ enum Styles {
   CATALOG_CONTENT = 'catalog-content',
   CARD_CONTAINER = 'card-container',
   NAV_SIDEBAR = 'nav-sidebar',
+  PROD_CONTAINER = 'product-container-catalog',
 }
 
 enum Events {
