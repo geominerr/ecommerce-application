@@ -5,6 +5,18 @@ import {
   IProductAttribute,
 } from './response-converter-interfaces';
 
+function normalizeAttributeName(name: string): string {
+  return name
+    .split('-')
+    .map((partName, index) => {
+      if (index === 0) {
+        return partName[0].toUpperCase() + partName.slice(1);
+      }
+      return partName;
+    })
+    .join(' ');
+}
+
 function converteResponseData(response: IProductResponse): IProductData {
   const id: string = response.id;
   const title: string = response.name.en;
@@ -16,7 +28,12 @@ function converteResponseData(response: IProductResponse): IProductData {
   const images: string[] = response.masterVariant.images.map(
     (image: IProductImage): string => image.url
   );
-  const attributes: IProductAttribute[] = response.masterVariant.attributes;
+
+  const attributes: IProductAttribute[] = response.masterVariant.attributes.map((attribute) => {
+    const name = normalizeAttributeName(attribute.name);
+
+    return { name: name, value: attribute.value };
+  });
 
   const productData: IProductData = {
     id,
