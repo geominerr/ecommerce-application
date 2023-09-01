@@ -88,6 +88,34 @@ export default class Catalog extends TemplateView {
     this.addClickHandler(this.applySortBtn);
   }
 
+  // Сортирует либо по алфавиту, либо по цене. Можно передать тип сортировки "price" или "name.en" направление "asc" и "desc".
+  private sort(
+    sort_type: string = '',
+    direction: string = '',
+    brand: string = '',
+    country: string = '',
+    min_price: string = this.default_min_price,
+    max_price = this.default_max_price,
+    additionalSortParam = ''
+  ): void {
+    if (!direction) {
+      direction = 'asc';
+    }
+    if (!sort_type) {
+      sort_type = 'name.en';
+    }
+
+    this.filterByBrand(
+      brand,
+      country,
+      min_price,
+      max_price,
+      `sort=${sort_type} ${direction}&${additionalSortParam}`
+    );
+  }
+
+  // Фильтрует по стране бренда. По умолчанию пустая строка.
+  // Те же условия что и у предыдущего метода.
   private filterByBrand(
     brand: string = '',
     country: string = '',
@@ -109,10 +137,9 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Сортирует по стране бренда. По умолчанию пустая строка.
+  // Фильтрует по стране бренда. По умолчанию пустая строка.
   // Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
   // Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов.
-  // Принимает
   private filterByRegistrationCountry(
     country: string = '',
     min_price: string = this.default_min_price,
@@ -132,7 +159,7 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Сортирует по минимальной цене. По умолчанию ноль.
+  // Фильтрует по минимальной цене. По умолчанию ноль.
   // Принимает минимальную цену, максимальную цену и дополнительный параметр поиска/фильтра/сортирвки.
   private filterByMinPrice(
     min_price: string = this.default_min_price,
@@ -147,7 +174,7 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Сортирует по максимальной цене. По умолчанию миллион долларов.
+  // Фильтрует по максимальной цене. По умолчанию миллион долларов.
   // Принимает максимальную цену и дополнительный параметр поиска/фильтра/сортирвки.
   private filterByMaxPrice(
     max_price: string = this.default_max_price,
@@ -160,7 +187,7 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Сортирует по категории, если она есть после "/". Принимает дополнительный параметр поиска/фильтра/сортирвки.
+  // Фильтрует по категории, если она есть после "/". Принимает дополнительный параметр поиска/фильтра/сортирвки.
   private async filterByCategory(additionalSortParam: string = ''): Promise<void> {
     const currentURLCategory = window.location.href.split('/')[4]; // если undefined, то будет пустой каталог
     const categories = await this.api.getProjectData('categories', 20, 0);
@@ -181,7 +208,7 @@ export default class Catalog extends TemplateView {
       console.log('Sort pushed');
 
       // this.filterByMinPrice('1000', '2000', '');
-      this.filterByBrand('Pioneer', '', '100', '9000', '');
+      this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000', '');
     });
   }
 }
