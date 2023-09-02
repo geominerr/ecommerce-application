@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Customer, CustomerResponse } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY, LOCAL_KEY } from './api-env-constants';
@@ -193,12 +192,12 @@ export class APIUserActions {
     const requestData = {
       actions: [
         {
-          "action" : "changeEmail",
-          "email": "email@example.com"
+          action: 'changeEmail',
+          email: 'email@example.com',
         },
       ],
     };
-    const url = `https://api.{region}.commercetools.com/{projectKey}/me`;
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem(this.keyAccessToken)}`,
       'Content-Type': 'application/json',
