@@ -4,6 +4,7 @@ import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcru
 import Navbar from '../../components/navbar/navbar';
 import InputSearch from '../../components/search/search';
 import SelectSort from '../../components/select-sort/select-sort';
+import Buttons from './buttons/buttons';
 import { NOT_FOUND_PRODUCT } from './not-found-product';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
 import { transform } from '../../utils/response-converter/response-converter';
@@ -18,6 +19,8 @@ export default class Catalog extends TemplateView {
   private cardContainer: HTMLDivElement;
 
   private sortContainer: HTMLDivElement;
+
+  private buttonsGroup: HTMLElement;
 
   private navSidebar: HTMLDivElement;
 
@@ -46,6 +49,7 @@ export default class Catalog extends TemplateView {
     this.cardContainer = this.createElement(TagNames.DIV, Styles.CARD_CONTAINER);
     this.sortContainer = this.createElement(TagNames.DIV, Styles.SORT_CONTAINER);
     this.navSidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
+    this.buttonsGroup = new Buttons().getElement();
     this.applySortBtn = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.inputSearch = new InputSearch();
     this.selectSort = new SelectSort();
@@ -56,13 +60,14 @@ export default class Catalog extends TemplateView {
     this.default_max_price = '1000000'; // $
     // this.createSorting();
     this.addChangeHandler(this.selectSort.getElement(), this.inputSearch.getElement());
+    this.addButtonClickHandler();
   }
 
   private documentTitle: string = 'Catalog';
 
   public async getHtml(): Promise<HTMLElement> {
     const { container, prodContainer, navbarBreadcrumb, navbar, navSidebar, cardContainer } = this;
-    const { sortContainer } = this;
+    const { sortContainer, buttonsGroup } = this;
     const breadcrumbElement = navbarBreadcrumb.getElement();
     const navigationElement = navbar.getElement();
     const searchElement = this.inputSearch.getElement();
@@ -73,7 +78,9 @@ export default class Catalog extends TemplateView {
     navSidebar.append(navigationElement);
     [searchElement, sortElement].forEach((el) => sortContainer.append(el));
     [navSidebar, cardContainer].forEach((el) => prodContainer.append(el));
-    [breadcrumbElement, sortContainer, prodContainer].forEach((el) => container.append(el));
+    [breadcrumbElement, buttonsGroup, sortContainer, prodContainer].forEach((el) =>
+      container.append(el)
+    );
 
     navbar.updateStateLinks();
 
@@ -294,6 +301,20 @@ export default class Catalog extends TemplateView {
         target.value = '';
 
         this.search(searchParam);
+      }
+    });
+  }
+
+  private addButtonClickHandler(): void {
+    const navbar = this.navbar.getElement();
+
+    document.body.addEventListener('click', (e) => {
+      const { target } = e;
+
+      if (target instanceof HTMLElement && target.id === 'catalog') {
+        navbar.classList.add('navbar--open');
+      } else {
+        navbar.classList.remove('navbar--open');
       }
     });
   }
