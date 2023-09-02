@@ -11,6 +11,7 @@ describe('converteResponseData function', () => {
       id: 'testId777',
       title: 'TestTitle',
       description: 'Test description',
+      key: 'AMP-08',
       images: ['testImage1', 'testImage2', 'testImage3'],
       price: `€ ${(273900 / 100).toFixed(2)}`,
       attributes: [
