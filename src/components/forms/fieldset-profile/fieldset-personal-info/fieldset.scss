@@ -24,3 +24,11 @@
     cursor: pointer;
   }
 }
+
+.buttons-container.show {
+  display: flex;
+}
+
+.buttons-container.hide {
+  display: none;
+}

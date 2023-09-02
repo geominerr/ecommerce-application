@@ -59,7 +59,6 @@ class ProfileForm extends BaseComponent {
         });
       }
       await this.fetchUserData();
-      // this.disableAllInputs();
     } catch (error) {
       console.error('Failed to fetch customer data:', error);
     }
@@ -147,11 +146,30 @@ class ProfileForm extends BaseComponent {
 
     personalInfo.append(fieldsetPersonalElement);
     this.changeUserData();
+    this.cancelUserData();
+    this.updateUserData();
   }
 
   private changeUserData(): void {
     this.fieldSetPersonal.edit.addEventListener('click', () => {
       this.enablePersonalInputs();
+      this.showPersonalInfoButtons();
+    });
+  }
+
+  private cancelUserData(): void {
+    this.fieldSetPersonal.buttonCancel.addEventListener('click', () => {
+      this.disableAllInputs();
+      this.hidePersonalInfo();
+    });
+  }
+
+  private updateUserData(): void {
+    this.fieldSetPersonal.buttonSave.addEventListener('click', async () => {
+      const api = new APIUserActions();
+      await api.updatePersonalInfo();
+      this.disableAllInputs();
+      this.hidePersonalInfo();
     });
   }
 
@@ -174,6 +192,16 @@ class ProfileForm extends BaseComponent {
 
   private enablePersonalInputs(): void {
     this.fieldSetPersonal.inputEnable();
+  }
+
+  private hidePersonalInfo(): void {
+    // Call the hideFromScreen method of the FieldsetPersonal instance
+    this.fieldSetPersonal.hideFromScreen();
+  }
+
+  private showPersonalInfoButtons(): void {
+    // Call the showOnScreen method of the FieldsetPersonal instance
+    this.fieldSetPersonal.showOnScreen();
   }
 }
 

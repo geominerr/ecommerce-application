@@ -1,3 +1,5 @@
+$fontFamily: 'Montserrat', sans-serif;
+
 .profile-form {
   margin-top: 3rem;
   margin-bottom: 3rem;
@@ -29,7 +31,7 @@
   color: rgb(75, 75, 75);
 }
 
-.personal-info{
+.personal-info {
   display:flex;
   align-items: center;
   justify-content: center;
@@ -37,7 +39,28 @@
   width: 100%;
 }
 
-.shipping-addresses{
+.buttons-container {
+  width: 100%;
+  display: none;
+  flex-direction: row;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.cancel-button,.save-button {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  color: #000;
+  background-color: #fff;
+  border: 0.1rem solid rgb(14, 14, 14);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  width: 7rem;
+}
+
+
+.shipping-addresses {
   margin-top: 3rem;
   display:flex;
   flex-direction: row;
@@ -49,7 +72,7 @@
   width: 100%;
 }
 
-.billing-addresses{
+.billing-addresses {
   margin-top: 3rem;
   display:flex;
   flex-direction: row;

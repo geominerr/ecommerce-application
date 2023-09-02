@@ -15,6 +15,8 @@ enum Styles {
   BUTTONS_CONTAINER = 'buttons-container',
   BUTTON_CANCEL = 'cancel-button',
   BUTTON_SAVE = 'save-button',
+  BUTTONS_HIDE = 'hide',
+  BUTTONS_SHOW = 'show',
   EDIT = 'edit',
 }
 

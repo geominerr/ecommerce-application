@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { Customer, CustomerResponse } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY, LOCAL_KEY } from './api-env-constants';
 import { IUserData } from './api-interfaces';
+import FieldsetPersonal from '../components/forms/fieldset-profile/fieldset-personal-info/fieldset-personal-info';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
 
@@ -13,6 +15,8 @@ export class APIUserActions {
   public STORE_KEY: string;
 
   private keyAccessToken: string = LOCAL_KEY;
+
+  private fieldSetPersonal!: FieldsetPersonal;
 
   private keyUserId: string = 'userID';
 
@@ -180,6 +184,38 @@ export class APIUserActions {
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  public async updatePersonalInfo(): Promise<void> {
+    // const personalInfoData = this.fieldSetPersonal.getInputValues();
+    // const [firstName, lastName, email, dateOfBirth] = personalInfoData;
+    const requestData = {
+      actions: [
+        {
+          "action" : "changeEmail",
+          "email": "email@example.com"
+        },
+      ],
+    };
+    const url = `https://api.{region}.commercetools.com/{projectKey}/me`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem(this.keyAccessToken)}`,
+      'Content-Type': 'application/json',
+    };
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(requestData),
+      });
+      if (response.status === 200) {
+        // Handle success
+      } else {
+        throw new Error('Failed to update user data');
+      }
+    } catch (error) {
+      console.error('Failed to update user data:', error);
     }
   }
 }
