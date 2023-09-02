@@ -37,6 +37,8 @@ export default class Catalog extends TemplateView {
 
   private default_max_price: string;
 
+  private sortParams: string[] | null = null;
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
@@ -74,16 +76,27 @@ export default class Catalog extends TemplateView {
     [breadcrumbElement, sortContainer, prodContainer].forEach((el) => container.append(el));
 
     navbar.updateStateLinks();
-    this.load();
+
+    this.load(this.sortParams);
 
     return container;
   }
 
   // Отсюда начинается загрузка
-  private load(): void {
-    if (!window.location.href.split('/')[4]) {
-      // запускается, если просто catalog, без категории
-      this.makeCard();
+  private load(sortParams?: string[] | null): void {
+    // эта же проверка есть в filterByCategory()
+
+    // if (!window.location.href.split('/')[4]) {
+    //   // запускается, если просто catalog, без категории
+    //   this.makeCard();
+    // } else
+
+    // добавил сохранение параметров сортировки в памяти приложения, теперь при переходах будет приментся сортировка
+
+    if (sortParams) {
+      const typeSort = sortParams[0];
+      const directionSort = sortParams[1];
+      this.sort(typeSort, directionSort);
     } else {
       this.filterByCategory();
     }
@@ -265,6 +278,10 @@ export default class Catalog extends TemplateView {
       const params: string[] = this.selectSort.getValue();
       const typeSort = params[0];
       const directionSort = params[1];
+
+      // сохраняем параметры сортиврке
+      this.sortParams = [];
+      this.sortParams.push(typeSort, directionSort);
 
       this.sort(typeSort, directionSort);
     });
