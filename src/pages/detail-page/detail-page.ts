@@ -1,4 +1,5 @@
 import TemplateView from '../template-view/template-view';
+import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcrumb';
 import Sidebar from './sidebar/sidebar';
 import Slider from '../../components/slider/slider';
 import converteResponseData from '../../utils/response-converter/response-converter';
@@ -7,11 +8,18 @@ import { TagNames, Styles } from './enum';
 import './detail-page.scss';
 
 // swiper
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Swiper from 'swiper';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
+
+const testHref = [
+  { href: '/catalog', content: 'Categoria' },
+  { href: '/catalog', content: 'Subcategoria' },
+];
 
 class DetailPage extends TemplateView {
   private container: HTMLElement;
@@ -19,6 +27,8 @@ class DetailPage extends TemplateView {
   private navigation: HTMLElement;
 
   private productWrapper: HTMLDivElement;
+
+  private navbar: NavbarBreadcrumb;
 
   private slider: HTMLDivElement;
 
@@ -35,6 +45,8 @@ class DetailPage extends TemplateView {
     this.productWrapper = this.createElement(TagNames.DIV, Styles.PRODUCT_WRAPPER);
     this.slider = this.createElement(TagNames.DIV, Styles.SLIDER);
     this.sidebar = this.createElement(TagNames.DIV, Styles.SIDEBAR);
+    this.navbar = new NavbarBreadcrumb();
+    this.navigation.append(this.navbar.getElement());
     this.api = new APIProductActions();
   }
 
@@ -53,8 +65,9 @@ class DetailPage extends TemplateView {
   }
 
   private async createComponent(id: string): Promise<HTMLElement> {
-    const { container, navigation, productWrapper, slider, sidebar } = this;
+    const { container, navigation, navbar, productWrapper, slider, sidebar } = this;
 
+    navbar.clearContainer();
     slider.innerHTML = '';
     sidebar.innerHTML = '';
 
@@ -66,14 +79,15 @@ class DetailPage extends TemplateView {
     } catch {
       throw Error('Invalid Product Data');
     }
+    const href = { href: '/catalog', content: `${productData.title}` };
+    const hrefs = [...testHref];
+    hrefs.push(href);
 
     const sidebarElement = new Sidebar(productData).getElement();
     const sliderSwiper = new Slider(productData.images).getElement();
     this.setTitleProduct(productData.title);
 
-    // пока заглушка...
-    navigation.innerText = 'Navigation - breadcrumb';
-
+    navbar.updateNavbar(hrefs);
     sidebar.append(sidebarElement);
     slider.append(sliderSwiper);
     setTimeout(() => this.initSwiper(), 10);

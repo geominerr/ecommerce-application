@@ -16,7 +16,12 @@ export class APIProductActions {
   }
 
   // Используй для запроса кактлога !product-projections limit = 40!
-  public async getProjectData(data_of: string = '', limit = 20, offset = 0): Promise<ProjectData> {
+  public async getProjectData(
+    data_of: string = '',
+    limit = 20,
+    offset = 0,
+    searchParam = ''
+  ): Promise<ProjectData> {
     // data of  is: products / product-projections / customers / categories / stores / orders / zones
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
     console.log('Access Token: ', ACCESS_TOKEN, '\n');
@@ -29,7 +34,7 @@ export class APIProductActions {
       };
 
       const response = await fetch(
-        `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/${data_of}?limit=${limit}&offset=${offset}`,
+        `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/${data_of}/search?${searchParam}&limit=${limit}&offset=${offset}`,
         {
           method: 'GET',
           headers: headers,

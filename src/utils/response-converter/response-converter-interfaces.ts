@@ -53,4 +53,35 @@ interface IProductData {
   discountPrice?: string;
 }
 
-export { IProductResponse, IProductData, IProductImage, IProductAttribute };
+interface ProductData {
+  id: string;
+  name: string;
+  img: string[];
+  price: string;
+}
+
+interface RawProductData {
+  id: string;
+  name: { en: string };
+  masterVariant: MasterVariant;
+}
+
+interface MasterVariant {
+  images: IProductImage[];
+  prices: Price[];
+}
+
+interface Price {
+  value: {
+    centAmount: number;
+  };
+}
+
+export {
+  IProductResponse,
+  IProductData,
+  IProductImage,
+  IProductAttribute,
+  ProductData,
+  RawProductData,
+};
