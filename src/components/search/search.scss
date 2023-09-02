@@ -3,13 +3,27 @@ $fontFamily: 'Montserrat', sans-serif;
 .search-container {
   position: relative;
   display: flex;
-  width: 55rem;
+  width: 40rem;
   gap: 1rem;
 
   font-family: $fontFamily;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background-image: url('../../assets/icons/magnifier.png');
+    background-size: 2rem 2rem;
+    background-repeat: no-repeat;
+  }
 }
 
 .input-search {
+  display: inline-block;
   width: 100%;
   min-height: 3rem;
   padding: 0.45rem;
