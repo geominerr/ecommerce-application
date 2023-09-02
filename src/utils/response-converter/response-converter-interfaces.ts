@@ -3,6 +3,7 @@ interface IProductResponse {
   name: { en: string };
   description: { en: string };
   masterVariant: IProductVariant;
+  key: string;
 }
 
 interface IProductVariant {
@@ -51,6 +52,7 @@ interface IProductData {
   images: string[];
   attributes: IProductAttribute[];
   discountPrice?: string;
+  key: string;
 }
 
 interface ProductData {

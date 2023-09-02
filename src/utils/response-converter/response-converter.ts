@@ -23,6 +23,7 @@ function converteResponseData(response: IProductResponse): IProductData {
   const id: string = response.id;
   const title: string = response.name.en;
   const description: string = response.description.en;
+  const key: string = response.key;
   const priceNumber: number = response.masterVariant.prices[0].value.centAmount;
   const price: string = `€ ${(priceNumber / 100).toFixed(2)}`;
   const discountPriceNumber: number | undefined =
@@ -44,6 +45,7 @@ function converteResponseData(response: IProductResponse): IProductData {
     price,
     images,
     attributes,
+    key,
   };
 
   if (discountPriceNumber) {
