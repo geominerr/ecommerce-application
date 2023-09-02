@@ -11,6 +11,9 @@ enum Styles {
   INPUT_ERROR = 'input--error',
   LOGIN_WRAPPER = 'login-btn-wrapper',
   TITLE_HINT = 'title-hint',
+  INFO = 'personal-info',
+  SHIPPING = 'shipping-addresses',
+  BILLING = 'billing-addresses',
 }
 
 enum Content {

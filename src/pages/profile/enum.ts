@@ -10,4 +10,8 @@ enum Styles {
   USER_ADRESSES = 'user-adresses',
 }
 
-export { TagNames, Styles };
+enum Content {
+  PROFILE = 'My Profile',
+}
+
+export { TagNames, Styles, Content };

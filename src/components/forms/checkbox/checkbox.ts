@@ -41,6 +41,10 @@ class CheckboxComponent extends BaseComponent {
     this.hint.hideAddressWarning();
   }
 
+  public setChecked(checked: boolean): void {
+    this.input.checked = checked;
+  }
+
   private createComponent(contentLabel: string, id: string): void {
     const { container, inputWrapper, label, input, hint } = this;
     const hintElement: HTMLElement = hint.getElement();

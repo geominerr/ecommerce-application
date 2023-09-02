@@ -1,9 +1,10 @@
 import BaseComponent from '../../../base/base-component/base-component';
-import SelectComponent from '../../select/select';
-import InputBase from '../../input-base/input-base';
-import InputPostal from '../../input-postal/input-postal';
+import SelectComponentProfile from '../../select-profile/select';
+import InputBase from '../../input-profile/input-base/input-base';
+import InputPostal from '../../input-profile/input-postal/input-postal';
+import CheckboxComponent from '../../checkbox/checkbox';
 import { AddressCheck } from '../../../../utils/address_check';
-import { TagNames, Styles, Contents } from './enum';
+import { TagNames, Styles, Contents, Attributes } from './enum';
 import { OPTIONS } from './input-options';
 import './fieldset-shipping.scss';
 
@@ -12,28 +13,29 @@ class FieldsetShip extends BaseComponent {
 
   private legendElement: HTMLLegendElement;
 
-  private select: SelectComponent;
+  public select: SelectComponentProfile;
 
-  private inputPostal: InputPostal;
+  public inputPostal: InputPostal;
 
-  private inputCity: InputBase;
+  public inputCity: InputBase;
 
-  private inputStreet: InputBase;
+  public inputStreet: InputBase;
 
-  private inputStreetNumber: InputBase;
+  public inputStreetNumber: InputBase;
 
-  private isDisplayOn: boolean = true;
+  public checkboxShipDef: CheckboxComponent;
 
   constructor(validator: AddressCheck) {
     super();
 
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
-    this.select = new SelectComponent('shipping');
+    this.select = new SelectComponentProfile('shipping');
     this.inputPostal = new InputPostal(validator.postalCodeCheck, OPTIONS[3]);
     this.inputCity = new InputBase(validator.cityCheck, OPTIONS[0]);
     this.inputStreet = new InputBase(validator.streetCheck, OPTIONS[1]);
     this.inputStreetNumber = new InputBase(validator.streetCheck, OPTIONS[2]);
+    this.checkboxShipDef = new CheckboxComponent(Contents.LABEL, Attributes.ID_VALUE_SHIP_DEF);
     this.select.setInputPostal(this.inputPostal);
     this.inputPostal.setSelectComponent(this.select);
 
@@ -44,44 +46,36 @@ class FieldsetShip extends BaseComponent {
     return this.fieldsetElement;
   }
 
-  public hideFromScreen(): void {
-    this.isDisplayOn = !this.isDisplayOn;
-    this.fieldsetElement.classList.add(Styles.FIELDSET_HIDE);
-  }
-
-  public showOnScreen(): void {
-    this.isDisplayOn = !this.isDisplayOn;
-    this.fieldsetElement.classList.remove(Styles.FIELDSET_HIDE);
+  public inputDisable(): void {
+    [
+      this.select,
+      this.inputPostal,
+      this.inputCity,
+      this.inputStreet,
+      this.inputStreetNumber,
+    ].forEach((input) => input.inputDisable());
   }
 
   public getData(): string[] | null {
     const { inputStreet, inputStreetNumber, inputCity, inputPostal, select } = this;
-    const isDisplayOn: boolean = this.isDisplayOn;
+
     const result: string[] = [];
 
-    if (isDisplayOn) {
-      [inputStreet, inputStreetNumber, inputCity, inputPostal, select].forEach((input): number =>
-        result.push(input.getValue())
-      );
+    [inputStreet, inputStreetNumber, inputCity, inputPostal, select].forEach((input): number =>
+      result.push(input.getValue())
+    );
 
-      return result;
-    }
-
-    return null;
+    return result;
   }
 
   public isValidData(): boolean {
-    if (!this.isDisplayOn) {
-      return true;
-    }
-
     const { inputCity, inputPostal, inputStreet, inputStreetNumber, select } = this;
 
     const isValid: boolean = [inputCity, inputPostal, inputStreet, inputStreetNumber, select].every(
       (input): boolean => input.isValid()
     );
 
-    if (!isValid && this.isDisplayOn) {
+    if (!isValid) {
       [inputCity, inputPostal, inputStreet, inputStreetNumber, select].forEach((input): void =>
         input.showHintRequiredFieldIsEmpty()
       );
@@ -101,13 +95,29 @@ class FieldsetShip extends BaseComponent {
       inputStreetNumber,
     } = this;
 
+    const checkboxShipDef: HTMLElement = this.checkboxShipDef.getElement();
     legendElement.innerText = Contents.LEGEND;
     fieldsetElement.append(legendElement);
 
     [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(
-      (component: InputBase | InputPostal | SelectComponent): void =>
+      (component: InputBase | InputPostal | SelectComponentProfile): void =>
         fieldsetElement.append(component.getElement())
     );
+    fieldsetElement.append(checkboxShipDef);
+  }
+
+  public setInputValues(
+    streetName: string,
+    streetNumber: string,
+    postalCode: string,
+    city: string,
+    country: string
+  ): void {
+    this.inputCity.setValue(city);
+    this.inputStreet.setValue(streetName);
+    this.inputStreetNumber.setValue(streetNumber);
+    this.inputPostal.setValue(postalCode);
+    this.select.setValue(country);
   }
 }
 

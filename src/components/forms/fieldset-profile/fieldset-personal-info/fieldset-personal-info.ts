@@ -1,26 +1,34 @@
 import BaseComponent from '../../../base/base-component/base-component';
 import InputBase from '../../input-profile/input-base/input-base';
+// import Button from '../../buttons-profile/button';
 import { AddressCheck } from '../../../../utils/address_check';
 import { EmailPasswordCheck } from '../../../../utils/email_password_check';
 import { TagNames, Styles, Contents } from './enum';
 import { OPTIONS } from './input-options';
-import { APIUserActions } from '../../../../api/api-user-actions';
 import './fieldset.scss';
 
 class FieldsetPersonal extends BaseComponent {
   private fieldsetElement: HTMLFieldSetElement;
 
+  private titleContainer: HTMLDivElement;
+
   private legendElement: HTMLLegendElement;
 
-  private inputMail: InputBase;
+  public edit: HTMLImageElement;
 
-  private inputFirstName: InputBase;
+  public inputMail: InputBase;
 
-  private inputLastName: InputBase;
+  public inputFirstName: InputBase;
 
-  private inputDateBirth: InputBase;
+  public inputLastName: InputBase;
 
-  private keyAccessToken: string = '_cyber_(^-^)_punk_A';
+  public inputDateBirth: InputBase;
+
+  private buttonsContainer: HTMLDivElement;
+
+  private buttonCancel: HTMLButtonElement;
+
+  private buttonSave: HTMLButtonElement;
 
   private allInputs: InputBase[] = [];
 
@@ -28,43 +36,33 @@ class FieldsetPersonal extends BaseComponent {
     super();
 
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
+    this.titleContainer = this.createElement(TagNames.DIV, Styles.TITLE_CONTAINER);
+    this.buttonsContainer = this.createElement(TagNames.DIV, Styles.BUTTONS_CONTAINER);
+    this.buttonCancel = this.createElement(TagNames.BUTTON, Styles.BUTTON_CANCEL);
+    this.buttonCancel.innerHTML = 'Cancel';
+    this.buttonSave = this.createElement(TagNames.BUTTON, Styles.BUTTON_SAVE);
+    this.buttonSave.innerHTML = 'Save';
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
+    this.edit = this.createElement(TagNames.IMG, Styles.EDIT);
+    this.edit.setAttribute('src', '../../../../assets/svg/edit.svg');
     this.inputMail = new InputBase(validatorPass.emailCheck, OPTIONS[0]);
     this.inputFirstName = new InputBase(validatorAdrress.firstNameCheck, OPTIONS[1]);
     this.inputLastName = new InputBase(validatorAdrress.lastNameCheck, OPTIONS[2]);
     this.inputDateBirth = new InputBase(validatorAdrress.ageCheck, OPTIONS[3]);
 
     this.createComponent();
-    this.getUserData();
   }
 
-  public async getUserData(): Promise<void> {
-    try {
-      const navLinks = Array.from(document.querySelectorAll('a.nav-link'));
-      const profileLink = navLinks.find((link) => link.getAttribute('href') === '/profile');
-      [this.inputFirstName, this.inputLastName, this.inputMail, this.inputDateBirth].forEach(
-        (input) => input.inputDisable()
-      );
+  public inputDisable(): void {
+    [this.inputFirstName, this.inputLastName, this.inputMail, this.inputDateBirth].forEach(
+      (input) => input.inputDisable()
+    );
+  }
 
-      const fetchUserData = async (): Promise<void> => {
-        if (localStorage.getItem(this.keyAccessToken)) {
-          const api = new APIUserActions();
-          const { firstName, lastName, email, dateOfBirth } = await api.getCustomer();
-          this.setInputValues(firstName, lastName, email, dateOfBirth);
-        }
-      };
-
-      if (profileLink) {
-        profileLink.addEventListener('click', async (event) => {
-          event.preventDefault();
-          await fetchUserData();
-        });
-      }
-
-      await fetchUserData();
-    } catch (error) {
-      console.error('Failed to fetch customer data:', error);
-    }
+  public inputEnable(): void {
+    [this.inputFirstName, this.inputLastName, this.inputMail, this.inputDateBirth].forEach(
+      (input) => input.inputEnable()
+    );
   }
 
   public getElement(): HTMLElement {
@@ -115,15 +113,18 @@ class FieldsetPersonal extends BaseComponent {
     } = this;
 
     legendElement.innerText = Contents.LEGEND;
-    fieldsetElement.append(legendElement);
+    this.titleContainer.append(legendElement, this.edit);
+    fieldsetElement.append(this.titleContainer);
+    this.buttonsContainer.append(this.buttonCancel, this.buttonSave);
 
     [inputMail, inputFirstName, inputLastName, inputDateBirth].forEach((input: InputBase): void => {
       allInputs.push(input);
       fieldsetElement.append(input.getElement());
+      fieldsetElement.append(this.buttonsContainer);
     });
   }
 
-  private setInputValues(
+  public setInputValues(
     firstName: string,
     lastName: string,
     email: string,
