@@ -30,8 +30,6 @@ class ProfileForm extends BaseComponent {
 
   private keyAccessToken: string = '_cyber_(^-^)_punk_A';
 
-  private hasFetchedData: boolean = false;
-
   constructor(
     api: APIUserActions,
     validatorEmail: EmailPasswordCheck,
@@ -54,16 +52,14 @@ class ProfileForm extends BaseComponent {
   public async getUserData(): Promise<void> {
     try {
       const profileLink = document.querySelector(`a[href="/profile"]`) as HTMLAnchorElement;
-      if (profileLink && !this.hasFetchedData) {
+      if (profileLink) {
         profileLink.addEventListener('click', async (event) => {
           event.preventDefault();
-          if (!this.hasFetchedData) {
-            await this.fetchUserData();
-          }
+          await this.fetchUserData();
         });
       }
       await this.fetchUserData();
-      this.disableAllInputs();
+      // this.disableAllInputs();
     } catch (error) {
       console.error('Failed to fetch customer data:', error);
     }
@@ -84,8 +80,11 @@ class ProfileForm extends BaseComponent {
         defaultShippingAddressId,
         defaultBillingAddressId,
       } = await api.getPersonalInfo();
-      this.fieldSetPersonal.setInputValues(firstName, lastName, email, dateOfBirth);
 
+      this.clearShippingAddresses();
+      this.clearBillingAddresses();
+
+      this.fieldSetPersonal.setInputValues(firstName, lastName, email, dateOfBirth);
       shippingAddressIds.forEach((shippingAddressId) => {
         const shippingAddress = addresses.find((address) => address.id === shippingAddressId);
         if (shippingAddress) {
@@ -113,8 +112,22 @@ class ProfileForm extends BaseComponent {
           this.billingAddresses.append(fieldSetBilling.getElement());
         }
       });
-      this.hasFetchedData = true;
+      this.disableAllInputs();
     }
+  }
+
+  private clearShippingAddresses(): void {
+    this.fieldSetShippingList.forEach((fieldSetShipping) => {
+      fieldSetShipping.getElement().remove();
+    });
+    this.fieldSetShippingList = [];
+  }
+
+  private clearBillingAddresses(): void {
+    this.fieldSetBillingList.forEach((fieldSetBilling) => {
+      fieldSetBilling.getElement().remove();
+    });
+    this.fieldSetBillingList = [];
   }
 
   public getElement(): HTMLElement {
