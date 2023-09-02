@@ -1,8 +1,8 @@
 import BaseComponent from '../base/base-component/base-component';
-import { TagNames, Styles } from './enum';
-import './navbar-breadcrumb.scss';
 import { ILinkOptions, IMapPaths } from './navbar-breadcrumb-interfaces';
 import { MAP_PATHS } from './map-path';
+import { TagNames, Styles } from './enum';
+import './navbar-breadcrumb.scss';
 
 class NavbarBreadcrumb extends BaseComponent {
   private container: HTMLDivElement;
