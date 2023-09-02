@@ -51,8 +51,7 @@ export default class Catalog extends TemplateView {
     const breadcrumbElement = navbarBreadcrumb.getElement();
     const navigationElement = navbar.getElement();
 
-    navbarBreadcrumb.clearContainer();
-    navbarBreadcrumb.updateNavbar([{ href: '/catalog', content: 'All' }]);
+    navbarBreadcrumb.updateFromPathname();
 
     navSidebar.append(navigationElement);
     [navSidebar, cardContainer].forEach((el) => prodContainer.append(el));
