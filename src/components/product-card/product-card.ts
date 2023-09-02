@@ -60,12 +60,6 @@ class ProductCard extends BaseComponent {
     if (data.discountPrice) {
       price.classList.add(Styles.PRICE_DISABLED);
       discountPrice.innerText = data.discountPrice;
-    } else {
-      // сейчас это чисто для примера, этого не будет если не будет discount
-      if (Math.random() > 0.5) {
-        price.classList.add(Styles.PRICE_DISABLED);
-        discountPrice.innerText = '€ 777';
-      }
     }
 
     imgWrapper.append(img);

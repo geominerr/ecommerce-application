@@ -1,52 +1,109 @@
 import TemplateView from '../template-view/template-view';
-import './catalog.scss';
+import ProductCard from '../../components/product-card/product-card';
+import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcrumb';
+import Navbar from '../../components/navbar/navbar';
+import InputSearch from '../../components/search/search';
+import SelectSort from '../../components/select-sort/select-sort';
+import Buttons from './buttons/buttons';
+import { NOT_FOUND_PRODUCT } from './not-found-product';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
 import { transform } from '../../utils/response-converter/response-converter';
 import { TagNames, Styles, Events } from './enum';
-
-import ProductCard from '../../components/product-card/product-card';
+import './catalog.scss';
 
 export default class Catalog extends TemplateView {
   private container: HTMLDivElement;
 
-  private card_container: HTMLDivElement;
+  private prodContainer: HTMLDivElement;
 
-  private nav_sidebar: HTMLDivElement;
+  private cardContainer: HTMLDivElement;
+
+  private sortContainer: HTMLDivElement;
+
+  private buttonsGroup: HTMLElement;
+
+  private navSidebar: HTMLDivElement;
 
   private applySortBtn: HTMLButtonElement;
 
+  private navbarBreadcrumb: NavbarBreadcrumb;
+
+  private navbar: Navbar;
+
   private api: APIProductActions;
+
+  private selectSort: SelectSort;
+
+  private inputSearch: InputSearch;
 
   private default_min_price: string;
 
   private default_max_price: string;
 
+  private sortParams: string[] | null = null;
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
-    this.card_container = this.createElement(TagNames.DIV, Styles.CARD_CONTAINER);
-    this.nav_sidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
+    this.prodContainer = this.createElement(TagNames.DIV, Styles.PROD_CONTAINER);
+    this.cardContainer = this.createElement(TagNames.DIV, Styles.CARD_CONTAINER);
+    this.sortContainer = this.createElement(TagNames.DIV, Styles.SORT_CONTAINER);
+    this.navSidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
+    this.buttonsGroup = new Buttons().getElement();
     this.applySortBtn = this.createElement(TagNames.BUTTON, Styles.BUTTON);
+    this.inputSearch = new InputSearch();
+    this.selectSort = new SelectSort();
+    this.navbarBreadcrumb = new NavbarBreadcrumb();
+    this.navbar = new Navbar();
     this.api = api;
     this.default_min_price = '0'; // $
     this.default_max_price = '1000000'; // $
-    this.createSorting();
-    this.load();
+    // this.createSorting();
+    this.addChangeHandler(this.selectSort.getElement(), this.inputSearch.getElement());
+    this.addButtonClickHandler();
   }
 
   private documentTitle: string = 'Catalog';
 
   public async getHtml(): Promise<HTMLElement> {
-    this.container.append(this.nav_sidebar);
-    this.container.append(this.card_container);
-    return this.container;
+    const { container, prodContainer, navbarBreadcrumb, navbar, navSidebar, cardContainer } = this;
+    const { sortContainer, buttonsGroup } = this;
+    const breadcrumbElement = navbarBreadcrumb.getElement();
+    const navigationElement = navbar.getElement();
+    const searchElement = this.inputSearch.getElement();
+    const sortElement = this.selectSort.getElement();
+
+    navbarBreadcrumb.updateFromPathname();
+
+    navSidebar.append(navigationElement);
+    [searchElement, sortElement].forEach((el) => sortContainer.append(el));
+    [navSidebar, cardContainer].forEach((el) => prodContainer.append(el));
+    [breadcrumbElement, buttonsGroup, sortContainer, prodContainer].forEach((el) =>
+      container.append(el)
+    );
+
+    navbar.updateStateLinks();
+
+    this.load(this.sortParams);
+
+    return container;
   }
 
   // Отсюда начинается загрузка
-  private load(): void {
-    if (!window.location.href.split('/')[4]) {
-      // запускается, если просто catalog, без категории
-      this.makeCard();
+  private load(sortParams?: string[] | null): void {
+    // эта же проверка есть в filterByCategory()
+
+    // if (!window.location.href.split('/')[4]) {
+    //   // запускается, если просто catalog, без категории
+    //   this.makeCard();
+    // } else
+
+    // добавил сохранение параметров сортировки в памяти приложения, теперь при переходах будет приментся сортировка
+
+    if (sortParams) {
+      const typeSort = sortParams[0];
+      const directionSort = sortParams[1];
+      this.sort(typeSort, directionSort);
     } else {
       this.filterByCategory();
     }
@@ -57,21 +114,25 @@ export default class Catalog extends TemplateView {
   }
 
   private async makeCard(searchParam: string = ''): Promise<void> {
-    const CARD_DATA = await this.api.getProjectData('product-projections', 20, 0, searchParam);
+    const CARD_DATA = await this.api.getProjectData('product-projections', 40, 0, searchParam);
     console.log(CARD_DATA);
 
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
     if (CARD_DATA.limit) {
       // чистим контейнер а иначе там будут сотни карточек при каждом новом клике по catalog link
-      this.card_container.innerHTML = '';
+      this.cardContainer.innerHTML = '';
 
-      CARD_DATA.results.forEach((res) => {
-        console.log('transformed', transform(res));
-        //  типа вот так new ProductCard(converteResponseData(rec)
+      if (CARD_DATA.results.length) {
+        CARD_DATA.results.forEach((res) => {
+          console.log('transformed', transform(res));
+          //  типа вот так new ProductCard(converteResponseData(rec)
 
-        const card = new ProductCard(transform(res)).getElement();
-        this.card_container.append(card);
-      });
+          const card = new ProductCard(transform(res)).getElement();
+          this.cardContainer.append(card);
+        });
+      } else {
+        this.cardContainer.innerHTML = NOT_FOUND_PRODUCT;
+      }
     }
   }
 
@@ -83,7 +144,7 @@ export default class Catalog extends TemplateView {
   }
 
   private createSorting(): void {
-    this.nav_sidebar.append(this.applySortBtn);
+    this.navSidebar.append(this.applySortBtn);
     this.applySortBtn.innerText = 'Apply sort';
     this.addClickHandler(this.applySortBtn);
   }
@@ -214,8 +275,47 @@ export default class Catalog extends TemplateView {
 
       // ∠( ᐛ 」∠)_ Сортировку и поиск, разумеется, стоит навесить на отдельные кнопки. ∠( ᐛ 」∠)_
 
-      // this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000');
-      this.search('orban');
+      this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000');
+      this.search('Pioneer');
+    });
+  }
+
+  private addChangeHandler(selectSort: HTMLElement, inputSearch: HTMLElement): void {
+    selectSort.addEventListener('change', () => {
+      const params: string[] = this.selectSort.getValue();
+      const typeSort = params[0];
+      const directionSort = params[1];
+
+      // сохраняем параметры сортиврке
+      this.sortParams = [];
+      this.sortParams.push(typeSort, directionSort);
+
+      this.sort(typeSort, directionSort);
+    });
+
+    inputSearch.addEventListener('change', (e: Event) => {
+      const { target } = e;
+
+      if (target instanceof HTMLInputElement) {
+        const searchParam = this.inputSearch.getValue();
+        target.value = '';
+
+        this.search(searchParam);
+      }
+    });
+  }
+
+  private addButtonClickHandler(): void {
+    const navbar = this.navbar.getElement();
+
+    document.body.addEventListener('click', (e) => {
+      const { target } = e;
+
+      if (target instanceof HTMLElement && target.id === 'catalog') {
+        navbar.classList.add('navbar--open');
+      } else {
+        navbar.classList.remove('navbar--open');
+      }
     });
   }
 }

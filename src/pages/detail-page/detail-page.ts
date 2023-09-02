@@ -16,11 +16,6 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-const testHref = [
-  { href: '/catalog', content: 'Categoria' },
-  { href: '/catalog', content: 'Subcategoria' },
-];
-
 class DetailPage extends TemplateView {
   private container: HTMLElement;
 
@@ -79,15 +74,12 @@ class DetailPage extends TemplateView {
     } catch {
       throw Error('Invalid Product Data');
     }
-    const href = { href: '/catalog', content: `${productData.title}` };
-    const hrefs = [...testHref];
-    hrefs.push(href);
 
     const sidebarElement = new Sidebar(productData).getElement();
     const sliderSwiper = new Slider(productData.images).getElement();
     this.setTitleProduct(productData.title);
 
-    navbar.updateNavbar(hrefs);
+    navbar.updateNavbar(productData.key, productData.title);
     sidebar.append(sidebarElement);
     slider.append(sliderSwiper);
     setTimeout(() => this.initSwiper(), 10);

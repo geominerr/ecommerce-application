@@ -121,6 +121,7 @@ export interface IProductResponse {
   name: { en: string };
   description: { en: string };
   masterVariant: IProductVariant;
+  key: string;
 }
 
 interface IProductVariant {

@@ -3,6 +3,7 @@ interface IProductResponse {
   name: { en: string };
   description: { en: string };
   masterVariant: IProductVariant;
+  key: string;
 }
 
 interface IProductVariant {
@@ -51,6 +52,7 @@ interface IProductData {
   images: string[];
   attributes: IProductAttribute[];
   discountPrice?: string;
+  key: string;
 }
 
 interface ProductData {
@@ -58,6 +60,7 @@ interface ProductData {
   name: string;
   img: string[];
   price: string;
+  discountPrice?: string;
 }
 
 interface RawProductData {
@@ -74,6 +77,13 @@ interface MasterVariant {
 interface Price {
   value: {
     centAmount: number;
+  };
+  discounted?: {
+    value: {
+      currencyCode: string;
+      centAmount: number;
+      fractionDigits: number;
+    };
   };
 }
 
