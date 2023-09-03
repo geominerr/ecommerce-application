@@ -55,7 +55,6 @@ export default class Catalog extends TemplateView {
     this.api = api;
     this.default_min_price = '0'; // $
     this.default_max_price = '1000000'; // $
-    // this.createSorting();
     this.addChangeHandler(this.selectSort.getElement(), this.inputSearch.getElement());
     this.addButtonClickHandler();
   }
@@ -121,9 +120,6 @@ export default class Catalog extends TemplateView {
 
       if (CARD_DATA.results.length) {
         CARD_DATA.results.forEach((res) => {
-          console.log('transformed', transform(res));
-          //  типа вот так new ProductCard(converteResponseData(rec)
-
           const card = new ProductCard(transform(res)).getElement();
           this.cardContainer.append(card);
         });
@@ -140,17 +136,12 @@ export default class Catalog extends TemplateView {
     return element;
   }
 
-  private createSorting(): void {
-    // this.navSidebar.append(this.filterbar);
-    // сюда добавь фильтр ui
-  }
-
   // Сортирует либо по алфавиту, либо по цене. Можно передать тип сортировки "price" или "name.en" направление "asc" и "desc".
   private sort(
     sort_type: string = '',
     direction: string = '',
-    brand: string = '',
-    country: string = '',
+    brand: string[] = [''],
+    country: string[] = [''],
     min_price: string = this.default_min_price,
     max_price = this.default_max_price,
     additionalSortParam = ''
@@ -171,19 +162,19 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по стране бренда. По умолчанию пустая строка.
+  // Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
   // Те же условия что и у предыдущего метода.
   private filterByBrand(
-    brand: string = '',
-    country: string = '',
+    brand: string[] = [''],
+    country: string[] = [''],
     min_price: string = this.default_min_price,
     max_price = this.default_max_price,
     additionalSortParam = ''
   ): void {
-    if (!brand) {
-      brand = 'exists';
+    if (!brand[0]) {
+      brand = ['exists'];
     } else {
-      brand = `"${brand}"`;
+      brand = brand.map((el) => `"${el}"`);
     }
 
     this.filterByRegistrationCountry(
@@ -194,19 +185,19 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по стране бренда. По умолчанию пустая строка.
+  // Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
   // Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
   // Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов.
   private filterByRegistrationCountry(
-    country: string = '',
+    country: string[] = [''],
     min_price: string = this.default_min_price,
     max_price = this.default_max_price,
     additionalSortParam = ''
   ): void {
-    if (!country) {
-      country = 'exists';
+    if (!country[0]) {
+      country = ['exists'];
     } else {
-      country = `"${country}"`;
+      country = country.map((el) => `"${el}"`);
     }
 
     this.filterByMinPrice(
@@ -265,18 +256,6 @@ export default class Catalog extends TemplateView {
     this.makeCard(`text.en="${search_string}"`);
   }
 
-  // УДАЛИТЬ ПОСЛЕ СОЗДАНИЯ фильтр ui
-  // private addClickHandler(applySortBtn: HTMLElement): void {
-  //   applySortBtn.addEventListener(Events.CLICK, async () => {
-  //     console.log('Sort pushed');
-
-  //     // ∠( ᐛ 」∠)_ Сортировку и поиск, разумеется, стоит навесить на отдельные кнопки. ∠( ᐛ 」∠)_
-
-  //     this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000');
-  //     this.search('Pioneer');
-  //   });
-  // }
-
   private addChangeHandler(selectSort: HTMLElement, inputSearch: HTMLElement): void {
     selectSort.addEventListener('change', () => {
       const params: string[] = this.selectSort.getValue();
@@ -288,6 +267,12 @@ export default class Catalog extends TemplateView {
       this.sortParams.push(typeSort, directionSort);
 
       this.sort(typeSort, directionSort);
+
+      // FOR TEST
+      // this.sort('price', 'desc', ['Pioneer', 'Audeze'], ['USA', 'Japan'], '100', '9000');
+      // setTimeout(() => {
+      //   this.sort(typeSort, directionSort, ['Pioneer', 'Audeze'], ['USA', 'Japan']);
+      // }, 2000);
     });
 
     inputSearch.addEventListener('change', (e: Event) => {
