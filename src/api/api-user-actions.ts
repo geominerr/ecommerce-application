@@ -236,4 +236,75 @@ export class APIUserActions {
       console.error('Failed to update user data:', error);
     }
   }
+
+  // eslint-disable-next-line max-lines-per-function
+  public async removeShippingAddress(shippingAddressId: string): Promise<void> {
+    const requestVersion = localStorage.getItem('requestVersion');
+    const requestData = {
+      version: requestVersion !== null ? parseInt(requestVersion) : 0,
+      actions: [
+        {
+          action: 'removeAddress',
+          addressId: shippingAddressId,
+        },
+      ],
+    };
+
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem(this.keyAccessToken)}`,
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.status === 200) {
+        // Success
+      } else {
+        throw new Error('Failed to update user data');
+      }
+    } catch (error) {
+      console.error('Failed to update user data:', error);
+    }
+  }
+
+  public async removeBillingAddress(billingAddressId: string): Promise<void> {
+    const requestVersion = localStorage.getItem('requestVersion');
+    const requestData = {
+      version: requestVersion !== null ? parseInt(requestVersion) : 0,
+      actions: [
+        {
+          action: 'removeAddress',
+          addressId: billingAddressId,
+        },
+      ],
+    };
+
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem(this.keyAccessToken)}`,
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.status === 200) {
+        // Success
+      } else {
+        throw new Error('Failed to update user data');
+      }
+    } catch (error) {
+      console.error('Failed to update user data:', error);
+    }
+  }
 }

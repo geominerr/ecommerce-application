@@ -20,7 +20,7 @@ class FieldsetBill extends BaseComponent {
 
   public edit: HTMLImageElement;
 
-  public close: HTMLImageElement;
+  public remove: HTMLImageElement;
 
   public select: SelectComponentProfile;
 
@@ -43,8 +43,8 @@ class FieldsetBill extends BaseComponent {
     this.buttonsContainer = this.createElement(TagNames.DIV, Styles.BUTTONS_CONTAINER);
     this.edit = this.createElement(TagNames.IMG, Styles.EDIT);
     this.edit.setAttribute('src', '../../../../assets/svg/edit.svg');
-    this.close = this.createElement(TagNames.IMG, Styles.CLOSE);
-    this.close.setAttribute('src', '../../../../assets/svg/close.svg');
+    this.remove = this.createElement(TagNames.IMG, Styles.CLOSE);
+    this.remove.setAttribute('src', '../../../../assets/svg/close.svg');
     this.select = new SelectComponentProfile('billing');
     this.inputCity = new InputBase(validatorAdrress.cityCheck, OPTIONS[0]);
     this.inputStreet = new InputBase(validatorAdrress.streetCheck, OPTIONS[1]);
@@ -113,7 +113,7 @@ class FieldsetBill extends BaseComponent {
     const checkboxBillDef: HTMLElement = this.checkboxBillDef.getElement();
     legendElement.innerText = Contents.LEGEND;
     this.titleContainer.append(legendElement, this.buttonsContainer);
-    this.buttonsContainer.append(this.edit, this.close);
+    this.buttonsContainer.append(this.edit, this.remove);
     fieldsetElement.append(this.titleContainer);
 
     [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(

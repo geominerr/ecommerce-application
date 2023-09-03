@@ -102,6 +102,9 @@ class ProfileForm extends BaseComponent {
           if (shippingAddressId === defaultShippingAddressId) {
             fieldSetShipping.checkboxShipDef.setChecked(true);
           }
+          fieldSetShipping.remove.addEventListener('click', () => {
+            this.removeShippingAddress(shippingAddressId);
+          });
           this.fieldSetShippingList.push(fieldSetShipping);
           this.shippingAddresses.append(fieldSetShipping.getElement());
         }
@@ -116,6 +119,9 @@ class ProfileForm extends BaseComponent {
           if (billingAddressId === defaultBillingAddressId) {
             fieldSetBilling.checkboxBillDef.setChecked(true);
           }
+          fieldSetBilling.remove.addEventListener('click', () => {
+            this.removeBillingAddress(billingAddressId);
+          });
           this.fieldSetBillingList.push(fieldSetBilling);
           this.billingAddresses.append(fieldSetBilling.getElement());
         }
@@ -206,6 +212,18 @@ class ProfileForm extends BaseComponent {
         this.hidePersonalInfo();
       }
     });
+  }
+
+  private async removeShippingAddress(shippingAddressId: string): Promise<void> {
+    const api = new APIUserActions();
+    await api.removeShippingAddress(shippingAddressId);
+    await this.fetchUserData();
+  }
+
+  private async removeBillingAddress(billingAddressId: string): Promise<void> {
+    const api = new APIUserActions();
+    await api.removeBillingAddress(billingAddressId);
+    await this.fetchUserData();
   }
 
   private disableAllInputs(): void {
