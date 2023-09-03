@@ -1,3 +1,75 @@
+.modal-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--active {
+    background-color: rgba(59, 59, 59, 0.7);
+    position: fixed;
+    z-index: 12;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    .image-wrap {
+      padding: 0rem 3rem;
+      width: 100%;
+      height: 80vh;
+    }
+
+    .slider-wrapper {
+      width: 70%;
+      height: 90vh;
+      background-color: white;
+
+      .modal-btn {
+        display: block;
+      }
+    }
+  }
+}
+
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-btn {
+    display: none;
+    position: absolute;
+    z-index: 12;
+    top: 3rem;
+    right: 4rem;
+    width: 2.5rem;
+    height: 2.5rem;
+
+    background-image: url("../../assets/icons/close.png");
+    background-size: 2.5rem 2.5rem;
+    background-repeat: no-repeat;
+
+    cursor: pointer;
+    transition: all 0.3s;
+
+    @media (hover: hover) {
+      &:hover {
+        transform: scale(1.15);
+      }
+
+      &:active {
+        transform: scale(1.0);
+      }
+    }
+  }
+}
+
+.lock {
+  overflow: hidden;
+}
+
 .swiper {
   width: 100%;
 
@@ -72,9 +144,10 @@
     align-self: center;
     max-width: 100%;
     max-height: 100%;
+    cursor: pointer;
   }
-
 }
+
 
 .image-wrap {
   display: flex;
@@ -83,6 +156,7 @@
   width: 80%;
   height: 50rem;
 }
+
 
 @media (hover: hover) {
   .swiper-button-prev {
@@ -98,6 +172,13 @@
   }
 }
 
+@media screen and (max-width: 1050px) {
+  .modal-wrapper--active .slider-wrapper {
+    width: 85%;
+  }
+}
+
+
 @media screen and (max-width: 800px) {
   .swiper .slide-image {
     max-width: 100%
@@ -111,15 +192,37 @@
     }
   }
 
+  .modal-wrapper--active {
+    .slider-wrapper {
+      width: 95%;
+    }
+
+    .image-wrap {
+      padding: 0rem 1rem;
+    }
+  }
+
   .image-wrap {
-    width: 90%;
+    width: 100%;
     height: 35rem;
   }
-} 
+}
 
-@media screen  and  (max-width: 500px) {
+@media screen and (max-width: 500px) {
   .image-wrap {
     width: 100%;
     height: 22rem;
+  }
+
+  .modal-wrapper--active {
+    .image-wrap {
+      padding: 0rem 0.5rem;
+      height: 65vh;
+    }
+
+    .slider-wrapper {
+      width: 95%;
+      height: 70vh;
+    }
   }
 }

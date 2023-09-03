@@ -18,7 +18,11 @@ describe('Slider', () => {
     styles.forEach((style): void => {
       const element = document.body.querySelector(`.${style}`);
 
-      expect(element).not.toBeNull();
+      if (style === 'modal-wrapper--active' || style === 'lock') {
+        expect(element).toBeNull();
+      } else {
+        expect(element).not.toBeNull();
+      }
     });
   });
 });
