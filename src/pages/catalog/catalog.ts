@@ -4,6 +4,7 @@ import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcru
 import Navbar from '../../components/navbar/navbar';
 import InputSearch from '../../components/search/search';
 import SelectSort from '../../components/select-sort/select-sort';
+import Filter from '../../components/product-card/filter/filter';
 import Buttons from './buttons/buttons';
 import { NOT_FOUND_PRODUCT } from './not-found-product';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
@@ -32,6 +33,8 @@ export default class Catalog extends TemplateView {
 
   private selectSort: SelectSort;
 
+  private filter: Filter;
+
   private inputSearch: InputSearch;
 
   private default_min_price: string;
@@ -50,28 +53,43 @@ export default class Catalog extends TemplateView {
     this.buttonsGroup = new Buttons().getElement();
     this.inputSearch = new InputSearch();
     this.selectSort = new SelectSort();
+    this.filter = new Filter();
     this.navbarBreadcrumb = new NavbarBreadcrumb();
     this.navbar = new Navbar();
     this.api = api;
     this.default_min_price = '0'; // $
     this.default_max_price = '1000000'; // $
-    this.addChangeHandler(this.selectSort.getElement(), this.inputSearch.getElement());
+    this.addChangeHandler(
+      this.selectSort.getElement(),
+      this.inputSearch.getElement(),
+      this.filter.getElement()
+    );
     this.addButtonClickHandler();
   }
 
   private documentTitle: string = 'Catalog';
 
   public async getHtml(): Promise<HTMLElement> {
-    const { container, prodContainer, navbarBreadcrumb, navbar, navSidebar, cardContainer } = this;
+    const {
+      container,
+      prodContainer,
+      navbarBreadcrumb,
+      navbar,
+      navSidebar,
+      cardContainer,
+      filter,
+    } = this;
     const { sortContainer, buttonsGroup } = this;
     const breadcrumbElement = navbarBreadcrumb.getElement();
     const navigationElement = navbar.getElement();
+    const filterElement = filter.getElement();
     const searchElement = this.inputSearch.getElement();
     const sortElement = this.selectSort.getElement();
 
     navbarBreadcrumb.updateFromPathname();
 
     navSidebar.append(navigationElement);
+    navSidebar.append(filterElement);
     [searchElement, sortElement].forEach((el) => sortContainer.append(el));
     [navSidebar, cardContainer].forEach((el) => prodContainer.append(el));
     [breadcrumbElement, buttonsGroup, sortContainer, prodContainer].forEach((el) =>
@@ -256,7 +274,12 @@ export default class Catalog extends TemplateView {
     this.makeCard(`text.en="${search_string}"`);
   }
 
-  private addChangeHandler(selectSort: HTMLElement, inputSearch: HTMLElement): void {
+  // eslint-disable-next-line max-lines-per-function
+  private addChangeHandler(
+    selectSort: HTMLElement,
+    inputSearch: HTMLElement,
+    filter: HTMLElement
+  ): void {
     selectSort.addEventListener('change', () => {
       const params: string[] = this.selectSort.getValue();
       const typeSort = params[0];
@@ -283,6 +306,29 @@ export default class Catalog extends TemplateView {
         target.value = '';
 
         this.search(searchParam);
+      }
+    });
+
+    filter.addEventListener('click', (e: Event) => {
+      const { target } = e;
+      const countries: string[] = [];
+      if (!this.sortParams || !this.sortParams[0]) {
+        this.sortParams = ['', ''];
+      }
+
+      if (target instanceof HTMLButtonElement) {
+        filter.firstChild?.childNodes.forEach((el) => {
+          const check = el.lastChild;
+          if (check instanceof HTMLInputElement) {
+            console.log(check.checked, check.value);
+            if (check.checked) {
+              countries.push(check.value);
+            }
+          }
+        });
+
+        // TODO: сделать так, чтобы работало при использовании сортировки.
+        this.sort(this.sortParams[0], this.sortParams[1], [''], countries);
       }
     });
   }

@@ -1,0 +1,19 @@
+.filter-container {
+
+  p {
+    font-size: 1.8rem;
+  }
+
+  .country-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+
+    .checkbox-label {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+  }
+}
