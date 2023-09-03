@@ -3,6 +3,7 @@ enum TagNames {
   LEGEND = 'legend',
   IMG = 'img',
   DIV = 'div',
+  BUTTON = 'button',
 }
 
 enum Styles {
@@ -13,6 +14,11 @@ enum Styles {
   CLOSE = 'close',
   TITLE_CONTAINER = 'addresses-title-container',
   BUTTONS_CONTAINER = 'addresses-buttons-container',
+  ACTIONS_CONTAINER = 'actions-buttons-container',
+  BUTTON_CANCEL = 'cancel-button',
+  BUTTON_SAVE = 'save-button',
+  BUTTONS_HIDE = 'hide',
+  BUTTONS_SHOW = 'show',
 }
 
 enum Contents {
