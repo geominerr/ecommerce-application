@@ -14,6 +14,10 @@ class ProfileForm extends BaseComponent {
 
   private personalInfo: HTMLDivElement;
 
+  public addShippingAddress: HTMLButtonElement;
+
+  public addBillingAddress: HTMLButtonElement;
+
   private shippingAddresses: HTMLDivElement;
 
   private billingAddresses: HTMLDivElement;
@@ -38,6 +42,10 @@ class ProfileForm extends BaseComponent {
     super();
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
     this.personalInfo = this.createElement(TagNames.DIV, Styles.INFO);
+    this.addShippingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
+    this.addShippingAddress.innerHTML = 'Add Address';
+    this.addBillingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
+    this.addBillingAddress.innerHTML = 'Add Address';
     this.shippingAddresses = this.createElement(TagNames.DIV, Styles.SHIPPING);
     this.billingAddresses = this.createElement(TagNames.DIV, Styles.BILLING);
     this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
@@ -140,11 +148,24 @@ class ProfileForm extends BaseComponent {
   }
 
   private createComponent(): void {
-    const { form, personalInfo, shippingAddresses, billingAddresses } = this;
+    const {
+      form,
+      personalInfo,
+      addShippingAddress,
+      shippingAddresses,
+      addBillingAddress,
+      billingAddresses,
+    } = this;
 
     const fieldsetPersonalElement: HTMLElement = this.fieldSetPersonal.getElement();
 
-    form.append(personalInfo, shippingAddresses, billingAddresses);
+    form.append(
+      personalInfo,
+      addShippingAddress,
+      shippingAddresses,
+      addBillingAddress,
+      billingAddresses
+    );
 
     personalInfo.append(fieldsetPersonalElement);
     this.changeUserData();

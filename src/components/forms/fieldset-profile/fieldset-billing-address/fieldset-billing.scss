@@ -16,3 +16,25 @@
 .fieldset--hide {
   display: none;
 }
+
+.addresses-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  .edit {
+    cursor: pointer;
+  }
+}
+
+.addresses-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  .edit {
+    cursor: pointer;
+  }
+  .close {
+    cursor: pointer;
+  }
+}

@@ -145,6 +145,7 @@ export class APIUserActions {
     if (accessToken) {
       localStorage.removeItem(this.keyAccessToken);
       localStorage.removeItem(this.keyUserId);
+      localStorage.removeItem('requestVersion');
     }
   }
 
