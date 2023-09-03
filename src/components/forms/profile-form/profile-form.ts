@@ -78,6 +78,7 @@ class ProfileForm extends BaseComponent {
         billingAddressIds,
         defaultShippingAddressId,
         defaultBillingAddressId,
+        version: requestVersion,
       } = await api.getPersonalInfo();
 
       this.clearShippingAddresses();
@@ -112,6 +113,7 @@ class ProfileForm extends BaseComponent {
         }
       });
       this.disableAllInputs();
+      localStorage.setItem('requestVersion', requestVersion.toString());
     }
   }
 
@@ -164,12 +166,24 @@ class ProfileForm extends BaseComponent {
     });
   }
 
+  public takeInputValues(): {
+    email: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+  } {
+    return this.fieldSetPersonal.getInputValues();
+  }
+
   private updateUserData(): void {
     this.fieldSetPersonal.buttonSave.addEventListener('click', async () => {
-      const api = new APIUserActions();
-      await api.updatePersonalInfo();
-      this.disableAllInputs();
-      this.hidePersonalInfo();
+      if (this.fieldSetPersonal.isValidData()) {
+        const api = new APIUserActions();
+        const { email, firstName, lastName, dateOfBirth } = this.takeInputValues();
+        await api.updatePersonalInfo(email, firstName, lastName, dateOfBirth);
+        this.disableAllInputs();
+        this.hidePersonalInfo();
+      }
     });
   }
 

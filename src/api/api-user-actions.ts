@@ -2,7 +2,6 @@ import { Customer, CustomerResponse } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY, LOCAL_KEY } from './api-env-constants';
 import { IUserData } from './api-interfaces';
-import FieldsetPersonal from '../components/forms/fieldset-profile/fieldset-personal-info/fieldset-personal-info';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
 
@@ -14,8 +13,6 @@ export class APIUserActions {
   public STORE_KEY: string;
 
   private keyAccessToken: string = LOCAL_KEY;
-
-  private fieldSetPersonal!: FieldsetPersonal;
 
   private keyUserId: string = 'userID';
 
@@ -186,30 +183,51 @@ export class APIUserActions {
     }
   }
 
-  public async updatePersonalInfo(): Promise<void> {
-    // const personalInfoData = this.fieldSetPersonal.getInputValues();
-    // const [firstName, lastName, email, dateOfBirth] = personalInfoData;
+  // eslint-disable-next-line max-lines-per-function
+  public async updatePersonalInfo(
+    email: string,
+    firstName: string,
+    lastName: string,
+    dateOfBirth: string
+  ): Promise<void> {
+    const requestVersion = localStorage.getItem('requestVersion');
     const requestData = {
+      version: requestVersion !== null ? parseInt(requestVersion) : 0,
       actions: [
         {
           action: 'changeEmail',
-          email: 'email@example.com',
+          email: email,
+        },
+        {
+          action: 'setFirstName',
+          firstName: firstName,
+        },
+        {
+          action: 'setLastName',
+          lastName: lastName,
+        },
+        {
+          action: 'setDateOfBirth',
+          dateOfBirth: dateOfBirth,
         },
       ],
     };
+
     const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem(this.keyAccessToken)}`,
       'Content-Type': 'application/json',
     };
+
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(requestData),
       });
+
       if (response.status === 200) {
-        // Handle success
+        // Success
       } else {
         throw new Error('Failed to update user data');
       }

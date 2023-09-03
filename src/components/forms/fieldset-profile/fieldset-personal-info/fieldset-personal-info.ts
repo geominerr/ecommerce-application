@@ -143,13 +143,18 @@ class FieldsetPersonal extends BaseComponent {
     this.inputDateBirth.setValue(dateOfBirth);
   }
 
-  public getInputValues(): string[] {
-    const values: string[] = [];
-    values.push(this.inputMail.getValue());
-    values.push(this.inputFirstName.getValue());
-    values.push(this.inputLastName.getValue());
-    values.push(this.inputDateBirth.getValue());
-    return values;
+  public getInputValues(): {
+    email: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+  } {
+    const email = this.inputMail.getValue();
+    const firstName = this.inputFirstName.getValue();
+    const lastName = this.inputLastName.getValue();
+    const dateOfBirth = this.inputDateBirth.getValue();
+
+    return { email, firstName, lastName, dateOfBirth };
   }
 }
 
