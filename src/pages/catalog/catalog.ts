@@ -8,7 +8,7 @@ import Buttons from './buttons/buttons';
 import { NOT_FOUND_PRODUCT } from './not-found-product';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
 import { transform } from '../../utils/response-converter/response-converter';
-import { TagNames, Styles, Events } from './enum';
+import { TagNames, Styles } from './enum';
 import './catalog.scss';
 
 export default class Catalog extends TemplateView {
@@ -23,8 +23,6 @@ export default class Catalog extends TemplateView {
   private buttonsGroup: HTMLElement;
 
   private navSidebar: HTMLDivElement;
-
-  private applySortBtn: HTMLButtonElement;
 
   private navbarBreadcrumb: NavbarBreadcrumb;
 
@@ -50,7 +48,6 @@ export default class Catalog extends TemplateView {
     this.sortContainer = this.createElement(TagNames.DIV, Styles.SORT_CONTAINER);
     this.navSidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
     this.buttonsGroup = new Buttons().getElement();
-    this.applySortBtn = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.inputSearch = new InputSearch();
     this.selectSort = new SelectSort();
     this.navbarBreadcrumb = new NavbarBreadcrumb();
@@ -144,9 +141,8 @@ export default class Catalog extends TemplateView {
   }
 
   private createSorting(): void {
-    this.navSidebar.append(this.applySortBtn);
-    this.applySortBtn.innerText = 'Apply sort';
-    this.addClickHandler(this.applySortBtn);
+    // this.navSidebar.append(this.filterbar);
+    // сюда добавь фильтр ui
   }
 
   // Сортирует либо по алфавиту, либо по цене. Можно передать тип сортировки "price" или "name.en" направление "asc" и "desc".
@@ -269,16 +265,17 @@ export default class Catalog extends TemplateView {
     this.makeCard(`text.en="${search_string}"`);
   }
 
-  private addClickHandler(applySortBtn: HTMLElement): void {
-    applySortBtn.addEventListener(Events.CLICK, async () => {
-      console.log('Sort pushed');
+  // УДАЛИТЬ ПОСЛЕ СОЗДАНИЯ фильтр ui
+  // private addClickHandler(applySortBtn: HTMLElement): void {
+  //   applySortBtn.addEventListener(Events.CLICK, async () => {
+  //     console.log('Sort pushed');
 
-      // ∠( ᐛ 」∠)_ Сортировку и поиск, разумеется, стоит навесить на отдельные кнопки. ∠( ᐛ 」∠)_
+  //     // ∠( ᐛ 」∠)_ Сортировку и поиск, разумеется, стоит навесить на отдельные кнопки. ∠( ᐛ 」∠)_
 
-      this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000');
-      this.search('Pioneer');
-    });
-  }
+  //     this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000');
+  //     this.search('Pioneer');
+  //   });
+  // }
 
   private addChangeHandler(selectSort: HTMLElement, inputSearch: HTMLElement): void {
     selectSort.addEventListener('change', () => {
