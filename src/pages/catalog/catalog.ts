@@ -43,6 +43,8 @@ export default class Catalog extends TemplateView {
 
   private sortParams: string[] | null = null;
 
+  private countries: string[] = [];
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
@@ -311,7 +313,7 @@ export default class Catalog extends TemplateView {
 
     filter.addEventListener('click', (e: Event) => {
       const { target } = e;
-      const countries: string[] = [];
+      this.countries = [];
       if (!this.sortParams || !this.sortParams[0]) {
         this.sortParams = ['', ''];
       }
@@ -322,13 +324,14 @@ export default class Catalog extends TemplateView {
           if (check instanceof HTMLInputElement) {
             console.log(check.checked, check.value);
             if (check.checked) {
-              countries.push(check.value);
+              this.countries.push(check.value);
+              check.checked = false; // Удалить, когда будет сохранение состояния.
             }
           }
         });
 
         // TODO: сделать так, чтобы работало при использовании сортировки.
-        this.sort(this.sortParams[0], this.sortParams[1], [''], countries);
+        this.sort(this.sortParams[0], this.sortParams[1], [''], this.countries);
       }
     });
   }
