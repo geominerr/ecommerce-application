@@ -18,6 +18,8 @@ class ProfileForm extends BaseComponent {
 
   public addBillingAddress: HTMLButtonElement;
 
+  public changePassword: HTMLButtonElement;
+
   private shippingAddresses: HTMLDivElement;
 
   private billingAddresses: HTMLDivElement;
@@ -46,6 +48,8 @@ class ProfileForm extends BaseComponent {
     this.addShippingAddress.innerHTML = 'Add Address';
     this.addBillingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
     this.addBillingAddress.innerHTML = 'Add Address';
+    this.changePassword = this.createElement(TagNames.BUTTON, Styles.BUTTON_CHANGE);
+    this.changePassword.innerHTML = 'Change Password';
     this.shippingAddresses = this.createElement(TagNames.DIV, Styles.SHIPPING);
     this.billingAddresses = this.createElement(TagNames.DIV, Styles.BILLING);
     this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
@@ -161,6 +165,7 @@ class ProfileForm extends BaseComponent {
       shippingAddresses,
       addBillingAddress,
       billingAddresses,
+      changePassword,
     } = this;
 
     const fieldsetPersonalElement: HTMLElement = this.fieldSetPersonal.getElement();
@@ -170,7 +175,8 @@ class ProfileForm extends BaseComponent {
       addShippingAddress,
       shippingAddresses,
       addBillingAddress,
-      billingAddresses
+      billingAddresses,
+      changePassword
     );
 
     personalInfo.append(fieldsetPersonalElement);

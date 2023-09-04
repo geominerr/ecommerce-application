@@ -48,6 +48,16 @@ $fontFamily: 'Montserrat', sans-serif;
   margin-bottom: 2rem;
 }
 
+// раскомментируй
+// .addresses-buttons-container {
+//   width: 100%;
+//   display: none;
+//   flex-direction: row;
+//   justify-content: center;
+//   gap: 3rem;
+//   margin-bottom: 2rem;
+// }
+
 .cancel-button,.save-button {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
@@ -81,11 +91,24 @@ $fontFamily: 'Montserrat', sans-serif;
   justify-content: center;
   gap: 3rem;
   padding: 0 2rem;
+  border-bottom: 1px solid rgb(193, 222, 220);
 }
 
 .add-button {
   margin-top: 2rem;
   width: 15rem;
+  padding: 0.7rem;
+  font-size: 1.5rem;
+  color: rgb(202, 202, 202);
+  background-color: rgb(14, 14, 14);
+  border: 0.1rem solid rgb(14, 14, 14);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.change-button {
+  margin-top: 2rem;
+  width: 20rem;
   padding: 0.7rem;
   font-size: 1.5rem;
   color: rgb(202, 202, 202);

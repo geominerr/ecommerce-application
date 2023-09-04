@@ -16,6 +16,7 @@ enum Styles {
   SHIPPING = 'shipping-addresses',
   BILLING = 'billing-addresses',
   BUTTON_ADD = 'add-button',
+  BUTTON_CHANGE = 'change-button',
 }
 
 enum Content {
