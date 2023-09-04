@@ -14,6 +14,12 @@ class ProfileForm extends BaseComponent {
 
   private personalInfo: HTMLDivElement;
 
+  public addShippingAddress: HTMLButtonElement;
+
+  public addBillingAddress: HTMLButtonElement;
+
+  public changePassword: HTMLButtonElement;
+
   private shippingAddresses: HTMLDivElement;
 
   private billingAddresses: HTMLDivElement;
@@ -38,6 +44,12 @@ class ProfileForm extends BaseComponent {
     super();
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
     this.personalInfo = this.createElement(TagNames.DIV, Styles.INFO);
+    this.addShippingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
+    this.addShippingAddress.innerHTML = 'Add Address';
+    this.addBillingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
+    this.addBillingAddress.innerHTML = 'Add Address';
+    this.changePassword = this.createElement(TagNames.BUTTON, Styles.BUTTON_CHANGE);
+    this.changePassword.innerHTML = 'Change Password';
     this.shippingAddresses = this.createElement(TagNames.DIV, Styles.SHIPPING);
     this.billingAddresses = this.createElement(TagNames.DIV, Styles.BILLING);
     this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
@@ -59,7 +71,6 @@ class ProfileForm extends BaseComponent {
         });
       }
       await this.fetchUserData();
-      // this.disableAllInputs();
     } catch (error) {
       console.error('Failed to fetch customer data:', error);
     }
@@ -79,6 +90,7 @@ class ProfileForm extends BaseComponent {
         billingAddressIds,
         defaultShippingAddressId,
         defaultBillingAddressId,
+        version: requestVersion,
       } = await api.getPersonalInfo();
 
       this.clearShippingAddresses();
@@ -94,6 +106,9 @@ class ProfileForm extends BaseComponent {
           if (shippingAddressId === defaultShippingAddressId) {
             fieldSetShipping.checkboxShipDef.setChecked(true);
           }
+          fieldSetShipping.remove.addEventListener('click', () => {
+            this.removeShippingAddress(shippingAddressId);
+          });
           this.fieldSetShippingList.push(fieldSetShipping);
           this.shippingAddresses.append(fieldSetShipping.getElement());
         }
@@ -108,11 +123,15 @@ class ProfileForm extends BaseComponent {
           if (billingAddressId === defaultBillingAddressId) {
             fieldSetBilling.checkboxBillDef.setChecked(true);
           }
+          fieldSetBilling.remove.addEventListener('click', () => {
+            this.removeBillingAddress(billingAddressId);
+          });
           this.fieldSetBillingList.push(fieldSetBilling);
           this.billingAddresses.append(fieldSetBilling.getElement());
         }
       });
       this.disableAllInputs();
+      localStorage.setItem('requestVersion', requestVersion.toString());
     }
   }
 
@@ -139,20 +158,78 @@ class ProfileForm extends BaseComponent {
   }
 
   private createComponent(): void {
-    const { form, personalInfo, shippingAddresses, billingAddresses } = this;
+    const {
+      form,
+      personalInfo,
+      addShippingAddress,
+      shippingAddresses,
+      addBillingAddress,
+      billingAddresses,
+      changePassword,
+    } = this;
 
     const fieldsetPersonalElement: HTMLElement = this.fieldSetPersonal.getElement();
 
-    form.append(personalInfo, shippingAddresses, billingAddresses);
+    form.append(
+      personalInfo,
+      addShippingAddress,
+      shippingAddresses,
+      addBillingAddress,
+      billingAddresses,
+      changePassword
+    );
 
     personalInfo.append(fieldsetPersonalElement);
     this.changeUserData();
+    this.cancelUserData();
+    this.updateUserData();
   }
 
   private changeUserData(): void {
     this.fieldSetPersonal.edit.addEventListener('click', () => {
       this.enablePersonalInputs();
+      this.showPersonalInfoButtons();
     });
+  }
+
+  private cancelUserData(): void {
+    this.fieldSetPersonal.buttonCancel.addEventListener('click', () => {
+      this.disableAllInputs();
+      this.hidePersonalInfo();
+    });
+  }
+
+  public takeInputValues(): {
+    email: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+  } {
+    return this.fieldSetPersonal.getInputValues();
+  }
+
+  private updateUserData(): void {
+    this.fieldSetPersonal.buttonSave.addEventListener('click', async () => {
+      if (this.fieldSetPersonal.isValidData()) {
+        const api = new APIUserActions();
+        const { email, firstName, lastName, dateOfBirth } = this.takeInputValues();
+        await api.updatePersonalInfo(email, firstName, lastName, dateOfBirth);
+        this.disableAllInputs();
+        this.hidePersonalInfo();
+      }
+    });
+  }
+
+  private async removeShippingAddress(shippingAddressId: string): Promise<void> {
+    const api = new APIUserActions();
+    await api.removeShippingAddress(shippingAddressId);
+    await this.fetchUserData();
+  }
+
+  private async removeBillingAddress(billingAddressId: string): Promise<void> {
+    const api = new APIUserActions();
+    await api.removeBillingAddress(billingAddressId);
+    await this.fetchUserData();
   }
 
   private disableAllInputs(): void {
@@ -174,6 +251,16 @@ class ProfileForm extends BaseComponent {
 
   private enablePersonalInputs(): void {
     this.fieldSetPersonal.inputEnable();
+  }
+
+  private hidePersonalInfo(): void {
+    // Call the hideFromScreen method of the FieldsetPersonal instance
+    this.fieldSetPersonal.hideFromScreen();
+  }
+
+  private showPersonalInfoButtons(): void {
+    // Call the showOnScreen method of the FieldsetPersonal instance
+    this.fieldSetPersonal.showOnScreen();
   }
 }
 

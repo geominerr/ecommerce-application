@@ -3,6 +3,7 @@ enum TagNames {
   H3 = 'h3',
   FORM = 'form',
   H5 = 'h5',
+  BUTTON = 'button',
 }
 
 enum Styles {
@@ -14,6 +15,8 @@ enum Styles {
   INFO = 'personal-info',
   SHIPPING = 'shipping-addresses',
   BILLING = 'billing-addresses',
+  BUTTON_ADD = 'add-button',
+  BUTTON_CHANGE = 'change-button',
 }
 
 enum Content {

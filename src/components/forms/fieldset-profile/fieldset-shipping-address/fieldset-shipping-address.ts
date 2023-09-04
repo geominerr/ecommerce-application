@@ -13,6 +13,14 @@ class FieldsetShip extends BaseComponent {
 
   private legendElement: HTMLLegendElement;
 
+  private titleContainer: HTMLDivElement;
+
+  private actionsContainer: HTMLDivElement;
+
+  public edit: HTMLImageElement;
+
+  public remove: HTMLImageElement;
+
   public select: SelectComponentProfile;
 
   public inputPostal: InputPostal;
@@ -23,6 +31,12 @@ class FieldsetShip extends BaseComponent {
 
   public inputStreetNumber: InputBase;
 
+  private buttonsContainer: HTMLDivElement;
+
+  public buttonCancel: HTMLButtonElement;
+
+  public buttonSave: HTMLButtonElement;
+
   public checkboxShipDef: CheckboxComponent;
 
   constructor(validator: AddressCheck) {
@@ -30,6 +44,17 @@ class FieldsetShip extends BaseComponent {
 
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
     this.legendElement = this.createElement(TagNames.LEGEND, Styles.LEGEND);
+    this.titleContainer = this.createElement(TagNames.DIV, Styles.TITLE_CONTAINER);
+    this.actionsContainer = this.createElement(TagNames.DIV, Styles.ACTIONS_CONTAINER);
+    this.buttonCancel = this.createElement(TagNames.BUTTON, Styles.BUTTON_CANCEL);
+    this.buttonCancel.innerHTML = 'Cancel';
+    this.buttonSave = this.createElement(TagNames.BUTTON, Styles.BUTTON_SAVE);
+    this.buttonSave.innerHTML = 'Save';
+    this.buttonsContainer = this.createElement(TagNames.DIV, Styles.BUTTONS_CONTAINER);
+    this.edit = this.createElement(TagNames.IMG, Styles.EDIT);
+    this.edit.setAttribute('src', '../../../../assets/svg/edit.svg');
+    this.remove = this.createElement(TagNames.IMG, Styles.CLOSE);
+    this.remove.setAttribute('src', '../../../../assets/svg/close.svg');
     this.select = new SelectComponentProfile('shipping');
     this.inputPostal = new InputPostal(validator.postalCodeCheck, OPTIONS[3]);
     this.inputCity = new InputBase(validator.cityCheck, OPTIONS[0]);
@@ -97,12 +122,16 @@ class FieldsetShip extends BaseComponent {
 
     const checkboxShipDef: HTMLElement = this.checkboxShipDef.getElement();
     legendElement.innerText = Contents.LEGEND;
-    fieldsetElement.append(legendElement);
+    this.titleContainer.append(legendElement, this.actionsContainer);
+    this.actionsContainer.append(this.edit, this.remove);
+    this.buttonsContainer.append(this.buttonCancel, this.buttonSave);
+    fieldsetElement.append(this.titleContainer);
 
     [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(
       (component: InputBase | InputPostal | SelectComponentProfile): void =>
         fieldsetElement.append(component.getElement())
     );
+    fieldsetElement.append(this.buttonsContainer);
     fieldsetElement.append(checkboxShipDef);
   }
 

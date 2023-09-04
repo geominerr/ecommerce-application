@@ -1,6 +1,5 @@
 import BaseComponent from '../../../base/base-component/base-component';
 import InputBase from '../../input-profile/input-base/input-base';
-// import Button from '../../buttons-profile/button';
 import { AddressCheck } from '../../../../utils/address_check';
 import { EmailPasswordCheck } from '../../../../utils/email_password_check';
 import { TagNames, Styles, Contents } from './enum';
@@ -26,9 +25,9 @@ class FieldsetPersonal extends BaseComponent {
 
   private buttonsContainer: HTMLDivElement;
 
-  private buttonCancel: HTMLButtonElement;
+  public buttonCancel: HTMLButtonElement;
 
-  private buttonSave: HTMLButtonElement;
+  public buttonSave: HTMLButtonElement;
 
   private allInputs: InputBase[] = [];
 
@@ -63,6 +62,14 @@ class FieldsetPersonal extends BaseComponent {
     [this.inputFirstName, this.inputLastName, this.inputMail, this.inputDateBirth].forEach(
       (input) => input.inputEnable()
     );
+  }
+
+  public hideFromScreen(): void {
+    this.buttonsContainer.classList.remove(Styles.BUTTONS_SHOW);
+  }
+
+  public showOnScreen(): void {
+    this.buttonsContainer.classList.add(Styles.BUTTONS_SHOW);
   }
 
   public getElement(): HTMLElement {
@@ -134,6 +141,20 @@ class FieldsetPersonal extends BaseComponent {
     this.inputFirstName.setValue(firstName);
     this.inputLastName.setValue(lastName);
     this.inputDateBirth.setValue(dateOfBirth);
+  }
+
+  public getInputValues(): {
+    email: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+  } {
+    const email = this.inputMail.getValue();
+    const firstName = this.inputFirstName.getValue();
+    const lastName = this.inputLastName.getValue();
+    const dateOfBirth = this.inputDateBirth.getValue();
+
+    return { email, firstName, lastName, dateOfBirth };
   }
 }
 
