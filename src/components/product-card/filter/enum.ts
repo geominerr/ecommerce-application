@@ -9,6 +9,7 @@ enum TagNames {
 enum Styles {
   CONTAINER = 'filter-container',
   COUNTRY_CONTAINER = 'country-container',
+  BRAND_CONTAINER = 'brand-container',
   LABEL = 'label',
   CHECKBOX = 'checkbox',
   CHECKBOX_LABEL = 'checkbox-label',

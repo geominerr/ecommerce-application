@@ -45,6 +45,8 @@ export default class Catalog extends TemplateView {
 
   private countries: string[] = [];
 
+  private brands: string[] = [];
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
@@ -313,25 +315,17 @@ export default class Catalog extends TemplateView {
 
     filter.addEventListener('click', (e: Event) => {
       const { target } = e;
-      this.countries = [];
+      this.countries = this.filter.getCountryValue();
+      this.brands = this.filter.getBrandValue();
+
       if (!this.sortParams || !this.sortParams[0]) {
         this.sortParams = ['', ''];
       }
 
       if (target instanceof HTMLButtonElement) {
-        filter.firstChild?.childNodes.forEach((el) => {
-          const check = el.lastChild;
-          if (check instanceof HTMLInputElement) {
-            console.log(check.checked, check.value);
-            if (check.checked) {
-              this.countries.push(check.value);
-              check.checked = false; // Удалить, когда будет сохранение состояния.
-            }
-          }
-        });
-
+        console.log(this.countries, this.brands);
         // TODO: сделать так, чтобы работало при использовании сортировки.
-        this.sort(this.sortParams[0], this.sortParams[1], [''], this.countries);
+        this.sort(this.sortParams[0], this.sortParams[1], this.brands, this.countries);
       }
     });
   }
