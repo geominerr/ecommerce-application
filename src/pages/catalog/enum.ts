@@ -12,8 +12,4 @@ enum Styles {
   SORT_CONTAINER = 'sort-search-container',
 }
 
-enum Events {
-  CLICK = 'click',
-}
-
-export { TagNames, Styles, Events };
+export { TagNames, Styles };

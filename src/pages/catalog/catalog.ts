@@ -4,11 +4,12 @@ import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcru
 import Navbar from '../../components/navbar/navbar';
 import InputSearch from '../../components/search/search';
 import SelectSort from '../../components/select-sort/select-sort';
+import Filter from '../../components/product-card/filter/filter';
 import Buttons from './buttons/buttons';
 import { NOT_FOUND_PRODUCT } from './not-found-product';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
 import { transform } from '../../utils/response-converter/response-converter';
-import { TagNames, Styles, Events } from './enum';
+import { TagNames, Styles } from './enum';
 import './catalog.scss';
 
 export default class Catalog extends TemplateView {
@@ -24,8 +25,6 @@ export default class Catalog extends TemplateView {
 
   private navSidebar: HTMLDivElement;
 
-  private applySortBtn: HTMLButtonElement;
-
   private navbarBreadcrumb: NavbarBreadcrumb;
 
   private navbar: Navbar;
@@ -33,6 +32,8 @@ export default class Catalog extends TemplateView {
   private api: APIProductActions;
 
   private selectSort: SelectSort;
+
+  private filter: Filter;
 
   private inputSearch: InputSearch;
 
@@ -42,6 +43,12 @@ export default class Catalog extends TemplateView {
 
   private sortParams: string[] | null = null;
 
+  private countries: string[] = [];
+
+  private brands: string[] = [];
+
+  private prices: string[] = [];
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
@@ -50,32 +57,45 @@ export default class Catalog extends TemplateView {
     this.sortContainer = this.createElement(TagNames.DIV, Styles.SORT_CONTAINER);
     this.navSidebar = this.createElement(TagNames.DIV, Styles.NAV_SIDEBAR);
     this.buttonsGroup = new Buttons().getElement();
-    this.applySortBtn = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.inputSearch = new InputSearch();
     this.selectSort = new SelectSort();
+    this.filter = new Filter();
     this.navbarBreadcrumb = new NavbarBreadcrumb();
     this.navbar = new Navbar();
     this.api = api;
     this.default_min_price = '0'; // $
     this.default_max_price = '1000000'; // $
-    // this.createSorting();
-    this.addChangeHandler(this.selectSort.getElement(), this.inputSearch.getElement());
+    this.addChangeHandler(
+      this.selectSort.getElement(),
+      this.inputSearch.getElement(),
+      this.filter.getElement()
+    );
     this.addButtonClickHandler();
   }
 
   private documentTitle: string = 'Catalog';
 
   public async getHtml(): Promise<HTMLElement> {
-    const { container, prodContainer, navbarBreadcrumb, navbar, navSidebar, cardContainer } = this;
+    const {
+      container,
+      prodContainer,
+      navbarBreadcrumb,
+      navbar,
+      navSidebar,
+      cardContainer,
+      filter,
+    } = this;
     const { sortContainer, buttonsGroup } = this;
     const breadcrumbElement = navbarBreadcrumb.getElement();
     const navigationElement = navbar.getElement();
+    const filterElement = filter.getElement();
     const searchElement = this.inputSearch.getElement();
     const sortElement = this.selectSort.getElement();
 
     navbarBreadcrumb.updateFromPathname();
 
     navSidebar.append(navigationElement);
+    navSidebar.append(filterElement);
     [searchElement, sortElement].forEach((el) => sortContainer.append(el));
     [navSidebar, cardContainer].forEach((el) => prodContainer.append(el));
     [breadcrumbElement, buttonsGroup, sortContainer, prodContainer].forEach((el) =>
@@ -124,9 +144,6 @@ export default class Catalog extends TemplateView {
 
       if (CARD_DATA.results.length) {
         CARD_DATA.results.forEach((res) => {
-          console.log('transformed', transform(res));
-          //  типа вот так new ProductCard(converteResponseData(rec)
-
           const card = new ProductCard(transform(res)).getElement();
           this.cardContainer.append(card);
         });
@@ -143,18 +160,12 @@ export default class Catalog extends TemplateView {
     return element;
   }
 
-  private createSorting(): void {
-    this.navSidebar.append(this.applySortBtn);
-    this.applySortBtn.innerText = 'Apply sort';
-    this.addClickHandler(this.applySortBtn);
-  }
-
   // Сортирует либо по алфавиту, либо по цене. Можно передать тип сортировки "price" или "name.en" направление "asc" и "desc".
   private sort(
     sort_type: string = '',
     direction: string = '',
-    brand: string = '',
-    country: string = '',
+    brand: string[] = [''],
+    country: string[] = [''],
     min_price: string = this.default_min_price,
     max_price = this.default_max_price,
     additionalSortParam = ''
@@ -175,19 +186,19 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по стране бренда. По умолчанию пустая строка.
+  // Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
   // Те же условия что и у предыдущего метода.
   private filterByBrand(
-    brand: string = '',
-    country: string = '',
+    brand: string[] = [''],
+    country: string[] = [''],
     min_price: string = this.default_min_price,
     max_price = this.default_max_price,
     additionalSortParam = ''
   ): void {
-    if (!brand) {
-      brand = 'exists';
+    if (!brand[0]) {
+      brand = ['exists'];
     } else {
-      brand = `"${brand}"`;
+      brand = brand.map((el) => `"${el}"`);
     }
 
     this.filterByRegistrationCountry(
@@ -198,19 +209,19 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по стране бренда. По умолчанию пустая строка.
+  // Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
   // Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
   // Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов.
   private filterByRegistrationCountry(
-    country: string = '',
+    country: string[] = [''],
     min_price: string = this.default_min_price,
     max_price = this.default_max_price,
     additionalSortParam = ''
   ): void {
-    if (!country) {
-      country = 'exists';
+    if (!country[0]) {
+      country = ['exists'];
     } else {
-      country = `"${country}"`;
+      country = country.map((el) => `"${el}"`);
     }
 
     this.filterByMinPrice(
@@ -269,18 +280,12 @@ export default class Catalog extends TemplateView {
     this.makeCard(`text.en="${search_string}"`);
   }
 
-  private addClickHandler(applySortBtn: HTMLElement): void {
-    applySortBtn.addEventListener(Events.CLICK, async () => {
-      console.log('Sort pushed');
-
-      // ∠( ᐛ 」∠)_ Сортировку и поиск, разумеется, стоит навесить на отдельные кнопки. ∠( ᐛ 」∠)_
-
-      this.sort('price', 'desc', 'Pioneer', 'Japan', '100', '9000');
-      this.search('Pioneer');
-    });
-  }
-
-  private addChangeHandler(selectSort: HTMLElement, inputSearch: HTMLElement): void {
+  // eslint-disable-next-line max-lines-per-function
+  private addChangeHandler(
+    selectSort: HTMLElement,
+    inputSearch: HTMLElement,
+    filter: HTMLElement
+  ): void {
     selectSort.addEventListener('change', () => {
       const params: string[] = this.selectSort.getValue();
       const typeSort = params[0];
@@ -301,6 +306,31 @@ export default class Catalog extends TemplateView {
         target.value = '';
 
         this.search(searchParam);
+      }
+    });
+
+    filter.addEventListener('click', (e: Event) => {
+      const { target } = e;
+      this.countries = this.filter.getCountryValue();
+      this.brands = this.filter.getBrandValue();
+      this.prices = this.filter.getPriceValue();
+
+      if (!this.sortParams || !this.sortParams[0]) {
+        this.sortParams = ['', ''];
+      }
+
+      if (target instanceof HTMLButtonElement) {
+        // TODO: сделать так, чтобы работало при использовании сортировки.
+        this.sort(
+          this.sortParams[0],
+          this.sortParams[1],
+          this.brands,
+          this.countries,
+          this.prices[0],
+          this.prices[1]
+        );
+
+        filter.querySelectorAll('input').forEach((el) => (el.checked = false)); // Удаить, если будет сохранение чекбоксов в память
       }
     });
   }

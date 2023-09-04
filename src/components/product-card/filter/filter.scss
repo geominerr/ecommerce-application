@@ -1,0 +1,35 @@
+.filter-container {
+  margin: 5rem 0 5rem 0;
+
+  p {
+    margin: 2rem 0 2rem 0;
+    font-size: 1.8rem;
+  }
+
+  .country-container,
+  .brand-container,
+  .price-container {
+    margin: 2rem 0 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+
+    .checkbox-label {
+      cursor: pointer;
+      margin: .5rem 0 .5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+
+      .checkbox {
+        cursor: pointer;
+        margin: 0 1rem 0 1rem;
+      }
+    }
+
+    .input-label {
+      width: 100%;
+    }
+  }
+}
