@@ -17,6 +17,8 @@ class Filter extends BaseComponent {
 
   private checkboxBritain: HTMLInputElement;
 
+  private checkboxGermany: HTMLInputElement;
+
   private checkboxPioneer: HTMLInputElement;
 
   private checkboxYamaha: HTMLInputElement;
@@ -45,6 +47,7 @@ class Filter extends BaseComponent {
     this.checkboxJapan = this.createCheckbox('Japan', 'Japan');
     this.checkboxUSA = this.createCheckbox('USA', 'USA');
     this.checkboxBritain = this.createCheckbox('Great Britain', 'Great Britain');
+    this.checkboxGermany = this.createCheckbox('Germany', 'Germany');
 
     // Чекбоксы для брендов
     this.checkboxPioneer = this.createCheckbox('Pioneer', 'Pioneer');
@@ -100,7 +103,8 @@ class Filter extends BaseComponent {
     if (
       this.checkboxJapan.lastChild instanceof HTMLInputElement &&
       this.checkboxUSA.lastChild instanceof HTMLInputElement &&
-      this.checkboxBritain.lastChild instanceof HTMLInputElement
+      this.checkboxBritain.lastChild instanceof HTMLInputElement &&
+      this.checkboxGermany.lastChild instanceof HTMLInputElement
     ) {
       if (this.checkboxJapan.lastChild.checked) {
         selectedValues.push(this.checkboxJapan.lastChild.value);
@@ -110,6 +114,9 @@ class Filter extends BaseComponent {
       }
       if (this.checkboxBritain.lastChild.checked) {
         selectedValues.push(this.checkboxBritain.lastChild.value);
+      }
+      if (this.checkboxGermany.lastChild.checked) {
+        selectedValues.push(this.checkboxGermany.lastChild.value);
       }
     }
 
@@ -147,6 +154,7 @@ class Filter extends BaseComponent {
     this.countryContainer.append(this.checkboxJapan);
     this.countryContainer.append(this.checkboxUSA);
     this.countryContainer.append(this.checkboxBritain);
+    this.countryContainer.append(this.checkboxGermany);
 
     // Здесь создается: контейнер для выбора бренда, хедер для бренда.
     const brandHeader = this.createElement(TagNames.P, Styles.FILTER_HEADER);
