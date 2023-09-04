@@ -296,12 +296,6 @@ export default class Catalog extends TemplateView {
       this.sortParams.push(typeSort, directionSort);
 
       this.sort(typeSort, directionSort);
-
-      // FOR TEST
-      // this.sort('price', 'desc', ['Pioneer', 'Audeze'], ['USA', 'Japan'], '100', '9000');
-      // setTimeout(() => {
-      //   this.sort(typeSort, directionSort, ['Pioneer', 'Audeze'], ['USA', 'Japan']);
-      // }, 2000);
     });
 
     inputSearch.addEventListener('change', (e: Event) => {
@@ -321,8 +315,6 @@ export default class Catalog extends TemplateView {
       this.brands = this.filter.getBrandValue();
       this.prices = this.filter.getPriceValue();
 
-      console.log(this.prices);
-
       if (!this.sortParams || !this.sortParams[0]) {
         this.sortParams = ['', ''];
       }
@@ -337,6 +329,9 @@ export default class Catalog extends TemplateView {
           this.prices[0],
           this.prices[1]
         );
+
+        console.log(this.prices);
+        filter.querySelectorAll('input').forEach((el) => (el.checked = false)); // Удаить, если будет сохранение чекбоксов в память
       }
     });
   }

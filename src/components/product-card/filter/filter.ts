@@ -117,17 +117,19 @@ class Filter extends BaseComponent {
   }
 
   public getPriceValue(): string[] {
-    const selectedValues: string[] = [];
+    const selectedValues: string[] = ['', ''];
 
     if (
       this.minPriceLabel.lastChild instanceof HTMLInputElement &&
       this.maxPriceLabel.lastChild instanceof HTMLInputElement
     ) {
       if (this.minPriceLabel.lastChild.value) {
-        selectedValues.push(this.minPriceLabel.lastChild.value);
+        // selectedValues.push(this.minPriceLabel.lastChild.value);
+        selectedValues[0] = this.minPriceLabel.lastChild.value;
       }
       if (this.maxPriceLabel.lastChild.value) {
-        selectedValues.push(this.maxPriceLabel.lastChild.value);
+        // selectedValues.push(this.maxPriceLabel.lastChild.value);
+        selectedValues[1] = this.maxPriceLabel.lastChild.value;
       }
     }
 
