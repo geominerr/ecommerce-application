@@ -1,0 +1,44 @@
+
+.select-sort {
+  width: 22rem;
+  height: 3rem;
+  padding-left: 0.8rem;
+
+  font-size: 1.4rem;
+  font-family: 'Montserrat', sans-serif;
+  color: #555555;
+  background-color: #fdfdfd;
+  border-radius: none;
+  border: 0.1rem solid rgb(27, 27, 27);
+
+  cursor: pointer;
+  transition: all 0.3s;
+
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: #f0f0f0;
+  }
+}
+
+.option:hover {
+  background-color: rgb(145, 44, 44);
+}
+
+.select--error {
+  outline: 0.15rem solid #fd0404;
+
+  &:focus {
+    outline: 0.15rem solid #fd0404;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .select-sort {
+    width: 100%;
+  }
+}

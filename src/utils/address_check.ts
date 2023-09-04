@@ -42,9 +42,9 @@ export class AddressCheck {
     const ageInMilliseconds = +currentDate - +birthDate;
     const ageInYears = ageInMilliseconds / (365 * 24 * 60 * 60 * 1000);
 
-    if (ageInYears < 13) {
+    if (ageInYears - 0.009 < 13) {
       return 'Unfortunately, you cannot register on this platform as the minimum age is 13.';
-    } else if (ageInYears > 100) {
+    } else if (ageInYears - 0.069 > 100) {
       return 'You should be dead.';
     }
     // Все ок? - null

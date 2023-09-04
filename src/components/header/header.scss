@@ -8,7 +8,7 @@
   justify-content: center;
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: 15;
   background-color: rgb(0, 0, 0);
 }
 
@@ -23,13 +23,15 @@
 .nav {
   display: flex;
   width: 90%;
-  justify-content: space-between;
+  justify-content: end;
   transition: all 0.3s;
+  gap: 5rem;
 
   &__products {
     display: flex;
     padding-left: 4rem;
     align-items: center;
+    justify-content: flex-end;
     flex-wrap: wrap;
   }
 
@@ -136,6 +138,13 @@
 
       .nav-link:nth-child(2) {
         order: 4;
+      }
+
+      .nav-link:nth-child(3) {
+        order: 2;
+      }
+      .nav-link:last-child {
+        order: 0;
       }
     }
   }

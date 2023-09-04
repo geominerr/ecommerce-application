@@ -1,0 +1,48 @@
+$fontFamily: 'Montserrat', sans-serif;
+
+.button-catalog {
+  position: relative;
+  width: 18rem;
+  padding: 0.7rem;
+
+  font-size: 1.6rem;
+  font-family: $fontFamily;
+  color: rgb(202, 202, 202);
+  background-color: rgb(14, 14, 14);
+  border: 0.1rem solid rgb(14, 14, 14);
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0.6rem;
+    right: 1rem;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background-image: url('../../../../assets/icons/folder.png');
+    background-size: 2rem 2rem;
+    background-repeat: no-repeat;
+  }
+
+  &--filter {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0.6rem;
+      right: 1rem;
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      background-image: url('../../../../assets/icons/tool.png');
+      background-size: 2rem 2rem;
+      background-repeat: no-repeat;
+    }
+  }
+
+  @media screen and (max-width: 440px) {
+    & {
+      width: 100%;
+    }
+  }
+}

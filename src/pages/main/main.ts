@@ -15,27 +15,23 @@ export default class Main extends TemplateView {
     <div class="main-categories">
         <div class="main-headphones">
             <div class="main-headphones title">HEADPHONES</div>
-            <a href="/headphones"><img src="../assets/img/main-headphones.png" alt="none"></a>
+            <a href="/catalog/headphones""><img src="../assets/img/main-headphones.png" alt="none"></a>
         </div>
         <div class="main-speakers">
             <div class="main-speakers title">SPEAKERS</div>
-            <a href="/speakers"><img src="../assets/img/main-speakers.png" alt="none"></a>
+            <a href="/catalog/sound-systems""><img src="../assets/img/main-speakers.png" alt="none"></a>
         </div>
         <div class="main-turntables">
             <div class="main-turntables title">TURNTABLES</div>
-            <a href="/turntables"><img src="../assets/img/main-turntables.png" alt="none"></a>
+            <a href="/catalog/turntables"><img src="../assets/img/main-turntables.png" alt="none"></a>
         </div>
         <div class="main-amplifiers">
             <div class="main-amplifiers title">AMPLIFIERS</div>
-            <a href="/amplifiers"><img src="../assets/img/main-amplifiers.png" alt="none"></a>
-        </div>
-        <div class="main-soundbars">
-            <div class="main-soundbars title">SOUNDBARS</div>
-            <a href="/soundbars"><img src="../assets/img/main-soundbars.png" alt="none"></a>
+            <a href="/catalog/amplifiers""><img src="../assets/img/main-amplifiers.png" alt="none"></a>
         </div>
         <div class="main-controllers">
             <div class="main-controllers title">DJ Controllers</div>
-            <a href="/controllers"><img src="../assets/img/main-controllers.png" alt="none"></a>
+            <a href="/catalog/controllers""><img src="../assets/img/main-controllers.png" alt="none"></a>
         </div>
     </div>
     <div class="main-follow">

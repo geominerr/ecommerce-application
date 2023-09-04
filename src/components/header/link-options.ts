@@ -1,13 +1,6 @@
 import { ILinkOptions } from './header-interfaces';
 
-const LINKS_OPTIONS: ILinkOptions[] = [
-  { href: '/headphones', content: 'Headphones' },
-  { href: '/speakers', content: 'Speakers' },
-  { href: '/turntables', content: 'Turntables' },
-  { href: '/amplifiers', content: 'Amplifiers' },
-  { href: '/controllers', content: 'Controllers' },
-  { href: '/soundbars', content: 'Soundbars' },
-];
+const LINKS_OPTIONS: ILinkOptions[] = [{ href: '/catalog', content: 'Catalog' }];
 
 const LINKS_OPTIONS_USER: ILinkOptions[] = [
   { href: '/authorization', content: 'Login' },

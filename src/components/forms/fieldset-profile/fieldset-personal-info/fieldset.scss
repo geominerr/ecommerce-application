@@ -1,0 +1,39 @@
+.fieldset {
+  width: 100%;
+  display: flex;
+  border: none;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+  width: 35rem;
+}
+
+.legend {
+  align-self: center;
+  margin-bottom: 3rem;
+  margin-bottom: 20px;
+  font-size: 2.2rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  .edit {
+    cursor: pointer;
+  }
+}
+
+.buttons-container.show {
+  display: flex;
+}
+
+.buttons-container.hide {
+  display: none;
+}
+
+.highlight {
+  background: rgb(64, 224, 208, 0.3);
+
+}

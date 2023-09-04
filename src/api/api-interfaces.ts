@@ -1,5 +1,19 @@
 interface Result {
   [key: string]: unknown;
+  id: string;
+  name: { en: string };
+  masterVariant: MasterVariant;
+}
+
+interface MasterVariant {
+  images: [];
+  prices: Price[];
+}
+
+interface Price {
+  value: {
+    centAmount: number;
+  };
 }
 
 export interface ProjectData {
@@ -39,6 +53,43 @@ export interface Customer {
   versionModifiedAt: string;
 }
 
+export interface CustomerResponse {
+  id: string;
+  version: number;
+  versionModifiedAt: string;
+  lastMessageSequenceNumber: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  lastModifiedBy: {
+    clientId: string;
+    isPlatformClient: boolean;
+  };
+  createdBy: {
+    clientId: string;
+    isPlatformClient: boolean;
+  };
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  password: string;
+  addresses: {
+    id: string;
+    streetName: string;
+    streetNumber: string;
+    postalCode: string;
+    city: string;
+    country: string;
+  }[];
+  defaultShippingAddressId: string;
+  defaultBillingAddressId: string;
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
+  isEmailVerified: boolean;
+  stores: string[];
+  authenticationMode: string;
+}
+
 export interface IPassFlow {
   password: string;
   username: string;
@@ -63,4 +114,50 @@ export interface IUserData {
   password: string;
   defaultShippingAddress?: number;
   defaultBillingAddress?: number;
+}
+
+export interface IProductResponse {
+  id: string;
+  name: { en: string };
+  description: { en: string };
+  masterVariant: IProductVariant;
+  key: string;
+}
+
+interface IProductVariant {
+  prices: IProductPrice[];
+  images: IProductImage[];
+  attributes: IProductAttribute[];
+}
+
+interface IProductPrice {
+  value: {
+    currencyCode: string;
+    centAmount: number;
+    fractionDigits: number;
+  };
+  discounted?: {
+    value: {
+      currencyCode: string;
+      centAmount: number;
+      fractionDigits: number;
+    };
+    discount: {
+      id: string;
+    };
+  };
+}
+
+interface IProductImage {
+  url: string;
+  label: string;
+  dimensions: {
+    w: number;
+    h: number;
+  };
+}
+
+interface IProductAttribute {
+  name: string;
+  value: string;
 }

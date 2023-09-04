@@ -1,0 +1,48 @@
+.fieldset-billing {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 35rem;
+  margin-bottom: 1rem;
+}
+
+.legend {
+  align-self: center;
+  padding: 0 0 1rem;
+  margin: 0;
+  font-size: 2.2rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.fieldset--hide {
+  display: none;
+}
+
+.addresses-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  .edit {
+    cursor: pointer;
+  }
+}
+
+.actions-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  .edit {
+    cursor: pointer;
+  }
+  .close {
+    cursor: pointer;
+  }
+}
+
+.addresses-buttons-container {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
