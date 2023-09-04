@@ -117,7 +117,7 @@ class Filter extends BaseComponent {
   }
 
   public getPriceValue(): string[] {
-    const selectedValues: string[] = ['', ''];
+    const selectedValues: string[] = [];
 
     if (
       this.minPriceLabel.lastChild instanceof HTMLInputElement &&

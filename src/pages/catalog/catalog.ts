@@ -330,7 +330,6 @@ export default class Catalog extends TemplateView {
           this.prices[1]
         );
 
-        console.log(this.prices);
         filter.querySelectorAll('input').forEach((el) => (el.checked = false)); // Удаить, если будет сохранение чекбоксов в память
       }
     });
