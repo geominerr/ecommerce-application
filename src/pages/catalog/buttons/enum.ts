@@ -3,7 +3,7 @@ enum TagNames {
 }
 
 enum Styles {
-  BUTTONS_CONTAINER = 'buttons-container',
+  BUTTONS_CONTAINER = 'buttons-container-catalog',
 }
 
 export { TagNames, Styles };
