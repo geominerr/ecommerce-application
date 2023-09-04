@@ -43,7 +43,6 @@ export class APIProductActions {
       const projectData = await response.json();
       return projectData as ProjectData;
     } catch (error) {
-      console.error('Error fetching Project data:', error);
       throw error;
     }
   }
@@ -74,7 +73,6 @@ export class APIProductActions {
 
       return projectData as ProjectData;
     } catch (error) {
-      console.error('Error fetching Project data:', error);
       throw error;
     }
   }
