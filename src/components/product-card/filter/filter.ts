@@ -5,6 +5,8 @@ import './filter.scss';
 class Filter extends BaseComponent {
   private filterContainer: HTMLDivElement;
 
+  private closeBtn: HTMLElement;
+
   private countryContainer: HTMLDivElement;
 
   private brandContainer: HTMLDivElement;
@@ -38,6 +40,7 @@ class Filter extends BaseComponent {
   constructor() {
     super();
     this.filterContainer = this.createElement(TagNames.DIV, Styles.CONTAINER);
+    this.closeBtn = this.createElement(TagNames.DIV, Styles.CLOSE_BTN);
     this.filterButton = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.countryContainer = this.createElement(TagNames.DIV, Styles.COUNTRY_CONTAINER);
     this.brandContainer = this.createElement(TagNames.DIV, Styles.BRAND_CONTAINER);
@@ -148,7 +151,10 @@ class Filter extends BaseComponent {
     const countryHeader = this.createElement(TagNames.P, Styles.FILTER_HEADER);
     countryHeader.innerText = 'Select country';
     this.filterContainer.append(countryHeader);
+    this.closeBtn.id = 'close-btn-filter';
+    this.filterContainer.append(this.closeBtn);
     this.filterButton.innerText = 'Apply filter';
+    this.filterButton.id = 'filter-btn';
     this.filterContainer.append(this.countryContainer);
 
     this.countryContainer.append(this.checkboxJapan);
@@ -204,7 +210,21 @@ class Filter extends BaseComponent {
     input.id = id;
     input.type = inputType;
     input.placeholder = placeholderText;
+    input.min = '0';
+    input.max = '31744';
 
+    input.addEventListener('input', () => {
+      const inputValue = parseInt(input.value);
+      const maxValue = parseInt(input.max);
+
+      if (inputValue > maxValue) {
+        input.value = input.max;
+      }
+
+      if (!inputValue) {
+        input.value = input.min;
+      }
+    });
     label.appendChild(input);
     return label;
   }

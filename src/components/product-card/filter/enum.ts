@@ -18,6 +18,7 @@ enum Styles {
   BUTTON = 'button',
   INPUT = 'input',
   INPUT_LABEL = 'input-label',
+  CLOSE_BTN = 'close-btn-filter',
 }
 
 enum Events {

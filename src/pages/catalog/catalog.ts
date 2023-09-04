@@ -337,14 +337,24 @@ export default class Catalog extends TemplateView {
 
   private addButtonClickHandler(): void {
     const navbar = this.navbar.getElement();
+    const filter = this.filter.getElement();
 
     document.body.addEventListener('click', (e) => {
       const { target } = e;
 
-      if (target instanceof HTMLElement && target.id === 'catalog') {
-        navbar.classList.add('navbar--open');
-      } else {
-        navbar.classList.remove('navbar--open');
+      if (target instanceof HTMLElement) {
+        if (target.id === 'catalog') {
+          navbar.classList.add('navbar--open');
+        } else {
+          navbar.classList.remove('navbar--open');
+        }
+
+        if (target.id === 'filter') {
+          console.log(target, filter);
+          filter.classList.add('filter-container--open');
+        } else if (target.id === 'close-btn-filter' || target.id === 'filter-btn') {
+          filter.classList.remove('filter-container--open');
+        }
       }
     });
   }
