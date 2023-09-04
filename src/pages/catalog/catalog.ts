@@ -345,15 +345,19 @@ export default class Catalog extends TemplateView {
       if (target instanceof HTMLElement) {
         if (target.id === 'catalog') {
           navbar.classList.add('navbar--open');
+          document.body.classList.add('lock');
         } else {
           navbar.classList.remove('navbar--open');
+          document.body.classList.remove('lock');
         }
 
         if (target.id === 'filter') {
           console.log(target, filter);
           filter.classList.add('filter-container--open');
+          document.body.classList.add('lock');
         } else if (target.id === 'close-btn-filter' || target.id === 'filter-btn') {
           filter.classList.remove('filter-container--open');
+          document.body.classList.remove('lock');
         }
       }
     });
