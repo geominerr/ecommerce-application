@@ -24,7 +24,6 @@ export class APIProductActions {
   ): Promise<ProjectData> {
     // data of  is: products / product-projections / customers / categories / stores / orders / zones
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
-    console.log('Access Token: ', ACCESS_TOKEN, '\n');
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
 
@@ -44,7 +43,6 @@ export class APIProductActions {
       const projectData = await response.json();
       return projectData as ProjectData;
     } catch (error) {
-      console.error('Error fetching Project data:', error);
       throw error;
     }
   }
@@ -55,7 +53,6 @@ export class APIProductActions {
     offset = 0
   ): Promise<ProjectData> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
-    console.log('Access Token: ', ACCESS_TOKEN, '\n');
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
 
@@ -76,7 +73,6 @@ export class APIProductActions {
 
       return projectData as ProjectData;
     } catch (error) {
-      console.error('Error fetching Project data:', error);
       throw error;
     }
   }
