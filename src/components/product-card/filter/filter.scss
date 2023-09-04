@@ -1,5 +1,29 @@
 .filter-container {
-  margin: 5rem 0 5rem 0;
+  width: 100%;
+
+  position: relative;
+
+  padding: 1rem 1.5rem 1rem 0rem;
+
+  border-top: 0.1rem solid rgba(59, 59, 59, 0.5);
+  transition: all 0.3s;
+
+  .close-btn-filter {
+    position: absolute;
+    z-index: 12;
+    top: 1.5rem;
+    right: 2rem;
+    width: 3rem;
+    height: 3rem;
+
+    background-image: url("../../../assets/icons/close-white.png");
+    background-size: 3rem 3rem;
+    background-repeat: no-repeat;
+
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
 
   p {
     margin: 2rem 0 2rem 0;
@@ -31,5 +55,37 @@
     .input-label {
       width: 100%;
     }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .filter-container {
+    overflow: auto;
+    width: 50%;
+    height: 100vh;
+    padding: 3rem 3rem 12rem;
+
+    position: fixed;
+    top: 9.1rem;
+    left: -120%;
+
+    background-color: rgba(42, 42, 42, 0.95);
+    color: white
+  }
+
+  .filter-container--open {
+    left: 0%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .filter-container {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .filter-container {
+    width: 100%;
   }
 }

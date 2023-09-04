@@ -72,19 +72,18 @@ export class Router {
   public async router(): Promise<void> {
     let currentPath = location.pathname;
 
-    /**костыль исключительно для примера, буду переделывать в отдельной ветке
-     будет отдельный class IDPathMap в которой будем передавать пути со страницы catalog,
-     чтобы в роутере мы были уверены что это валидный путь, сейчас можно любой ID вести
-     в строке браузера и роутер нас оправить на страницу несуществeющего товара*/
+    // добавил проверку, теперь пользователь если продолжит путь после ID будет кидать на 404
     if (currentPath.includes(this.pathLocation)) {
-      const id: string = currentPath.split('/')[2];
+      if (currentPath.split('/').length <= 3) {
+        const id: string = currentPath.split('/')[2];
 
-      this.content.innerHTML = '';
-      const element = await this.detailedPage.getElement(id);
+        this.content.innerHTML = '';
+        const element = await this.detailedPage.getElement(id);
 
-      this.content.append(element);
+        this.content.append(element);
 
-      return;
+        return;
+      }
     }
 
     if (localStorage.getItem(this.keyAccessToken)) {
