@@ -9,6 +9,8 @@ class Filter extends BaseComponent {
 
   private brandContainer: HTMLDivElement;
 
+  private priceContainer: HTMLDivElement;
+
   private checkboxJapan: HTMLInputElement;
 
   private checkboxUSA: HTMLInputElement;
@@ -25,6 +27,10 @@ class Filter extends BaseComponent {
 
   private checkboxKEF: HTMLInputElement;
 
+  private minPriceLabel: HTMLLabelElement;
+
+  private maxPriceLabel: HTMLLabelElement;
+
   private filterButton: HTMLButtonElement;
 
   constructor() {
@@ -33,6 +39,7 @@ class Filter extends BaseComponent {
     this.filterButton = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.countryContainer = this.createElement(TagNames.DIV, Styles.COUNTRY_CONTAINER);
     this.brandContainer = this.createElement(TagNames.DIV, Styles.BRAND_CONTAINER);
+    this.priceContainer = this.createElement(TagNames.DIV, Styles.PRICE_CONTAINER);
 
     // Чекбоксы для стран
     this.checkboxJapan = this.createCheckbox('Japan', 'Japan');
@@ -45,6 +52,11 @@ class Filter extends BaseComponent {
     this.checkboxAudeze = this.createCheckbox('Audeze', 'Audeze');
     this.checkboxMeze = this.createCheckbox('Meze', 'Meze');
     this.checkboxKEF = this.createCheckbox('KEF', 'KEF');
+
+    // Input для цен
+    this.minPriceLabel = this.createInputLabel('minPrice', 'Min price:', 'number', '€');
+    this.maxPriceLabel = this.createInputLabel('maxPrice', 'Max price:', 'number', '€');
+
     this.createComponent();
   }
 
@@ -104,8 +116,26 @@ class Filter extends BaseComponent {
     return selectedValues;
   }
 
+  public getPriceValue(): string[] {
+    const selectedValues: string[] = [];
+
+    if (
+      this.minPriceLabel.lastChild instanceof HTMLInputElement &&
+      this.maxPriceLabel.lastChild instanceof HTMLInputElement
+    ) {
+      if (this.minPriceLabel.lastChild.value) {
+        selectedValues.push(this.minPriceLabel.lastChild.value);
+      }
+      if (this.maxPriceLabel.lastChild.value) {
+        selectedValues.push(this.maxPriceLabel.lastChild.value);
+      }
+    }
+
+    return selectedValues;
+  }
+
   private createComponent(): void {
-    // Здась создается: контейнер для выбора страны, хедер для страны.
+    // Здесь создается: контейнер для выбора страны, хедер для страны.
     const countryHeader = this.createElement(TagNames.P, Styles.FILTER_HEADER);
     countryHeader.innerText = 'Select country';
     this.filterContainer.append(countryHeader);
@@ -116,7 +146,7 @@ class Filter extends BaseComponent {
     this.countryContainer.append(this.checkboxUSA);
     this.countryContainer.append(this.checkboxBritain);
 
-    // Здась создается: контейнер для выбора бренда, хедер для бренда.
+    // Здесь создается: контейнер для выбора бренда, хедер для бренда.
     const brandHeader = this.createElement(TagNames.P, Styles.FILTER_HEADER);
     brandHeader.innerText = 'Select brand';
     this.filterContainer.append(brandHeader);
@@ -128,7 +158,16 @@ class Filter extends BaseComponent {
     this.brandContainer.append(this.checkboxMeze);
     this.brandContainer.append(this.checkboxKEF);
 
-    this.filterContainer.append(this.filterButton); // перенести в конец
+    // Здесь создается: контейнер выбора для цен, хедер для цен.
+    const priceHeader = this.createElement(TagNames.P, Styles.FILTER_HEADER);
+    priceHeader.innerText = 'Select price range';
+    this.filterContainer.append(priceHeader);
+    this.filterContainer.append(this.priceContainer);
+
+    this.priceContainer.append(this.minPriceLabel);
+    this.priceContainer.append(this.maxPriceLabel);
+
+    this.filterContainer.append(this.filterButton);
   }
 
   private createCheckbox(labelText: string, value: string): HTMLInputElement {
@@ -140,6 +179,24 @@ class Filter extends BaseComponent {
     label.innerText = labelText;
     label.appendChild(checkbox);
     return label as HTMLInputElement;
+  }
+
+  private createInputLabel(
+    id: string,
+    labelText: string,
+    inputType: string,
+    placeholderText: string
+  ): HTMLLabelElement {
+    const label: HTMLLabelElement = this.createElement(TagNames.LABEL, Styles.INPUT_LABEL);
+    label.innerText = labelText;
+
+    const input: HTMLInputElement = this.createElement(TagNames.INPUT, Styles.INPUT);
+    input.id = id;
+    input.type = inputType;
+    input.placeholder = placeholderText;
+
+    label.appendChild(input);
+    return label;
   }
 }
 
