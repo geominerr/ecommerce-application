@@ -3,6 +3,7 @@ import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcru
 import Sidebar from './sidebar/sidebar';
 import Slider from '../../components/slider/slider';
 import converteResponseData from '../../utils/response-converter/response-converter';
+import { NOT_FOUND } from './not-found';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
 import { TagNames, Styles } from './enum';
 import './detail-page.scss';
@@ -50,7 +51,7 @@ class DetailPage extends TemplateView {
 
     this.createComponent(id)
       .then((element) => (container = element))
-      .catch((err) => console.log(err)); // здесь отловим ошибки некорректных данных и не дай бог Swiper )пока в консоль, потом можно через popup сообщение ...
+      .catch(() => (container.innerHTML = NOT_FOUND)); // здесь отловим ошибки некорректных данных и не дай бог Swiper )пока в консоль, потом можно через popup сообщение ...
 
     return container;
   }
@@ -63,6 +64,7 @@ class DetailPage extends TemplateView {
     const { container, navigation, navbar, productWrapper, slider, sidebar } = this;
 
     navbar.clearContainer();
+    container.innerHTML = '';
     slider.innerHTML = '';
     sidebar.innerHTML = '';
 
