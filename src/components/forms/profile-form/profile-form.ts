@@ -214,6 +214,7 @@ class ProfileForm extends BaseComponent {
         const api = new APIUserActions();
         const { email, firstName, lastName, dateOfBirth } = this.takeInputValues();
         await api.updatePersonalInfo(email, firstName, lastName, dateOfBirth);
+        this.fieldSetPersonal.highlightInputs(2000);
         this.disableAllInputs();
         this.hidePersonalInfo();
       }

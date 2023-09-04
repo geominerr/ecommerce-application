@@ -18,6 +18,7 @@ enum Styles {
   BUTTONS_HIDE = 'hide',
   BUTTONS_SHOW = 'show',
   EDIT = 'edit',
+  HIGHLIGHT = 'highlight',
 }
 
 enum Contents {
