@@ -1,5 +1,6 @@
 .filter-container {
   width: 100%;
+
   position: relative;
 
   padding: 1rem 1.5rem 1rem 0rem;
@@ -57,15 +58,12 @@
   }
 }
 
-
-
 @media screen and (max-width: 800px) {
-
-
   .filter-container {
+    overflow: auto;
     width: 50%;
     height: 100vh;
-    padding: 3rem 3rem;
+    padding: 3rem 3rem 12rem;
 
     position: fixed;
     top: 9.1rem;
