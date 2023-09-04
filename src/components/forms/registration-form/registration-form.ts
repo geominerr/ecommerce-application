@@ -139,12 +139,15 @@ class RegistrationForm extends BaseComponent {
 
       if (isValidForm) {
         const userData: IUserData = this.getData();
+        const { email, password } = userData;
 
         this.api
           .registerUser(userData)
           .then(() => {
-            this.popup.showRegistrationMessage();
-            this.redirectToMain();
+            this.api.loginUserPassFlow(email, password).then(() => {
+              this.popup.showRegistrationMessage();
+              this.redirectToMain();
+            });
           })
           .catch(() => {
             this.popup.showRegistrationErrorMessage();
