@@ -54,7 +54,6 @@ class NavbarBreadcrumb extends BaseComponent {
   private createLinkOptions(key: string, end: string): ILinkOptions[] {
     const options: ILinkOptions[] = [];
     const normalizedKey = key.slice(0, 3).toLowerCase();
-    console.log(normalizedKey);
     const optionCategoria = MAP_PATHS[normalizedKey as keyof IMapPaths];
     const optionEnd = { href: '/catalog', content: end };
 

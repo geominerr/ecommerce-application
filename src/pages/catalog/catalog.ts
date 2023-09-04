@@ -135,7 +135,6 @@ export default class Catalog extends TemplateView {
 
   private async makeCard(searchParam: string = ''): Promise<void> {
     const CARD_DATA = await this.api.getProjectData('product-projections', 40, 0, searchParam);
-    console.log(CARD_DATA);
 
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
     if (CARD_DATA.limit) {
@@ -343,16 +342,17 @@ export default class Catalog extends TemplateView {
       const { target } = e;
 
       if (target instanceof HTMLElement) {
-        if (target.id === 'catalog-btn') {
+        if (target.id === 'catalog-button') {
           navbar.classList.add('navbar--open');
           document.body.classList.add('lock');
         } else {
-          navbar.classList.remove('navbar--open');
-          document.body.classList.remove('lock');
+          if (navbar.classList.contains('navbar--open')) {
+            navbar.classList.remove('navbar--open');
+            document.body.classList.remove('lock');
+          }
         }
 
-        if (target.id === 'filter-btn') {
-          console.log(target, filter);
+        if (target.id === 'filter-button') {
           filter.classList.add('filter-container--open');
           document.body.classList.add('lock');
         } else if (target.id === 'close-btn-filter' || target.id === 'filter-btn') {
