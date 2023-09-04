@@ -343,7 +343,7 @@ export default class Catalog extends TemplateView {
       const { target } = e;
 
       if (target instanceof HTMLElement) {
-        if (target.id === 'catalog') {
+        if (target.id === 'catalog-btn') {
           navbar.classList.add('navbar--open');
           document.body.classList.add('lock');
         } else {
@@ -351,7 +351,7 @@ export default class Catalog extends TemplateView {
           document.body.classList.remove('lock');
         }
 
-        if (target.id === 'filter') {
+        if (target.id === 'filter-btn') {
           console.log(target, filter);
           filter.classList.add('filter-container--open');
           document.body.classList.add('lock');

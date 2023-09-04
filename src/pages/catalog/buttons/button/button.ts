@@ -23,7 +23,7 @@ class ButtonPage extends BaseComponent {
       button.classList.add(Styles.BTN_FILTER);
     }
 
-    button.id = type;
+    button.id = type + '-btn';
     button.innerText = type[0].toUpperCase() + type.slice(1);
   }
 }
