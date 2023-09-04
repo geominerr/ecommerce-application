@@ -108,6 +108,24 @@ class FieldsetPersonal extends BaseComponent {
     return isValid;
   }
 
+  public highlightInputs(duration: number): void {
+    const { inputMail, inputFirstName, inputLastName, inputDateBirth } = this;
+    [inputMail, inputFirstName, inputLastName, inputDateBirth].forEach((input) => {
+      const inputProfile = input.getElement().querySelector('.input-profile');
+      if (inputProfile) {
+        inputProfile.classList.add(Styles.HIGHLIGHT);
+      }
+    });
+    setTimeout(() => {
+      [inputMail, inputFirstName, inputLastName, inputDateBirth].forEach((input) => {
+        const inputProfile = input.getElement().querySelector('.input-profile');
+        if (inputProfile) {
+          inputProfile.classList.remove(Styles.HIGHLIGHT);
+        }
+      });
+    }, duration);
+  }
+
   private createComponent(): void {
     const {
       fieldsetElement,
