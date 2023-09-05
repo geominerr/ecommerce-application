@@ -3,6 +3,7 @@ import TemplateView from '../template-view/template-view';
 import ProfileForm from '../../components/forms/profile-form/profile-form';
 import { Router } from '../../router/router';
 import { AddressCheck } from '../../utils/address_check';
+import StateManager from '../../state-manager/state-manager';
 import { EmailPasswordCheck } from '../../utils/email_password_check';
 import { TagNames, Styles, Content } from './enum';
 import './profile.scss';
@@ -34,6 +35,12 @@ class Profile extends TemplateView {
 
   public setRouter(router: Router): this {
     this.profileForm.setRouter(router);
+
+    return this;
+  }
+
+  public setStateManager(state: StateManager): this {
+    this.profileForm.setStateManager(state);
 
     return this;
   }

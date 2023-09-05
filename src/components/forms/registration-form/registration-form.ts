@@ -3,7 +3,7 @@ import FieldsetPersonal from '../fieldset/fieldset-personal-info/fieldset-person
 import FieldsetShip from '../fieldset/fieldset-shipping-address/fieldset-shipping-address';
 import FieldsetBill from '../fieldset/fieldset-billing-address/fieldset-billing-address';
 import Button from '../button/button';
-import Popup from '../../popup/popup';
+import { popup } from '../../popup/popup';
 import CheckboxComponent from '../checkbox/checkbox';
 import StateManager from '../../../state-manager/state-manager';
 import { Router } from '../../../router/router';
@@ -41,7 +41,7 @@ class RegistrationForm extends BaseComponent {
 
   private buttonLogin: Button;
 
-  private popup: Popup;
+  private popup = popup;
 
   private api: APIUserActions;
 
@@ -72,7 +72,6 @@ class RegistrationForm extends BaseComponent {
     this.loginContainer = this.createElement(TagNames.DIV, Styles.LOGIN_WRAPPER);
     this.titleHint = this.createElement(TagNames.H5, Styles.TITLE_HINT);
     this.buttonLogin = new Button(TypeButton.LOGIN);
-    this.popup = new Popup();
     this.api = api;
 
     this.createComponent();
