@@ -20,6 +20,8 @@ class ProductCard extends BaseComponent {
 
   private buttonCart: HTMLButtonElement;
 
+  private description: HTMLElement;
+
   private hiddenLink: HTMLAnchorElement;
 
   private productData: ProductData;
@@ -33,6 +35,7 @@ class ProductCard extends BaseComponent {
     this.priceWrapper = this.createElement(TagNames.DIV, Styles.PRICE_WRAPPER);
     this.price = this.createElement(TagNames.P, Styles.PRICE);
     this.discountPrice = this.createElement(TagNames.P, Styles.PRICE_DISCOUNT);
+    this.description = this.createElement(TagNames.DIV, Styles.DESCRIPTION);
     this.buttonCart = this.createElement(TagNames.P, Styles.BUTTON_CART);
     this.hiddenLink = this.createElement(TagNames.A, Styles.LINK);
 
@@ -47,7 +50,7 @@ class ProductCard extends BaseComponent {
 
   private createComponent(data: ProductData): void {
     const { card, imgWrapper, img, title, buttonCart, hiddenLink } = this;
-    const { priceWrapper, price, discountPrice } = this;
+    const { priceWrapper, price, discountPrice, description } = this;
 
     hiddenLink.setAttribute(Attributes.HREF, `${Attributes.HREF_VALUE_DETAIL_PRODUCT}/${data.id}`);
     hiddenLink.setAttribute(Attributes.ID, data.id);
@@ -56,6 +59,7 @@ class ProductCard extends BaseComponent {
     title.innerText = data.name;
     price.innerText = data.price;
     buttonCart.innerText = Content.BUTTON_CART;
+    description.innerText = data.description;
 
     if (data.discountPrice) {
       price.classList.add(Styles.PRICE_DISABLED);
@@ -64,8 +68,8 @@ class ProductCard extends BaseComponent {
 
     imgWrapper.append(img);
     [price, discountPrice].forEach((el: HTMLElement): void => priceWrapper.append(el));
-    [hiddenLink, imgWrapper, title, priceWrapper, buttonCart].forEach((el: HTMLElement): void =>
-      card.append(el)
+    [hiddenLink, imgWrapper, title, priceWrapper, description, buttonCart].forEach(
+      (el: HTMLElement): void => card.append(el)
     );
 
     this.addClickHandler();
