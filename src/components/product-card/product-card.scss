@@ -1,6 +1,6 @@
 .card {
   width: 22rem;
-  height: 40rem;
+  height: 42rem;
 
   position: relative;
   z-index: 0;
@@ -25,12 +25,11 @@
 
   &__img-wrapper {
     width: 100%;
-    height: 20rem;
+    min-height: 20rem;
 
     display: flex;
     align-items: center;
     justify-content: center;
-
   }
 
   &__img {
@@ -65,7 +64,15 @@
   }
 
   &__description {
-    font-size: 1.5rem;
+    width: 100%;
+    height: 3rem;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: 1.4rem;
+    font-family: 'Montserrat', sans-serif;
   }
 
   &__button-cart {
@@ -83,7 +90,7 @@
   }
 
   .price-wrapper {
-    min-height: 4rem;
+    height: 4rem;
     display: flex;
     flex-direction: column;
     align-self: start;
@@ -123,6 +130,14 @@
     height: 25rem;
   }
 
+  .card__description {
+    height: 4rem;
+    line-height: 1.2;
+
+    white-space: wrap;
+    text-overflow: ellipsis;
+  }
+
   @media screen and (hover: hover) {
     .card:hover {
       z-index: 9;
@@ -144,6 +159,14 @@
   .card__img-wrapper {
     width: 100%;
     height: 20rem;
+  }
+
+  .card__description {
+    height: 3.5rem;
+    line-height: 1.4;
+
+    white-space: wrap;
+    text-overflow: ellipsis;
   }
 }
 

@@ -4,4 +4,5 @@ export interface ProductData {
   img: string[];
   price: string;
   discountPrice?: string;
+  description: string;
 }
