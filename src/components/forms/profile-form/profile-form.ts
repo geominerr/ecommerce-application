@@ -2,6 +2,7 @@ import BaseComponent from '../../base/base-component/base-component';
 import FieldsetPersonal from '../fieldset-profile/fieldset-personal-info/fieldset-personal-info';
 import FieldsetShip from '../fieldset-profile/fieldset-shipping-address/fieldset-shipping-address';
 import FieldsetBill from '../fieldset-profile/fieldset-billing-address/fieldset-billing-address';
+import FieldsetPassword from '../fieldset-profile/fieldset-password/fieldset-change-password';
 import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
@@ -18,6 +19,8 @@ class ProfileForm extends BaseComponent {
 
   public addBillingAddress: HTMLButtonElement;
 
+  private passwordsContainer: HTMLDivElement;
+
   public changePassword: HTMLButtonElement;
 
   private shippingAddresses: HTMLDivElement;
@@ -29,6 +32,8 @@ class ProfileForm extends BaseComponent {
   private fieldSetShippingList: FieldsetShip[];
 
   private fieldSetBillingList: FieldsetBill[];
+
+  private fieldSetPassword: FieldsetPassword;
 
   private api: APIUserActions;
 
@@ -44,6 +49,7 @@ class ProfileForm extends BaseComponent {
     super();
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
     this.personalInfo = this.createElement(TagNames.DIV, Styles.INFO);
+    this.passwordsContainer = this.createElement(TagNames.DIV, Styles.PASSWORD);
     this.addShippingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
     this.addShippingAddress.innerHTML = 'Add Address';
     this.addBillingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
@@ -53,6 +59,7 @@ class ProfileForm extends BaseComponent {
     this.shippingAddresses = this.createElement(TagNames.DIV, Styles.SHIPPING);
     this.billingAddresses = this.createElement(TagNames.DIV, Styles.BILLING);
     this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
+    this.fieldSetPassword = new FieldsetPassword(validatorEmail);
     this.fieldSetShippingList = [];
     this.fieldSetBillingList = [];
     this.api = api;
@@ -166,9 +173,11 @@ class ProfileForm extends BaseComponent {
       addBillingAddress,
       billingAddresses,
       changePassword,
+      passwordsContainer,
     } = this;
 
     const fieldsetPersonalElement: HTMLElement = this.fieldSetPersonal.getElement();
+    const fieldsetPasswordElement: HTMLElement = this.fieldSetPassword.getElement();
 
     form.append(
       personalInfo,
@@ -176,12 +185,16 @@ class ProfileForm extends BaseComponent {
       shippingAddresses,
       addBillingAddress,
       billingAddresses,
-      changePassword
+      changePassword,
+      passwordsContainer
     );
 
     personalInfo.append(fieldsetPersonalElement);
+    passwordsContainer.append(fieldsetPasswordElement);
     this.changeUserData();
+    this.changePasswordData();
     this.cancelUserData();
+    this.cancelPasswords();
     this.updateUserData();
   }
 
@@ -192,10 +205,22 @@ class ProfileForm extends BaseComponent {
     });
   }
 
+  private changePasswordData(): void {
+    this.changePassword.addEventListener('click', () => {
+      this.fieldSetPassword.showPassword();
+    });
+  }
+
   private cancelUserData(): void {
     this.fieldSetPersonal.buttonCancel.addEventListener('click', () => {
       this.disableAllInputs();
       this.hidePersonalInfo();
+    });
+  }
+
+  private cancelPasswords(): void {
+    this.fieldSetPassword.buttonCancel.addEventListener('click', () => {
+      this.fieldSetPassword.hidePassword();
     });
   }
 
@@ -255,12 +280,10 @@ class ProfileForm extends BaseComponent {
   }
 
   private hidePersonalInfo(): void {
-    // Call the hideFromScreen method of the FieldsetPersonal instance
     this.fieldSetPersonal.hideFromScreen();
   }
 
   private showPersonalInfoButtons(): void {
-    // Call the showOnScreen method of the FieldsetPersonal instance
     this.fieldSetPersonal.showOnScreen();
   }
 }

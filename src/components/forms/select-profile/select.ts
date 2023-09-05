@@ -81,13 +81,11 @@ class SelectComponentProfile extends BaseComponent {
     disabledOption.hidden = true;
     disabledOption.innerText = disabledOptionText;
 
-    select.setAttribute(Attributes.ID, SHIPPING_OPTIONS.ID);
     select.setAttribute(Attributes.NAME, SHIPPING_OPTIONS.NAME);
     label.setAttribute(Attributes.FOR, SHIPPING_OPTIONS.ID);
     label.innerText = SHIPPING_OPTIONS.LABEL_CONTENT;
 
     if (type !== Address.SHIPPING) {
-      select.setAttribute(Attributes.ID, BILLING_OPTIONS.ID);
       select.setAttribute(Attributes.NAME, BILLING_OPTIONS.NAME);
       label.setAttribute(Attributes.FOR, BILLING_OPTIONS.ID);
       label.innerText = BILLING_OPTIONS.LABEL_CONTENT;

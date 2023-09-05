@@ -1,0 +1,23 @@
+.fieldset-passwords {
+  margin-top: 2rem;
+  padding: 0;
+  width: 100%;
+  display: none;
+  border: none;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  width: 35rem;
+}
+
+.legend {
+  align-self: center;
+  padding: 0 0 1rem;
+  margin: 0;
+  font-size: 2.2rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.show{
+  display: flex;
+}
