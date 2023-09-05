@@ -285,16 +285,7 @@ class ProfileForm extends BaseComponent {
             if (err.message.includes('400')) {
               this.popup.showOldPassNotConfirmErrorMessage();
             }
-
-            // if (err.message.includes('')) {
-            //   this.popup.showNewPassIndetityOldErrorMessage();
-            // }
-            // this.popup.showNewPassIndetityOldErrorMessage();
-            console.log(err.message);
           });
-
-        // this.redirectToMain();
-        // this.router?.router();
       }
     });
   }
