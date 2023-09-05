@@ -4,6 +4,7 @@ import FieldsetShip from '../fieldset-profile/fieldset-shipping-address/fieldset
 import FieldsetBill from '../fieldset-profile/fieldset-billing-address/fieldset-billing-address';
 import FieldsetPassword from '../fieldset-profile/fieldset-password/fieldset-change-password';
 import StateManager from '../../../state-manager/state-manager';
+import { popup } from '../../popup/popup';
 import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
@@ -38,7 +39,9 @@ class ProfileForm extends BaseComponent {
 
   private stateManager: StateManager | null = null;
 
-  private pathToMain: string = '/';
+  private pathToLogin: string = '/authorization';
+
+  private popup = popup;
 
   private api: APIUserActions;
 
@@ -268,11 +271,28 @@ class ProfileForm extends BaseComponent {
       if (this.fieldSetPassword.isValidData()) {
         const api = new APIUserActions();
         const { currentPassword, newPassword } = this.takePasswordValues();
-        await api.changeUserPassword(currentPassword, newPassword);
-        this.fieldSetPassword.highlightInputs(2000);
-        // очищение полей
-        // this.fieldSetPassword.hidePassword();
-        api.logoutUser();
+        await api
+          .changeUserPassword(currentPassword, newPassword)
+          .then((data) => {
+            console.log(data);
+            this.popup.showChangePasswordMessage();
+            this.fieldSetPassword.highlightInputs(2000);
+            this.fieldSetPassword.hidePassword();
+            this.api.logoutUser();
+            this.redirectToLogin();
+          })
+          .catch((err) => {
+            if (err.message.includes('400')) {
+              this.popup.showOldPassNotConfirmErrorMessage();
+            }
+
+            // if (err.message.includes('')) {
+            //   this.popup.showNewPassIndetityOldErrorMessage();
+            // }
+            // this.popup.showNewPassIndetityOldErrorMessage();
+            console.log(err.message);
+          });
+
         // this.redirectToMain();
         // this.router?.router();
       }
@@ -308,9 +328,10 @@ class ProfileForm extends BaseComponent {
     });
   }
 
-  private redirectToMain(): void {
+  private redirectToLogin(): void {
     if (this.router && this.stateManager) {
-      history.replaceState(null, '', this.pathToMain);
+      this.stateManager.changeAuthorizationStatus();
+      history.pushState(null, '', this.pathToLogin);
       this.router.router();
     }
   }

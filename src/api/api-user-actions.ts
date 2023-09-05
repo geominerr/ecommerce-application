@@ -323,19 +323,19 @@ export class APIUserActions {
     };
 
     try {
-      const response = await fetch(url, {
+      const response: Response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(requestData),
       });
 
       if (response.status === 200) {
-        // Success
+        return await response.json();
       } else {
-        throw new Error('Failed to update user data');
+        throw new Error(`${response.status}`);
       }
     } catch (error) {
-      console.error('Failed to update user data:', error);
+      throw error;
     }
   }
 }

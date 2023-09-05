@@ -35,6 +35,20 @@ class Popup extends BaseComponent {
     this.removeStylesWithDelay();
   }
 
+  public showChangePasswordMessage(): void {
+    this.popupDescription.innerText = `You have successfully changed your password. Please login again!`;
+    this.popupDescription.classList.add(Styles.POPUP_SUCCESS);
+    this.container.classList.add(Styles.POPUP_VISIBLE);
+
+    this.removeStylesWithDelay();
+  }
+
+  public showOldPassNotConfirmErrorMessage(): void {
+    this.popupDescription.innerText = 'Sorry, we you entered the wrong old password!';
+    this.popupDescription.classList.add(Styles.POPUP_ERROR);
+    this.container.classList.add(Styles.POPUP_VISIBLE);
+  }
+
   public showRegistrationMessage(): void {
     this.popupDescription.innerText = `We are glad to welcome you, to our Universe. Your account has been successfully created!`;
     this.popupDescription.classList.add(Styles.POPUP_SUCCESS);
@@ -97,4 +111,6 @@ class Popup extends BaseComponent {
   }
 }
 
-export default Popup;
+const popup = new Popup();
+
+export { popup, Popup };
