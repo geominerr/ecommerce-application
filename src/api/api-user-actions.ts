@@ -307,4 +307,35 @@ export class APIUserActions {
       console.error('Failed to update user data:', error);
     }
   }
+
+  public async changeUserPassword(currentPassword: string, newPassword: string): Promise<void> {
+    const requestVersion = localStorage.getItem('requestVersion');
+    const requestData = {
+      version: requestVersion !== null ? parseInt(requestVersion) : 0,
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    };
+
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/password`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem(this.keyAccessToken)}`,
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.status === 200) {
+        // Success
+      } else {
+        throw new Error('Failed to update user data');
+      }
+    } catch (error) {
+      console.error('Failed to update user data:', error);
+    }
+  }
 }

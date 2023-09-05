@@ -13,6 +13,7 @@ enum Styles {
   BUTTON_SAVE = 'save-button',
   BUTTONS_HIDE = 'hide',
   BUTTONS_SHOW = 'show',
+  HIGHLIGHT = 'highlight',
 }
 
 enum Events {

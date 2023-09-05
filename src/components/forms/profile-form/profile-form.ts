@@ -3,6 +3,7 @@ import FieldsetPersonal from '../fieldset-profile/fieldset-personal-info/fieldse
 import FieldsetShip from '../fieldset-profile/fieldset-shipping-address/fieldset-shipping-address';
 import FieldsetBill from '../fieldset-profile/fieldset-billing-address/fieldset-billing-address';
 import FieldsetPassword from '../fieldset-profile/fieldset-password/fieldset-change-password';
+import StateManager from '../../../state-manager/state-manager';
 import { Router } from '../../../router/router';
 import { APIUserActions } from '../../../api/api-user-actions';
 import { EmailPasswordCheck } from '../../../utils/email_password_check';
@@ -34,6 +35,10 @@ class ProfileForm extends BaseComponent {
   private fieldSetBillingList: FieldsetBill[];
 
   private fieldSetPassword: FieldsetPassword;
+
+  private stateManager: StateManager | null = null;
+
+  private pathToMain: string = '/';
 
   private api: APIUserActions;
 
@@ -164,6 +169,10 @@ class ProfileForm extends BaseComponent {
     this.router = router;
   }
 
+  public setStateManager(state: StateManager): void {
+    this.stateManager = state;
+  }
+
   private createComponent(): void {
     const {
       form,
@@ -196,6 +205,7 @@ class ProfileForm extends BaseComponent {
     this.cancelUserData();
     this.cancelPasswords();
     this.updateUserData();
+    this.setNewPassword();
   }
 
   private changeUserData(): void {
@@ -246,6 +256,29 @@ class ProfileForm extends BaseComponent {
     });
   }
 
+  public takePasswordValues(): {
+    currentPassword: string;
+    newPassword: string;
+  } {
+    return this.fieldSetPassword.getInputValues();
+  }
+
+  private setNewPassword(): void {
+    this.fieldSetPassword.buttonSave.addEventListener('click', async () => {
+      if (this.fieldSetPassword.isValidData()) {
+        const api = new APIUserActions();
+        const { currentPassword, newPassword } = this.takePasswordValues();
+        await api.changeUserPassword(currentPassword, newPassword);
+        this.fieldSetPassword.highlightInputs(2000);
+        // очищение полей
+        // this.fieldSetPassword.hidePassword();
+        api.logoutUser();
+        // this.redirectToMain();
+        // this.router?.router();
+      }
+    });
+  }
+
   private async removeShippingAddress(shippingAddressId: string): Promise<void> {
     const api = new APIUserActions();
     await api.removeShippingAddress(shippingAddressId);
@@ -273,6 +306,13 @@ class ProfileForm extends BaseComponent {
     this.fieldSetBillingList.forEach((fieldSetBilling) => {
       fieldSetBilling.inputDisable();
     });
+  }
+
+  private redirectToMain(): void {
+    if (this.router && this.stateManager) {
+      history.replaceState(null, '', this.pathToMain);
+      this.router.router();
+    }
   }
 
   private enablePersonalInputs(): void {

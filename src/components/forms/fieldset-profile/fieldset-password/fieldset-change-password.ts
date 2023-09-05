@@ -108,6 +108,34 @@ class FieldsetPassword extends BaseComponent {
     inputConfirm.addEventListener(Events.INPUT, checkPasswords);
   }
 
+  public getInputValues(): {
+    currentPassword: string;
+    newPassword: string;
+  } {
+    const currentPassword = this.inputPassword.getValue();
+    const newPassword = this.inputNewPassword.getValue();
+
+    return { currentPassword, newPassword };
+  }
+
+  public highlightInputs(duration: number): void {
+    const { inputPassword, inputNewPassword, inputPasswordRepeat } = this;
+    [inputPassword, inputNewPassword, inputPasswordRepeat].forEach((input) => {
+      const inputProfile = input.getElement().querySelector('.input-pass');
+      if (inputProfile) {
+        inputProfile.classList.add(Styles.HIGHLIGHT);
+      }
+    });
+    setTimeout(() => {
+      [inputPassword, inputNewPassword, inputPasswordRepeat].forEach((input) => {
+        const inputProfile = input.getElement().querySelector('.input-pass');
+        if (inputProfile) {
+          inputProfile.classList.remove(Styles.HIGHLIGHT);
+        }
+      });
+    }, duration);
+  }
+
   public hidePassword(): void {
     this.fieldsetElement.classList.remove(Styles.FIELDSET_SHOW);
   }
