@@ -36,11 +36,21 @@
   }
 }
 
-// раскомментируй
-// .addresses-buttons-container.show {
-//   display: flex;
-// }
+.addresses-buttons-container {
+  margin-bottom: 2rem;
+  display: none;
+  flex-direction: row;
+  gap: 3rem;
+}
 
-// .addresses-buttons-container.hide {
-//   display: none;
-// }
+.show {
+  display: flex;
+}
+
+.hide {
+  display: none;
+}
+
+.highlight {
+  background: rgb(64, 224, 208, 0.3);
+}

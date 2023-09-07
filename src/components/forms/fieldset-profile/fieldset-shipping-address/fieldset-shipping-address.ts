@@ -39,7 +39,9 @@ class FieldsetShip extends BaseComponent {
 
   public checkboxShipDef: CheckboxComponent;
 
-  constructor(validator: AddressCheck) {
+  public addressId: string;
+
+  constructor(validator: AddressCheck, addressId: string) {
     super();
 
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
@@ -65,10 +67,21 @@ class FieldsetShip extends BaseComponent {
     this.inputPostal.setSelectComponent(this.select);
 
     this.createComponent();
+    this.changeShippingData();
+    this.cancelShippingData();
+    this.addressId = addressId;
   }
 
   public getElement(): HTMLElement {
     return this.fieldsetElement;
+  }
+
+  public hideFromScreen(): void {
+    this.buttonsContainer.classList.remove(Styles.BUTTONS_SHOW);
+  }
+
+  public showOnScreen(): void {
+    this.buttonsContainer.classList.add(Styles.BUTTONS_SHOW);
   }
 
   public inputDisable(): void {
@@ -81,12 +94,22 @@ class FieldsetShip extends BaseComponent {
     ].forEach((input) => input.inputDisable());
   }
 
+  public inputEnable(): void {
+    [
+      this.select,
+      this.inputPostal,
+      this.inputCity,
+      this.inputStreet,
+      this.inputStreetNumber,
+    ].forEach((input) => input.inputEnable());
+  }
+
   public getData(): string[] | null {
     const { inputStreet, inputStreetNumber, inputCity, inputPostal, select } = this;
 
     const result: string[] = [];
 
-    [inputStreet, inputStreetNumber, inputCity, inputPostal, select].forEach((input): number =>
+    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach((input): number =>
       result.push(input.getValue())
     );
 
@@ -142,11 +165,69 @@ class FieldsetShip extends BaseComponent {
     city: string,
     country: string
   ): void {
+    this.select.setValue(country);
     this.inputCity.setValue(city);
     this.inputStreet.setValue(streetName);
     this.inputStreetNumber.setValue(streetNumber);
     this.inputPostal.setValue(postalCode);
-    this.select.setValue(country);
+  }
+
+  public getInputValues(): {
+    streetName: string;
+    streetNumber: string;
+    postalCode: string;
+    city: string;
+    country: string;
+  } {
+    const streetName = this.inputStreet.getValue();
+    const streetNumber = this.inputStreetNumber.getValue();
+    const postalCode = this.inputPostal.getValue();
+    const city = this.inputCity.getValue();
+    const country = this.select.getValue();
+
+    return { streetName, streetNumber, postalCode, city, country };
+  }
+
+  private changeShippingData(): void {
+    this.edit.addEventListener('click', async () => {
+      this.showOnScreen();
+      this.inputEnable();
+    });
+  }
+
+  private cancelShippingData(): void {
+    this.buttonCancel.addEventListener('click', async () => {
+      this.hideFromScreen();
+      this.inputDisable();
+    });
+  }
+
+  public async highlightInputs(duration: number): Promise<void> {
+    const { select, inputPostal, inputCity, inputStreet, inputStreetNumber } = this;
+    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach((input) => {
+      const inputShipping = input.getElement().querySelector('.input-profile, .input-postal');
+      if (inputShipping) {
+        inputShipping.classList.add(Styles.HIGHLIGHT);
+      }
+    });
+
+    const selectElement = select.getElement().querySelector('select');
+    if (selectElement) {
+      selectElement.classList.add(Styles.HIGHLIGHT);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, duration));
+
+    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach((input) => {
+      const inputShipping = input.getElement().querySelector('.input-profile, .input-postal');
+      if (inputShipping) {
+        inputShipping.classList.remove(Styles.HIGHLIGHT);
+      }
+    });
+
+    if (selectElement) {
+      selectElement.classList.remove(Styles.HIGHLIGHT);
+    }
   }
 }
 
