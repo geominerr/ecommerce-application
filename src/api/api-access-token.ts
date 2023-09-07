@@ -1,4 +1,4 @@
-import { AccessTokenResponse, IPassFlow } from './api-interfaces';
+import { AccessTokenResponse, IPassFlow, IAnonymousResponse } from './api-interfaces';
 
 import {
   USER_CTP_CLIENT_ID,
@@ -83,7 +83,7 @@ export class APIAcceesToken {
     }
   }
 
-  public async getAnonymousToken(): Promise<string> {
+  public async getAnonymousToken(): Promise<IAnonymousResponse> {
     const url = `${this.CTP_AUTH_URL}/oauth/${this.PROJECT_KEY}/anonymous/token`;
     const credentials = `${this.CTP_CLIENT_ID}:${this.CTP_CLIENT_SECRET}`;
     const authHeader = 'Basic ' + btoa(credentials);
@@ -91,6 +91,40 @@ export class APIAcceesToken {
     const data = new URLSearchParams();
     data.append('grant_type', 'client_credentials');
     data.append('scope', `${this.CTP_SCOPES}`);
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: authHeader,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
+      });
+
+      const responseData = (await response.json()) as AccessTokenResponse;
+
+      return {
+        access_token: responseData.access_token,
+        refresh_token: responseData.refresh_token,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async refreshToken(refreshToken: string | undefined): Promise<string> {
+    const url = `${this.CTP_AUTH_URL}/oauth/token`;
+    const credentials = `${this.CTP_CLIENT_ID}:${this.CTP_CLIENT_SECRET}`;
+    const authHeader = 'Basic ' + btoa(credentials);
+
+    if (!refreshToken) {
+      refreshToken = '';
+    }
+
+    const data = new URLSearchParams();
+    data.append('grant_type', 'refresh_token');
+    data.append('refresh_token', `${refreshToken}`);
 
     try {
       const response = await fetch(url, {
