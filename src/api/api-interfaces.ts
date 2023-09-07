@@ -161,3 +161,8 @@ interface IProductAttribute {
   name: string;
   value: string;
 }
+
+export interface IAnonymousResponse {
+  access_token: string;
+  refresh_token: string | undefined;
+}
