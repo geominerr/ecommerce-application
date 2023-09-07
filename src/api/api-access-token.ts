@@ -1,4 +1,9 @@
-import { AccessTokenResponse, IPassFlow, IAnonymousResponse } from './api-interfaces';
+import {
+  AccessTokenResponse,
+  IPassFlow,
+  IAnonymousResponse,
+  IAnonymousRefresh,
+} from './api-interfaces';
 
 import {
   USER_CTP_CLIENT_ID,
@@ -107,13 +112,14 @@ export class APIAcceesToken {
       return {
         access_token: responseData.access_token,
         refresh_token: responseData.refresh_token,
+        expires_in: responseData.expires_in,
       };
     } catch (error) {
       throw error;
     }
   }
 
-  public async refreshToken(refreshToken: string | undefined): Promise<string> {
+  public async refreshToken(refreshToken: string | undefined): Promise<IAnonymousRefresh> {
     const url = `${this.CTP_AUTH_URL}/oauth/token`;
     const credentials = `${this.CTP_CLIENT_ID}:${this.CTP_CLIENT_SECRET}`;
     const authHeader = 'Basic ' + btoa(credentials);
@@ -136,9 +142,12 @@ export class APIAcceesToken {
         body: data,
       });
 
-      const responseData = (await response.json()) as AccessTokenResponse;
+      const responseData = (await response.json()) as IAnonymousRefresh;
 
-      return responseData.access_token;
+      return {
+        access_token: responseData.access_token,
+        expires_in: responseData.expires_in,
+      };
     } catch (error) {
       throw error;
     }
