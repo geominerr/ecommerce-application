@@ -1,4 +1,4 @@
-import { AddressCheck } from '../src/utils/address_check';
+import { AddressCheck } from '../../../src/utils/address_check';
 const CHECK = new AddressCheck();
 
 // Age

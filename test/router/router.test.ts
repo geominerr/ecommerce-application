@@ -1,12 +1,12 @@
-import AboutUs from '../src/pages/abouts-us/about-us';
-import Authorization from '../src/pages/authorization/authorization';
-import Cart from '../src/pages/cart/cart';
-import Catalog from '../src/pages/catalog/catalog';
-import Main from '../src/pages/main/main';
-import NotFound from '../src/pages/not-found/not-found';
-import Profile from '../src/pages/profile/profile';
-import Registration from '../src/pages/registration/registration';
-import { Router } from '../src/router/router';
+import AboutUs from '../../src/pages/abouts-us/about-us';
+import Authorization from '../../src/pages/authorization/authorization';
+import Cart from '../../src/pages/cart/cart';
+import Catalog from '../../src/pages/catalog/catalog';
+import Main from '../../src/pages/main/main';
+import NotFound from '../../src/pages/not-found/not-found';
+import Profile from '../../src/pages/profile/profile';
+import Registration from '../../src/pages/registration/registration';
+import { Router } from '../../src/router/router';
 
 let router: Router;
 let main: Main;
