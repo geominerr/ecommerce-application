@@ -165,4 +165,10 @@ interface IProductAttribute {
 export interface IAnonymousResponse {
   access_token: string;
   refresh_token: string | undefined;
+  expires_in: number;
+}
+
+export interface IAnonymousRefresh {
+  access_token: string;
+  expires_in: number;
 }

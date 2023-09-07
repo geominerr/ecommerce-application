@@ -1,5 +1,5 @@
 import { APIAcceesToken } from '../api-access-token';
-import { IAnonymousResponse } from '../api-interfaces';
+import { IAnonymousRefresh, IAnonymousResponse } from '../api-interfaces';
 
 export class APICartActions {
   private APIAcceesToken: APIAcceesToken;
@@ -8,21 +8,63 @@ export class APICartActions {
     this.APIAcceesToken = new APIAcceesToken();
   }
 
-  // Метод ниже исключительно для теста api. Его необходимо удалить по окончанию настройки.
-  public async getAnon(): Promise<void> {
+  // eslint-disable-next-line max-lines-per-function
+  public async getAnon(): Promise<string> {
     const storageAnonymousToken = localStorage.getItem('anonymousAccessToken');
+    const currentDate = new Date();
+    const tokenExpirationDate = localStorage.getItem('anonymousTokenExpiration');
 
     if (!storageAnonymousToken) {
-      const AnonymousToken: IAnonymousResponse = await this.APIAcceesToken.getAnonymousToken();
-      localStorage.setItem('anonymousAccessToken', AnonymousToken.access_token);
-      localStorage.setItem('anonymousRefreshToken', String(AnonymousToken.refresh_token));
+      const anonymousTokenResponse: IAnonymousResponse =
+        await this.APIAcceesToken.getAnonymousToken();
+
+      localStorage.setItem('anonymousAccessToken', anonymousTokenResponse.access_token);
+      localStorage.setItem('anonymousRefreshToken', String(anonymousTokenResponse.refresh_token));
+
+      const tokenExpiration =
+        currentDate.getTime() + Number(anonymousTokenResponse.expires_in) * 1000;
+
+      localStorage.setItem('anonymousTokenExpiration', String(tokenExpiration));
+
+      console.log(
+        'Получен свежий токен: ',
+        anonymousTokenResponse.access_token,
+        'Срок жизни: ',
+        anonymousTokenResponse.expires_in
+      );
+      return anonymousTokenResponse.access_token;
     }
 
-    console.log('anon: ', storageAnonymousToken);
+    if (storageAnonymousToken && currentDate.getTime() > Number(tokenExpirationDate)) {
+      const refreshToken = localStorage.getItem('anonymousRefreshToken');
+      if (refreshToken) {
+        const refreshedTokenResponse: IAnonymousRefresh = await this.APIAcceesToken.refreshToken(
+          refreshToken
+        );
 
-    // TODO: добавить рефрешь если токен просрочился. Нужно проверить, если он просрочился.
+        localStorage.setItem('anonymousAccessToken', refreshedTokenResponse.access_token);
+        const tokenExpiration =
+          currentDate.getTime() + Number(refreshedTokenResponse.expires_in) * 1000;
 
-    // const refresh = await this.APIAcceesToken.refreshToken(anon.refresh_token);
-    // console.log('refreshed: ', refresh);
+        localStorage.setItem('anonymousTokenExpiration', String(tokenExpiration));
+
+        console.log(
+          'Вернулся обновленный токен: ',
+          refreshedTokenResponse.access_token,
+          'Срок жизни: ',
+          refreshedTokenResponse.expires_in
+        );
+        return refreshedTokenResponse.access_token;
+      }
+    }
+
+    console.log(
+      'Токен вернулся из памяти: ',
+      storageAnonymousToken,
+      ' Обновится через:',
+      (Number(tokenExpirationDate) - currentDate.getTime()) / 1000,
+      'cек'
+    );
+    return storageAnonymousToken;
   }
 }
