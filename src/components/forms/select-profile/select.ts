@@ -51,6 +51,11 @@ class SelectComponentProfile extends BaseComponent {
     this.select.disabled = true;
   }
 
+  public inputEnable(): void {
+    // Set the value of the input element
+    this.select.disabled = false;
+  }
+
   public getValue(): string {
     return this.select.options[this.select.selectedIndex].value;
   }

@@ -66,10 +66,20 @@ class FieldsetBill extends BaseComponent {
     this.inputPostal.setSelectComponent(this.select);
 
     this.createComponent();
+    this.changeBillingData();
+    this.cancelBillingData();
   }
 
   public getElement(): HTMLElement {
     return this.fieldsetElement;
+  }
+
+  public hideFromScreen(): void {
+    this.buttonsContainer.classList.remove(Styles.BUTTONS_SHOW);
+  }
+
+  public showOnScreen(): void {
+    this.buttonsContainer.classList.add(Styles.BUTTONS_SHOW);
   }
 
   public inputDisable(): void {
@@ -80,6 +90,16 @@ class FieldsetBill extends BaseComponent {
       this.inputStreet,
       this.inputStreetNumber,
     ].forEach((input) => input.inputDisable());
+  }
+
+  public inputEnable(): void {
+    [
+      this.select,
+      this.inputPostal,
+      this.inputCity,
+      this.inputStreet,
+      this.inputStreetNumber,
+    ].forEach((input) => input.inputEnable());
   }
 
   public getData(): string[] | null {
@@ -148,6 +168,20 @@ class FieldsetBill extends BaseComponent {
     this.inputStreetNumber.setValue(streetNumber);
     this.inputPostal.setValue(postalCode);
     this.select.setValue(country);
+  }
+
+  private changeBillingData(): void {
+    this.edit.addEventListener('click', async () => {
+      this.showOnScreen();
+      this.inputEnable();
+    });
+  }
+
+  private cancelBillingData(): void {
+    this.buttonCancel.addEventListener('click', async () => {
+      this.hideFromScreen();
+      this.inputDisable();
+    });
   }
 }
 
