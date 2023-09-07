@@ -13,6 +13,7 @@ enum Styles {
   LOGIN_WRAPPER = 'login-btn-wrapper',
   TITLE_HINT = 'title-hint',
   INFO = 'personal-info',
+  PASSWORD = 'passwords-container',
   SHIPPING = 'shipping-addresses',
   BILLING = 'billing-addresses',
   BUTTON_ADD = 'add-button',

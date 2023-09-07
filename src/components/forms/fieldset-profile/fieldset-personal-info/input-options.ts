@@ -32,29 +32,6 @@ const dateDirthOptions: InputOptions = {
   CONTENT_LABEL: 'Date birth',
 };
 
-const passwordOptions: InputOptions = {
-  ID: 'registration-password',
-  TYPE: 'password',
-  NAME: 'registration-password',
-  PLACEHOLDER: 'Enter password',
-  CONTENT_LABEL: 'Password',
-};
-
-const confirmPasswordOptions: InputOptions = {
-  ID: 'registration-confirm-password',
-  TYPE: 'password',
-  NAME: 'registration-confirm-password',
-  PLACEHOLDER: 'Confirm password',
-  CONTENT_LABEL: 'Confirm password',
-};
-
-const OPTIONS: InputOptions[] = [
-  emailOptions,
-  firstNameOptions,
-  lastNameOptions,
-  dateDirthOptions,
-  passwordOptions,
-  confirmPasswordOptions,
-];
+const OPTIONS: InputOptions[] = [emailOptions, firstNameOptions, lastNameOptions, dateDirthOptions];
 
 export { OPTIONS };

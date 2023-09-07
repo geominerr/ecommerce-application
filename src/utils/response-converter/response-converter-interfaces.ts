@@ -61,11 +61,13 @@ interface ProductData {
   img: string[];
   price: string;
   discountPrice?: string;
+  description: string;
 }
 
 interface RawProductData {
   id: string;
   name: { en: string };
+  description?: { en: string };
   masterVariant: MasterVariant;
 }
 

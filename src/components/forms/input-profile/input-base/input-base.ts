@@ -39,7 +39,6 @@ class InputBase extends BaseComponent {
     const { container, label, input, errorHint } = this;
     const errorHintElement: HTMLElement = errorHint.getElement();
 
-    input.setAttribute(Attributes.ID, options.ID);
     input.setAttribute(Attributes.TYPE, options.TYPE);
     input.setAttribute(Attributes.NAME, options.NAME);
     label.setAttribute(Attributes.FOR, options.ID);

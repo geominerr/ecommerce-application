@@ -80,6 +80,7 @@ class App {
     this.router.start();
     this.registration.setRouter(this.router).setStateManager(this.stateManager);
     this.authorization.setRouter(this.router).setStateManager(this.stateManager);
+    this.profile.setRouter(this.router).setStateManager(this.stateManager);
   }
 }
 

@@ -1,4 +1,4 @@
-import Popup from '../../../src/components/popup/popup';
+import { Popup } from '../../../src/components/popup/popup';
 import { Styles } from '../../../src/components/popup/enum';
 
 describe('Popup', () => {
