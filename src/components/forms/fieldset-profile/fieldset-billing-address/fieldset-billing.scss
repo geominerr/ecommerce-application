@@ -42,7 +42,20 @@
 
 .addresses-buttons-container {
   margin-bottom: 2rem;
-  display: flex;
+  display: none;
   flex-direction: row;
   gap: 3rem;
+}
+
+.show {
+  display: flex;
+}
+
+.hide {
+  display: none;
+}
+
+
+.highlight {
+  background: rgb(64, 224, 208, 0.3);
 }

@@ -19,8 +19,6 @@ class ProfileForm extends BaseComponent {
 
   public addShippingAddress: HTMLButtonElement;
 
-  public addBillingAddress: HTMLButtonElement;
-
   private passwordsContainer: HTMLDivElement;
 
   public changePassword: HTMLButtonElement;
@@ -60,8 +58,6 @@ class ProfileForm extends BaseComponent {
     this.passwordsContainer = this.createElement(TagNames.DIV, Styles.PASSWORD);
     this.addShippingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
     this.addShippingAddress.innerHTML = 'Add Address';
-    this.addBillingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
-    this.addBillingAddress.innerHTML = 'Add Address';
     this.changePassword = this.createElement(TagNames.BUTTON, Styles.BUTTON_CHANGE);
     this.changePassword.innerHTML = 'Change Password';
     this.shippingAddresses = this.createElement(TagNames.DIV, Styles.SHIPPING);
@@ -116,7 +112,7 @@ class ProfileForm extends BaseComponent {
         const shippingAddress = addresses.find((address) => address.id === shippingAddressId);
         if (shippingAddress) {
           const { streetName, streetNumber, postalCode, city, country } = shippingAddress;
-          const fieldSetShipping = new FieldsetShip(this.validatorAddress);
+          const fieldSetShipping = new FieldsetShip(this.validatorAddress, shippingAddressId);
           fieldSetShipping.setInputValues(streetName, streetNumber, postalCode, city, country);
           if (shippingAddressId === defaultShippingAddressId) {
             fieldSetShipping.checkboxShipDef.setChecked(true);
@@ -133,7 +129,7 @@ class ProfileForm extends BaseComponent {
         const billingAddress = addresses.find((address) => address.id === billingAddressId);
         if (billingAddress) {
           const { streetName, streetNumber, postalCode, city, country } = billingAddress;
-          const fieldSetBilling = new FieldsetBill(this.validatorAddress);
+          const fieldSetBilling = new FieldsetBill(this.validatorAddress, billingAddressId);
           fieldSetBilling.setInputValues(streetName, streetNumber, postalCode, city, country);
           if (billingAddressId === defaultBillingAddressId) {
             fieldSetBilling.checkboxBillDef.setChecked(true);
@@ -182,7 +178,6 @@ class ProfileForm extends BaseComponent {
       personalInfo,
       addShippingAddress,
       shippingAddresses,
-      addBillingAddress,
       billingAddresses,
       changePassword,
       passwordsContainer,
@@ -195,7 +190,6 @@ class ProfileForm extends BaseComponent {
       personalInfo,
       addShippingAddress,
       shippingAddresses,
-      addBillingAddress,
       billingAddresses,
       changePassword,
       passwordsContainer
@@ -208,6 +202,8 @@ class ProfileForm extends BaseComponent {
     this.cancelUserData();
     this.cancelPasswords();
     this.updateUserData();
+    this.updateShippingData();
+    this.updateBillingData();
     this.setNewPassword();
   }
 
@@ -252,9 +248,62 @@ class ProfileForm extends BaseComponent {
         const api = new APIUserActions();
         const { email, firstName, lastName, dateOfBirth } = this.takeInputValues();
         await api.updatePersonalInfo(email, firstName, lastName, dateOfBirth);
-        this.fieldSetPersonal.highlightInputs(2000);
+        this.fieldSetPersonal.highlightInputs(1000);
         this.disableAllInputs();
         this.hidePersonalInfo();
+        await this.fetchUserData();
+      }
+    });
+  }
+
+  private updateShippingData(): void {
+    this.form.addEventListener('click', async (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('save-button')) {
+        const fieldSetShipping = this.fieldSetShippingList.find((fieldSet) =>
+          fieldSet.getElement().contains(target)
+        );
+        if (fieldSetShipping && fieldSetShipping.isValidData()) {
+          const api = new APIUserActions();
+          const { streetName, streetNumber, postalCode, city, country } =
+            fieldSetShipping.getInputValues();
+          await api.updateAddressesInfo(
+            fieldSetShipping.addressId,
+            streetName,
+            streetNumber,
+            postalCode,
+            city,
+            country
+          );
+          await fieldSetShipping.highlightInputs(1000);
+          await this.fetchUserData();
+        }
+      }
+    });
+  }
+
+  private updateBillingData(): void {
+    this.form.addEventListener('click', async (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('save-button')) {
+        const fieldSetBilling = this.fieldSetBillingList.find((fieldSet) =>
+          fieldSet.getElement().contains(target)
+        );
+        if (fieldSetBilling && fieldSetBilling.isValidData()) {
+          const api = new APIUserActions();
+          const { streetName, streetNumber, postalCode, city, country } =
+            fieldSetBilling.getInputValues();
+          await api.updateAddressesInfo(
+            fieldSetBilling.addressId,
+            streetName,
+            streetNumber,
+            postalCode,
+            city,
+            country
+          );
+          await fieldSetBilling.highlightInputs(1000);
+          await this.fetchUserData();
+        }
       }
     });
   }
@@ -276,7 +325,7 @@ class ProfileForm extends BaseComponent {
           .then((data) => {
             console.log(data);
             this.popup.showChangePasswordMessage();
-            this.fieldSetPassword.highlightInputs(2000);
+            this.fieldSetPassword.clearPassword();
             this.fieldSetPassword.hidePassword();
             this.api.logoutUser();
             this.redirectToLogin();
