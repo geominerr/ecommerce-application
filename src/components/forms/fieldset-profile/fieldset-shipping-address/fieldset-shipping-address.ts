@@ -39,7 +39,9 @@ class FieldsetShip extends BaseComponent {
 
   public checkboxShipDef: CheckboxComponent;
 
-  constructor(validator: AddressCheck) {
+  public addressId: string;
+
+  constructor(validator: AddressCheck, addressId: string) {
     super();
 
     this.fieldsetElement = this.createElement(TagNames.FIELDSET, Styles.FIELDSET);
@@ -67,6 +69,7 @@ class FieldsetShip extends BaseComponent {
     this.createComponent();
     this.changeShippingData();
     this.cancelShippingData();
+    this.addressId = addressId;
   }
 
   public getElement(): HTMLElement {
@@ -106,7 +109,7 @@ class FieldsetShip extends BaseComponent {
 
     const result: string[] = [];
 
-    [inputStreet, inputStreetNumber, inputCity, inputPostal, select].forEach((input): number =>
+    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach((input): number =>
       result.push(input.getValue())
     );
 
@@ -162,11 +165,27 @@ class FieldsetShip extends BaseComponent {
     city: string,
     country: string
   ): void {
+    this.select.setValue(country);
     this.inputCity.setValue(city);
     this.inputStreet.setValue(streetName);
     this.inputStreetNumber.setValue(streetNumber);
     this.inputPostal.setValue(postalCode);
-    this.select.setValue(country);
+  }
+
+  public getInputValues(): {
+    streetName: string;
+    streetNumber: string;
+    postalCode: string;
+    city: string;
+    country: string;
+  } {
+    const streetName = this.inputStreet.getValue();
+    const streetNumber = this.inputStreetNumber.getValue();
+    const postalCode = this.inputPostal.getValue();
+    const city = this.inputCity.getValue();
+    const country = this.select.getValue();
+
+    return { streetName, streetNumber, postalCode, city, country };
   }
 
   private changeShippingData(): void {
@@ -181,6 +200,34 @@ class FieldsetShip extends BaseComponent {
       this.hideFromScreen();
       this.inputDisable();
     });
+  }
+
+  public async highlightInputs(duration: number): Promise<void> {
+    const { select, inputPostal, inputCity, inputStreet, inputStreetNumber } = this;
+    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach((input) => {
+      const inputShipping = input.getElement().querySelector('.input-profile, .input-postal');
+      if (inputShipping) {
+        inputShipping.classList.add(Styles.HIGHLIGHT);
+      }
+    });
+
+    const selectElement = select.getElement().querySelector('select');
+    if (selectElement) {
+      selectElement.classList.add(Styles.HIGHLIGHT);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, duration));
+
+    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach((input) => {
+      const inputShipping = input.getElement().querySelector('.input-profile, .input-postal');
+      if (inputShipping) {
+        inputShipping.classList.remove(Styles.HIGHLIGHT);
+      }
+    });
+
+    if (selectElement) {
+      selectElement.classList.remove(Styles.HIGHLIGHT);
+    }
   }
 }
 
