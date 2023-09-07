@@ -1,13 +1,9 @@
 import TemplateView from '../template-view/template-view';
-import { APIAcceesToken } from '../../api/api-access-token'; // Удалить
-import { IAnonymousResponse } from '../../api/api-interfaces';
 import ButtonPage from '../catalog/buttons/button/button';
 import APICartActions from '../../api/cart-actions/api-cart-actions';
 import './cart.scss';
 
 export default class Cart extends TemplateView {
-  private api: APIAcceesToken; // Удалить
-
   private apiCart: APICartActions;
 
   private container: HTMLElement;
@@ -28,7 +24,6 @@ export default class Cart extends TemplateView {
     this.buttonGetCart = new ButtonPage('catalog');
     this.buttonRemoveProd = new ButtonPage('catalog');
     this.createComponent();
-    this.api = new APIAcceesToken(); // Удалить
     this.apiCart = new APICartActions();
   }
 
@@ -49,19 +44,9 @@ export default class Cart extends TemplateView {
     this.addClickHandler();
   }
 
-  // Метод ниже исключительно для теста api. Его необходимо удалить по окончанию настройки.
-  private async getAnon(): Promise<void> {
-    const anon: IAnonymousResponse = await this.api.getAnonymousToken();
-    console.log('anon: ', anon);
-
-    const refresh = await this.api.refreshToken(anon.refresh_token);
-    console.log('refreshed: ', refresh);
-  }
-
   private documentTitle: string = 'Cart';
 
   public async getHtml(): Promise<HTMLElement> {
-    this.getAnon();
     return this.container;
   }
 
@@ -86,14 +71,9 @@ export default class Cart extends TemplateView {
         }
 
         if (target.innerText === 'Add product') {
+          // сейчас харкод, будет id передаваться с карточки
           const IdProduct = 'f9adbb3d-f996-4d5d-acb7-736e96b3dfad';
           this.apiCart.addProductByID(IdProduct);
-          // const newIdProd = '9dee7238-61a0-4169-8d30-fba328901517';
-          // setTimeout(() => {
-          //   this.apiCart.addProductByID(newIdProd);
-          // }, 1000);
-
-          //
         }
 
         if (target.innerText === 'Get cart') {
@@ -101,7 +81,8 @@ export default class Cart extends TemplateView {
         }
 
         if (target.innerText === 'Remove') {
-          const lineId = '19c9866e-d693-41d2-9622-1cfc83d7eef4';
+          // сейчас харкод, будет Lineid передаваться с корзины
+          const lineId = '8e16ce4f-e40b-4f41-9d7a-b1eb8b9e3c3b';
           const quantity = 1;
           this.apiCart.removetByLineItemID(lineId, quantity);
         }

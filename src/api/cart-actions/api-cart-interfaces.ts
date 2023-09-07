@@ -74,4 +74,11 @@ interface ICartLocalData {
   version: number;
 }
 
-export { IResponseCart, ICartLocalData };
+interface IConvertedLocalData {
+  token: string;
+  id: string;
+  anonymousId: string;
+  version: number;
+}
+
+export { IResponseCart, ICartLocalData, IConvertedLocalData };
