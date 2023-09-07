@@ -79,6 +79,10 @@ class InputPassword extends BaseComponent {
     return this.input.value;
   }
 
+  public clearValue(): void {
+    this.input.value = '';
+  }
+
   public getInputElement(): HTMLInputElement {
     return this.input;
   }

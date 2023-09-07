@@ -276,7 +276,7 @@ class ProfileForm extends BaseComponent {
           .then((data) => {
             console.log(data);
             this.popup.showChangePasswordMessage();
-            this.fieldSetPassword.highlightInputs(2000);
+            this.fieldSetPassword.clearPassword();
             this.fieldSetPassword.hidePassword();
             this.api.logoutUser();
             this.redirectToLogin();
