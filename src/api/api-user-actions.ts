@@ -63,6 +63,8 @@ export class APIUserActions {
     anonymousCart?: { id: string; typeId: string }
   ): Promise<Customer> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
+    console.log(ACCESS_TOKEN);
+
     const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
@@ -154,9 +156,7 @@ export class APIUserActions {
   ): Promise<Customer> {
     const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
     // берем анонимный токен из LS где хранили ! нужно будет заменить на getAnon
-    const anonymousToken = this.apiAnonToken.getAnon();
-
-    console.log('анон в юзере: ', anonymousToken);
+    const anonymousToken = await this.apiAnonToken.getAnon();
 
     // получаем ID анонимной карты из LS , чтоббы ее связать с пользователем надо переписать этот бред с двумя as )))
     const idCart = JSON.parse(localStorage.getItem('_cyber_(c@rt_ID)_punk_') as string)
