@@ -1,4 +1,4 @@
-import { Customer, CustomerResponse } from './api-interfaces';
+import { Customer, CustomerResponse, ICustomerAndCart } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
 import { APIAnonToken } from './api-anon-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY, LOCAL_KEY } from './api-env-constants';
@@ -19,6 +19,8 @@ export class APIUserActions {
   private keyUserId: string = 'userID';
 
   private apiAnonToken: APIAnonToken;
+
+  private storageKeyCart: string = '_cyber_(c@rt_ID)_punk_';
 
   constructor() {
     this.CTP_PROJECT_KEY = CTP_PROJECT_KEY;
@@ -81,14 +83,14 @@ export class APIUserActions {
     };
 
     try {
-      const response = await fetch(url, {
+      const response: Response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(userData),
       });
 
       if (response.status === 200) {
-        const data = await response.json();
+        const data: ICustomerAndCart = await response.json();
         this.saveTokensToLocalStorage(ACCESS_TOKEN);
         localStorage.setItem(this.keyUserId, data.customer.id);
         return data.customer;
@@ -121,10 +123,11 @@ export class APIUserActions {
     };
 
     try {
-      // логинимся сначала с анонимным токеном, если логиниться через норм токен, то корзина подвяжеться, но не будет товаров.
-      await this.loginUserPassFlowWithAnonumyosToken(email, password);
+      if (this.isHasLocalCartData()) {
+        await this.loginUserPassFlowWithAnonumyosToken(email, password);
+      }
 
-      const response = await fetch(url, {
+      const response: Response = await fetch(url, {
         method: 'POST',
         headers,
         body: JSON.stringify(userData),
@@ -132,13 +135,16 @@ export class APIUserActions {
 
       if (response.status === 200) {
         // interface Custmomer необходимо будет модифийировать теперь там два поля Сart и Customer
-        const data = await response.json();
-        const newIdCart = data.cart.id;
-        const newVersion = data.cart.version;
+        const data: ICustomerAndCart = await response.json();
         localStorage.setItem('userID', data.customer.id);
-
         this.saveTokensToLocalStorage(ACCESS_TOKEN);
-        this.updateLocalCartData(ACCESS_TOKEN, newIdCart, newVersion);
+
+        // проверка, если в LS нет корзины то мы ее не прокидывали при авторизации значит и нет в ответе cart.id
+        if (this.isHasLocalCartData()) {
+          const newIdCart = data.cart.id;
+          const newVersion = data.cart.version;
+          this.updateLocalCartData(ACCESS_TOKEN, newIdCart, newVersion);
+        }
 
         return data.customer;
       } else {
@@ -155,12 +161,8 @@ export class APIUserActions {
     password: string
   ): Promise<Customer> {
     const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
-    // берем анонимный токен из LS где хранили ! нужно будет заменить на getAnon
     const anonymousToken = await this.apiAnonToken.getAnon();
-
-    // получаем ID анонимной карты из LS , чтоббы ее связать с пользователем надо переписать этот бред с двумя as )))
-    const idCart = JSON.parse(localStorage.getItem('_cyber_(c@rt_ID)_punk_') as string)
-      .id as string;
+    const idCart: string = JSON.parse(localStorage.getItem(this.storageKeyCart) || '')?.id;
 
     const headers = {
       Authorization: `Bearer ${anonymousToken}`,
@@ -449,8 +451,17 @@ export class APIUserActions {
     }
   }
 
+  private isHasLocalCartData(): boolean {
+    const localCartData = localStorage.getItem(this.storageKeyCart);
+    if (localCartData) {
+      return true;
+    }
+
+    return false;
+  }
+
   private updateLocalCartData(customerToken: string, id: string, version: number): void {
-    const localData = localStorage.getItem('_cyber_(c@rt_ID)_punk_');
+    const localData = localStorage.getItem(this.storageKeyCart);
 
     if (localData) {
       const cartData: ICartLocalData = JSON.parse(localData);
@@ -458,8 +469,8 @@ export class APIUserActions {
       cartData.customerToken = customerToken;
       cartData.id = id;
       cartData.version = version;
-      console.log(customerToken, cartData);
-      localStorage.setItem('_cyber_(c@rt_ID)_punk_', JSON.stringify(cartData));
+
+      localStorage.setItem(this.storageKeyCart, JSON.stringify(cartData));
     }
   }
 }
