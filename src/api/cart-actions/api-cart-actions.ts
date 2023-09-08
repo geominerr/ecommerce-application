@@ -1,9 +1,9 @@
-import { APIAcceesToken } from '../api-access-token';
 import { CTP_API_URL, CTP_PROJECT_KEY } from '../api-env-constants';
 import { ICartLocalData, IResponseCart } from './api-cart-interfaces';
+import { APIAnonToken } from '../api-anon-token';
 
 class APICartActions {
-  private apiAccesToken: APIAcceesToken;
+  private apiAnonToken: APIAnonToken;
 
   private apiUrl: string = CTP_API_URL;
 
@@ -12,12 +12,12 @@ class APICartActions {
   private storageKey: string = '_cyber_(c@rt_ID)_punk_';
 
   constructor() {
-    this.apiAccesToken = new APIAcceesToken();
+    this.apiAnonToken = new APIAnonToken();
   }
 
   // создаем анонимную корзину.
   public async createCart(): Promise<void> {
-    const anonymousToken = (await this.apiAccesToken.getAnonymousToken()).access_token;
+    const anonymousToken = await this.apiAnonToken.getAnon();
     const url = `${this.apiUrl}/${this.projectKey}/me/carts`;
 
     const headers = {
@@ -40,7 +40,6 @@ class APICartActions {
 
       // сохраняем данные корзины для дальнейшего взаимодесвтия с ней в LS
       const localData: ICartLocalData = {
-        anonymousToken: anonymousToken,
         id: responseData.id,
         anonymousId: responseData.anonymousId,
         version: responseData.version,
@@ -59,11 +58,12 @@ class APICartActions {
      * если  во время сессии кто то почистить LS вернем null,
      * мб вместо return null стоит вызвать createCart... )*/
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const anonymousToken = await this.apiAnonToken.getAnon();
 
     if (localData) {
       const idCart = localData.id;
       // после логина будем использовать customerToken, anonymous удалим из LS
-      const token = localData.anonymousToken || localData.customerToken || '';
+      const token = anonymousToken || localData.customerToken || '';
       const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
       const headers = {
@@ -91,8 +91,9 @@ class APICartActions {
   // передаем ID товара, если повторно вызывать с одинаковым id товара, то будет увелечивать количество товара + 1
   public async addProductByID(id: string): Promise<void> {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
-    const token = localData.anonymousToken || localData.customerToken || '';
+    const token = anonymousToken || localData.customerToken || '';
     const version = localData.version;
     const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
@@ -131,8 +132,9 @@ class APICartActions {
   // передаем LineItemID , можем произвольно изменить количество товара, если количесвто указать 0 полностью удалить товар из корзины.
   public async changeAmountByLineItemID(itemId: string, quantity: number): Promise<IResponseCart> {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
-    const token = localData.anonymousToken || localData.customerToken || '';
+    const token = anonymousToken || localData.customerToken || '';
     const version = localData.version;
     const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
@@ -172,8 +174,9 @@ class APICartActions {
   // передаем LineItemID , если количесвто указать 0 полностью удалить товар из корзины.
   public async removetByLineItemID(itemId: string, quantity: number): Promise<IResponseCart> {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
-    const token = localData.anonymousToken || localData.customerToken || '';
+    const token = anonymousToken || localData.customerToken || '';
     const version = localData.version;
     const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
@@ -213,6 +216,7 @@ class APICartActions {
   //
   // private getCartDataFromLocalStorage(): IConvertedLocalData | null {
   //   const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+  // const anonymousToken = await this.apiAnonToken.getAnon();
 
   //   if (!localData) {
   //     return null;
@@ -220,7 +224,7 @@ class APICartActions {
 
   //   const id = localData.id;
   //   const anonymousId = localData.anonymousId;
-  //   const token = localData.anonymousToken || localData.customerToken ?? '';
+  //   const token = anonymousToken || localData.customerToken ?? '';
   //   const version = localData.version;
 
   //   return { token, version, id, anonymousId };
