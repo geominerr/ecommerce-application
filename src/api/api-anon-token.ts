@@ -1,13 +1,14 @@
-import { APIAcceesToken } from '../api-access-token';
-import { IAnonymousRefresh, IAnonymousResponse } from '../api-interfaces';
+import { APIAcceesToken } from './api-access-token';
+import { IAnonymousRefresh, IAnonymousResponse } from './api-interfaces';
 
-export class APICartActions {
+export class APIAnonToken {
   private APIAcceesToken: APIAcceesToken;
 
   constructor() {
     this.APIAcceesToken = new APIAcceesToken();
   }
 
+  // Метод получеает анонимный токен, обновляет, если просрочен.
   // eslint-disable-next-line max-lines-per-function
   public async getAnon(): Promise<string> {
     const storageAnonymousToken = localStorage.getItem('anonymousAccessToken');
