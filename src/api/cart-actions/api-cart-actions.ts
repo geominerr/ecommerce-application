@@ -1,4 +1,4 @@
-import { CTP_API_URL, CTP_PROJECT_KEY } from '../api-env-constants';
+import { CTP_API_URL, CTP_PROJECT_KEY, LOCAL_KEY } from '../api-env-constants';
 import { ICartLocalData, IResponseCart } from './api-cart-interfaces';
 import { APIAnonToken } from '../api-anon-token';
 
@@ -11,17 +11,28 @@ class APICartActions {
 
   private storageKey: string = '_cyber_(c@rt_ID)_punk_';
 
+  private storageKeyAccessToken: string = LOCAL_KEY;
+
   constructor() {
     this.apiAnonToken = new APIAnonToken();
   }
 
-  // создаем анонимную корзину.
+  // eslint-disable-next-line max-lines-per-function
   public async createCart(): Promise<void> {
-    const anonymousToken = await this.apiAnonToken.getAnon();
+    let token = '';
+    const accessToken = localStorage.getItem(this.storageKeyAccessToken);
+
+    // проверяем залогинен ли пользователь чтобы не создавать анонимную корзину.
+    if (accessToken) {
+      token = accessToken;
+    } else {
+      token = await this.apiAnonToken.getAnon();
+    }
+
     const url = `${this.apiUrl}/${this.projectKey}/me/carts`;
 
     const headers = {
-      Authorization: `Bearer ${anonymousToken}`,
+      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     };
 
@@ -45,6 +56,10 @@ class APICartActions {
         version: responseData.version,
       };
 
+      if (accessToken) {
+        localData.customerToken = token;
+      }
+
       console.log(responseData);
       localStorage.setItem(this.storageKey, JSON.stringify(localData));
     } catch (error) {
@@ -54,9 +69,11 @@ class APICartActions {
 
   // просто получаем корзину, при клике на иконку Cart получаем данные корзины, которые мы конвертируем уже на странице cart и отрисуем
   public async getCart(): Promise<IResponseCart | null> {
+    if (!this.isCreatedCart()) await this.createCart();
+
     /** Получаем из LS  данные корзины...если данные есть, получаем корзину,
      * если  во время сессии кто то почистить LS вернем null,
-     * мб вместо return null стоит вызвать createCart... )*/
+     * мб вместо return null стоит вызвать createCart... ) */
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
     const anonymousToken = await this.apiAnonToken.getAnon();
 
@@ -90,6 +107,8 @@ class APICartActions {
 
   // передаем ID товара, если повторно вызывать с одинаковым id товара, то будет увелечивать количество товара + 1
   public async addProductByID(id: string): Promise<void> {
+    if (!this.isCreatedCart()) await this.createCart();
+
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
     const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
@@ -113,7 +132,6 @@ class APICartActions {
         },
       ],
     };
-
     try {
       const response: Response = await fetch(url, {
         method: 'POST',
@@ -300,6 +318,14 @@ class APICartActions {
     localCartData.version = version;
 
     localStorage.setItem(this.storageKey, JSON.stringify(localCartData));
+  }
+
+  private isCreatedCart(): boolean {
+    if (localStorage.getItem(this.storageKey)) {
+      return true;
+    }
+
+    return false;
   }
 }
 
