@@ -11,6 +11,7 @@ interface IResponseCart {
     centAmount: number;
     fractionDigits: number;
   };
+  totalLineItemQuantity: number;
 }
 
 interface ILineItem {
@@ -26,6 +27,8 @@ interface ILineItem {
   price: IPrice;
   quantity: number;
   totalPrice: ITotalPrice;
+  discountedPrice?: IDiscountedPrice;
+  discountedPricePerQuantity?: IDiscountPerQuantity[];
   key?: string;
   productKey?: string;
 }
@@ -57,6 +60,45 @@ interface IPrice {
   };
 }
 
+interface IDiscountedPrice {
+  value: {
+    centAmount: number;
+  };
+  includedDiscounts: IDiscount[];
+}
+
+interface IDiscount {
+  discount: {
+    typeId: string;
+    id: string;
+  };
+  discountedAmount: {
+    type: string;
+    currencyCode: string;
+    centAmount: number;
+    fractionDigits: number;
+  };
+}
+
+interface IDiscountPerQuantity {
+  quantity: number;
+  discountedPrice: {
+    value: {
+      centAmount: number;
+    };
+    includedDiscounts: [
+      {
+        discount: {
+          typeId: string;
+          id: string;
+        };
+        discountedAmount: {
+          centAmount: number;
+        };
+      }
+    ];
+  };
+}
 interface ITotalPrice {
   totalPrice: {
     type: string;
