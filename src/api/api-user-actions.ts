@@ -202,14 +202,13 @@ export class APIUserActions {
   }
 
   public logoutUser(): void {
-    const accessToken: string | null = localStorage.getItem(this.keyAccessToken);
-
-    if (accessToken) {
-      localStorage.removeItem(this.storageKeyCart);
-      localStorage.removeItem(this.keyAccessToken);
-      localStorage.removeItem(this.keyUserId);
-      localStorage.removeItem('requestVersion');
-    }
+    localStorage.removeItem(this.storageKeyCart);
+    localStorage.removeItem(this.keyAccessToken);
+    localStorage.removeItem(this.keyUserId);
+    localStorage.removeItem('requestVersion');
+    localStorage.removeItem('anonymousAccessToken');
+    localStorage.removeItem('anonymousTokenExpiration');
+    localStorage.removeItem('anonymousRefreshToken');
   }
 
   private saveTokensToLocalStorage(accessToken: string): void {
