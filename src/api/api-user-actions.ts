@@ -205,6 +205,7 @@ export class APIUserActions {
     const accessToken: string | null = localStorage.getItem(this.keyAccessToken);
 
     if (accessToken) {
+      localStorage.removeItem(this.storageKeyCart);
       localStorage.removeItem(this.keyAccessToken);
       localStorage.removeItem(this.keyUserId);
       localStorage.removeItem('requestVersion');
