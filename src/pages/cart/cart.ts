@@ -16,6 +16,8 @@ export default class Cart extends TemplateView {
 
   private buttonRemoveProd: ButtonPage;
 
+  private buttonGetDiscount: ButtonPage;
+
   constructor() {
     super();
     this.container = this.createElement('div', 'cart');
@@ -23,23 +25,35 @@ export default class Cart extends TemplateView {
     this.buttonAddProduct = new ButtonPage('catalog');
     this.buttonGetCart = new ButtonPage('catalog');
     this.buttonRemoveProd = new ButtonPage('catalog');
+    this.buttonGetDiscount = new ButtonPage('catalog');
     this.createComponent();
     this.apiCart = new APICartActions();
   }
 
   private createComponent(): void {
-    const { container, buttonAddProduct, buttonCreateCart, buttonGetCart, buttonRemoveProd } = this;
+    const {
+      container,
+      buttonAddProduct,
+      buttonCreateCart,
+      buttonGetCart,
+      buttonRemoveProd,
+      buttonGetDiscount,
+    } = this;
     const buttonCreate = buttonCreateCart.getElement();
     const buttonAdd = buttonAddProduct.getElement();
     const buttonGet = buttonGetCart.getElement();
     const buttonRemove = buttonRemoveProd.getElement();
+    const buttonGetD = buttonGetDiscount.getElement();
 
     buttonCreate.innerText = 'Create cart';
     buttonAdd.innerText = 'Add product';
     buttonGet.innerText = 'Get cart';
     buttonRemove.innerText = 'Remove';
+    buttonGetD.innerText = 'get Discount';
 
-    [buttonCreate, buttonGet, buttonAdd, buttonRemove].forEach((el) => container.append(el));
+    [buttonCreate, buttonGet, buttonAdd, buttonRemove, buttonGetD].forEach((el) =>
+      container.append(el)
+    );
 
     this.addClickHandler();
   }
@@ -82,9 +96,13 @@ export default class Cart extends TemplateView {
 
         if (target.innerText === 'Remove') {
           // сейчас харкод, будет Lineid передаваться с корзины
-          const lineId = '8e16ce4f-e40b-4f41-9d7a-b1eb8b9e3c3b';
-          const quantity = 1;
-          this.apiCart.removetByLineItemID(lineId, quantity);
+          // const lineId = '8e16ce4f-e40b-4f41-9d7a-b1eb8b9e3c3b';
+          // const quantity = 1;
+          this.apiCart.removeDicsount('e599b6ef-be2e-484f-a439-b7dc2c23e590');
+        }
+
+        if (target.innerText === 'get Discount') {
+          this.apiCart.addDicsount();
         }
       }
     });

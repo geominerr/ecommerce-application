@@ -210,6 +210,87 @@ class APICartActions {
     }
   }
 
+  public async addDicsount(): Promise<IResponseCart> {
+    const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const idCart = localData.id;
+    const token = localData.anonymousToken || localData.customerToken || '';
+    const version = localData.version;
+    const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+
+    const data = {
+      version: version,
+      actions: [
+        {
+          action: 'addDiscountCode',
+          code: 'max',
+        },
+      ],
+    };
+
+    try {
+      const response: Response = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data),
+      });
+
+      const responseData: IResponseCart = await response.json();
+      const newVersion: number = responseData.version;
+      if (newVersion) this.updateLocalData(newVersion);
+
+      return responseData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // idDiscount отличается от ID самого промо кода, после добавления скидки, необходимо из ответа брать єтот id  и писать его в LS
+  public async removeDicsount(idDiscount: string): Promise<IResponseCart> {
+    const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const idCart = localData.id;
+    const token = localData.anonymousToken || localData.customerToken || '';
+    const version = localData.version;
+    const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+
+    const data = {
+      version: version,
+      actions: [
+        {
+          action: 'removeDiscountCode',
+          discountCode: {
+            typeId: 'discount-code',
+            id: idDiscount,
+          },
+        },
+      ],
+    };
+
+    try {
+      const response: Response = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data),
+      });
+
+      const responseData: IResponseCart = await response.json();
+      const newVersion: number = responseData.version;
+      if (newVersion) this.updateLocalData(newVersion);
+      return responseData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   //
   // private getCartDataFromLocalStorage(): IConvertedLocalData | null {
   //   const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
