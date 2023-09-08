@@ -2,6 +2,7 @@ import { Customer, CustomerResponse } from './api-interfaces';
 import { APIAcceesToken } from './api-access-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY, LOCAL_KEY } from './api-env-constants';
 import { IUserData } from './api-interfaces';
+import { ICartLocalData } from './cart-actions/api-cart-interfaces';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
 
@@ -93,12 +94,8 @@ export class APIUserActions {
     }
   }
 
-  //eslint-disable-next-line
-  public async loginUserPassFlow(
-    email: string,
-    password: string,
-    anonymousCart?: { id: string; typeId: string }
-  ): Promise<Customer> {
+  // eslint-disable-next-line max-lines-per-function
+  public async loginUserPassFlow(email: string, password: string): Promise<Customer> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getCustomerAccessToken({
       username: email,
       password: password,
@@ -115,7 +112,67 @@ export class APIUserActions {
     const userData = {
       email,
       password,
-      anonymousCart,
+    };
+
+    try {
+      // логинимся сначала с анонимным токеном, если логиниться через норм токен, то корзина подвяжеться, но не будет товаров.
+      await this.loginUserPassFlowWithAnonumyosToken(email, password);
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(userData),
+      });
+
+      if (response.status === 200) {
+        // interface Custmomer необходимо будет модифийировать теперь там два поля Сart и Customer
+        const data = await response.json();
+        const newIdCart = data.cart.id;
+        const newVersion = data.cart.version;
+        localStorage.setItem('userID', data.customer.id);
+
+        this.saveTokensToLocalStorage(ACCESS_TOKEN);
+        this.updateLocalCartData(ACCESS_TOKEN, newIdCart, newVersion);
+
+        return data.customer;
+      } else {
+        throw new Error(`${await response.json().then((data) => data.message)}`);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // eslint-disable-next-line max-lines-per-function
+  private async loginUserPassFlowWithAnonumyosToken(
+    email: string,
+    password: string
+  ): Promise<Customer> {
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
+    // берем анонимный токен из LS где хранили ! нужно будет заменить на getAnon
+    const anonymousToken = JSON.parse(localStorage.getItem('_cyber_(c@rt_ID)_punk_') as string)
+      .anonymousToken as string;
+
+    // получаем ID анонимной карты из LS , чтоббы ее связать с пользователем надо переписать этот бред с двумя as )))
+    const idCart = JSON.parse(localStorage.getItem('_cyber_(c@rt_ID)_punk_') as string)
+      .id as string;
+
+    const headers = {
+      Authorization: `Bearer ${anonymousToken}`,
+      'Content-Type': 'application/json',
+    };
+
+    const userData = {
+      email,
+      password,
+
+      // данные анонимной корзины
+      anonymousCart: {
+        id: idCart,
+        typeId: 'cart',
+        activeCartSignInMode: 'MergeWithExistingCustomerCart',
+        updateProductData: true,
+      },
     };
 
     try {
@@ -127,8 +184,6 @@ export class APIUserActions {
 
       if (response.status === 200) {
         const data = await response.json();
-        localStorage.setItem('userID', data.customer.id);
-        this.saveTokensToLocalStorage(ACCESS_TOKEN);
 
         return data.customer;
       } else {
@@ -386,6 +441,21 @@ export class APIUserActions {
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  private updateLocalCartData(customerToken: string, id: string, version: number): void {
+    const localData = localStorage.getItem('_cyber_(c@rt_ID)_punk_');
+
+    if (localData) {
+      const cartData: ICartLocalData = JSON.parse(localData);
+      cartData.anonymousToken = '';
+      cartData.anonymousId = '';
+      cartData.customerToken = customerToken;
+      cartData.id = id;
+      cartData.version = version;
+      console.log(customerToken, cartData);
+      localStorage.setItem('_cyber_(c@rt_ID)_punk_', JSON.stringify(cartData));
     }
   }
 }
