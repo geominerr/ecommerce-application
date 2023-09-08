@@ -1,7 +1,10 @@
 import TemplateView from '../template-view/template-view';
 import ButtonPage from '../catalog/buttons/button/button';
 import APICartActions from '../../api/cart-actions/api-cart-actions';
+import APIDiscountActions from '../../api/discount-actions/api-discount-actions';
 import './cart.scss';
+
+const api = new APIDiscountActions();
 
 export default class Cart extends TemplateView {
   private apiCart: APICartActions;
@@ -102,7 +105,8 @@ export default class Cart extends TemplateView {
         }
 
         if (target.innerText === 'get Discount') {
-          this.apiCart.addDicsount();
+          api.getDiscountCodes();
+          this.apiCart.addDicsount('max');
         }
       }
     });

@@ -63,7 +63,7 @@ class APICartActions {
     if (localData) {
       const idCart = localData.id;
       // после логина будем использовать customerToken, anonymous удалим из LS
-      const token = anonymousToken || localData.customerToken || '';
+      const token = localData.customerToken || anonymousToken || '';
       const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
       const headers = {
@@ -93,7 +93,7 @@ class APICartActions {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
     const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
-    const token = anonymousToken || localData.customerToken || '';
+    const token = localData.customerToken || anonymousToken || '';
     const version = localData.version;
     const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
@@ -134,7 +134,7 @@ class APICartActions {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
     const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
-    const token = anonymousToken || localData.customerToken || '';
+    const token = localData.customerToken || anonymousToken || '';
     const version = localData.version;
     const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
@@ -171,12 +171,12 @@ class APICartActions {
     }
   }
 
-  // передаем LineItemID , если количесвто указать 0 полностью удалить товар из корзины.
+  // передаем LineItemID , если количесвто не передавать quantity в тело запроса полностью удалить товар из корзины.
   public async removetByLineItemID(itemId: string, quantity: number): Promise<IResponseCart> {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
     const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
-    const token = anonymousToken || localData.customerToken || '';
+    const token = localData.customerToken || anonymousToken || '';
     const version = localData.version;
     const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
@@ -213,10 +213,11 @@ class APICartActions {
     }
   }
 
-  public async addDicsount(): Promise<IResponseCart> {
+  public async addDicsount(discountCode: string): Promise<IResponseCart> {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
-    const token = localData.anonymousToken || localData.customerToken || '';
+    const token = localData.customerToken || anonymousToken || '';
     const version = localData.version;
     const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
@@ -230,7 +231,7 @@ class APICartActions {
       actions: [
         {
           action: 'addDiscountCode',
-          code: 'max',
+          code: discountCode,
         },
       ],
     };
@@ -255,8 +256,9 @@ class APICartActions {
   // idDiscount отличается от ID самого промо кода, после добавления скидки, необходимо из ответа брать єтот id  и писать его в LS
   public async removeDicsount(idDiscount: string): Promise<IResponseCart> {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
-    const token = localData.anonymousToken || localData.customerToken || '';
+    const token = localData.customerToken || anonymousToken || '';
     const version = localData.version;
     const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}`;
 
@@ -264,7 +266,6 @@ class APICartActions {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     };
-
     const data = {
       version: version,
       actions: [
@@ -294,27 +295,10 @@ class APICartActions {
     }
   }
 
-  //
-  // private getCartDataFromLocalStorage(): IConvertedLocalData | null {
-  //   const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
-  // const anonymousToken = await this.apiAnonToken.getAnon();
-
-  //   if (!localData) {
-  //     return null;
-  //   }
-
-  //   const id = localData.id;
-  //   const anonymousId = localData.anonymousId;
-  //   const token = anonymousToken || localData.customerToken ?? '';
-  //   const version = localData.version;
-
-  //   return { token, version, id, anonymousId };
-  // }
-
   private updateLocalData(version: number): void {
     const localCartData = JSON.parse(localStorage.getItem(this.storageKey) || '');
     localCartData.version = version;
-    console.log(localCartData.version);
+
     localStorage.setItem(this.storageKey, JSON.stringify(localCartData));
   }
 }
