@@ -126,7 +126,12 @@ function converteResponseCartData(response: IResponseCart): ICart {
   const id = response?.id;
   const totalPrice = `€ ${(response?.totalPrice?.centAmount / 100)?.toFixed(2)}`;
   const totalProducts = response?.totalLineItemQuantity;
-  const products = response?.lineItems?.map((lineItem) => converteLineItem(lineItem));
+  // может быть пустой массив
+  let products: ICartProduct[] = [];
+
+  if (response?.lineItems?.length) {
+    products = response?.lineItems?.map((lineItem) => converteLineItem(lineItem));
+  }
 
   return {
     id: id,
