@@ -1,7 +1,7 @@
-// пока работает без сохранения в LS , при перезагрузке будет асинхрон с корзиной.... )
-
 class ProductMap {
   private map = new Map();
+
+  private storageKeyCart: string = '_cyber_(c@rt_ID)_punk_';
 
   public reset(): void {
     this.map.clear();
@@ -25,6 +25,10 @@ class ProductMap {
 
   public getQuantity(): number {
     return this.map.size;
+  }
+
+  public updateMap(entries: [string, string][]): void {
+    entries.forEach((entrie) => this.map.set(entrie[0], entrie[1]));
   }
 }
 

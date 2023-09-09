@@ -3,6 +3,7 @@ import { ICartLocalData, IResponseCart } from './api-cart-interfaces';
 import { APIAnonToken } from '../api-anon-token';
 import productMap from '../../utils/product-map/product-map';
 import { extractlineItemID } from '../../utils/response-converter/response-converter';
+import { extractEntries } from '../../utils/response-converter/response-converter';
 
 class APICartActions {
   private productMap = productMap;
@@ -19,6 +20,7 @@ class APICartActions {
 
   constructor() {
     this.apiAnonToken = new APIAnonToken();
+    this.setStartStateMap();
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -345,6 +347,24 @@ class APICartActions {
     }
   }
 
+  private async setStartStateMap(): Promise<void> {
+    const localCartData = localStorage.getItem(this.storageKey);
+
+    if (!localCartData) {
+      return;
+    }
+
+    const entries = await this.getCart().then((data) => {
+      if (data) {
+        return extractEntries(data);
+      }
+    });
+
+    if (entries) {
+      this.productMap.updateMap(entries);
+    }
+  }
+
   private clearLocalData(): void {
     localStorage.removeItem(this.storageKey);
   }
@@ -368,3 +388,4 @@ class APICartActions {
 const APICart = new APICartActions();
 
 export default APICart;
+export { APICartActions };
