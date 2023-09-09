@@ -3,6 +3,7 @@ import FieldsetPersonal from '../fieldset-profile/fieldset-personal-info/fieldse
 import FieldsetShip from '../fieldset-profile/fieldset-shipping-address/fieldset-shipping-address';
 import FieldsetBill from '../fieldset-profile/fieldset-billing-address/fieldset-billing-address';
 import FieldsetPassword from '../fieldset-profile/fieldset-password/fieldset-change-password';
+import FieldsetNewAddress from '../fieldset-profile/fieldset-new-address/fieldset-new-address';
 import StateManager from '../../../state-manager/state-manager';
 import { popup } from '../../popup/popup';
 import { Router } from '../../../router/router';
@@ -17,7 +18,7 @@ class ProfileForm extends BaseComponent {
 
   private personalInfo: HTMLDivElement;
 
-  public addShippingAddress: HTMLButtonElement;
+  public addAddress: HTMLButtonElement;
 
   private passwordsContainer: HTMLDivElement;
 
@@ -26,6 +27,8 @@ class ProfileForm extends BaseComponent {
   private shippingAddresses: HTMLDivElement;
 
   private billingAddresses: HTMLDivElement;
+
+  private fieldSetNewAddress: FieldsetNewAddress;
 
   private fieldSetPersonal: FieldsetPersonal;
 
@@ -56,12 +59,13 @@ class ProfileForm extends BaseComponent {
     this.form = this.createElement(TagNames.FORM, Styles.FORM);
     this.personalInfo = this.createElement(TagNames.DIV, Styles.INFO);
     this.passwordsContainer = this.createElement(TagNames.DIV, Styles.PASSWORD);
-    this.addShippingAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
-    this.addShippingAddress.innerHTML = 'Add Address';
+    this.addAddress = this.createElement(TagNames.BUTTON, Styles.BUTTON_ADD);
+    this.addAddress.innerHTML = 'Add Address';
     this.changePassword = this.createElement(TagNames.BUTTON, Styles.BUTTON_CHANGE);
     this.changePassword.innerHTML = 'Change Password';
     this.shippingAddresses = this.createElement(TagNames.DIV, Styles.SHIPPING);
     this.billingAddresses = this.createElement(TagNames.DIV, Styles.BILLING);
+    this.fieldSetNewAddress = new FieldsetNewAddress(validatorAddress);
     this.fieldSetPersonal = new FieldsetPersonal(validatorEmail, validatorAddress);
     this.fieldSetPassword = new FieldsetPassword(validatorEmail);
     this.fieldSetShippingList = [];
@@ -176,19 +180,21 @@ class ProfileForm extends BaseComponent {
     const {
       form,
       personalInfo,
-      addShippingAddress,
+      addAddress,
       shippingAddresses,
       billingAddresses,
       changePassword,
       passwordsContainer,
     } = this;
 
+    const fieldsetAddAddressElement: HTMLElement = this.fieldSetNewAddress.getElement();
     const fieldsetPersonalElement: HTMLElement = this.fieldSetPersonal.getElement();
     const fieldsetPasswordElement: HTMLElement = this.fieldSetPassword.getElement();
 
     form.append(
       personalInfo,
-      addShippingAddress,
+      addAddress,
+      fieldsetAddAddressElement,
       shippingAddresses,
       billingAddresses,
       changePassword,
@@ -197,6 +203,8 @@ class ProfileForm extends BaseComponent {
 
     personalInfo.append(fieldsetPersonalElement);
     passwordsContainer.append(fieldsetPasswordElement);
+    this.addNewAddress();
+    this.cancelNewAddress();
     this.changeUserData();
     this.changePasswordData();
     this.cancelUserData();
@@ -207,6 +215,18 @@ class ProfileForm extends BaseComponent {
     this.updateBillingData();
     this.updateDeafaultBillingAddress();
     this.setNewPassword();
+  }
+
+  private addNewAddress(): void {
+    this.addAddress.addEventListener('click', () => {
+      this.fieldSetNewAddress.fieldsetElement.classList.add(Styles.FIELDSET_SHOW);
+    });
+  }
+
+  private cancelNewAddress(): void {
+    this.fieldSetNewAddress.buttonCancel.addEventListener('click', async () => {
+      this.fieldSetNewAddress.fieldsetElement.classList.remove(Styles.FIELDSET_SHOW);
+    });
   }
 
   private changeUserData(): void {

@@ -81,13 +81,14 @@ $fontFamily: 'Montserrat', sans-serif;
 
 
 .shipping-addresses {
-  margin-top: 3rem;
+  margin-top: 2rem;
   display:flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   gap: 3rem;
-  padding: 0 2rem;
+  padding: 3rem 2rem 0 2rem;
+  border-top: 1px solid rgb(193, 222, 220);
   border-bottom: 1px solid rgb(193, 222, 220);
   width: 100%;
 }

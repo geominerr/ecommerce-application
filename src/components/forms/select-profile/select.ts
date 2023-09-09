@@ -3,7 +3,7 @@ import ErrorHint from '../error-hint/error-hint';
 import InputPostal from '../input-profile/input-postal/input-postal';
 import { Address, Attributes, Events, Styles, TagNames } from './enum';
 import { AddresType } from './select-interfaces';
-import { COUNTRIES, BILLING_OPTIONS, SHIPPING_OPTIONS } from './select-options';
+import { COUNTRIES, BILLING_OPTIONS, SHIPPING_OPTIONS, NEW_ADDRESS } from './select-options';
 import './select.scss';
 
 class SelectComponentProfile extends BaseComponent {
@@ -75,6 +75,7 @@ class SelectComponentProfile extends BaseComponent {
     }
   }
 
+  // eslint-disable-next-line max-lines-per-function
   private createComponent(type: AddresType): void {
     const { container, select, disabledOptionText } = this;
     const label: HTMLLabelElement = this.createElement(TagNames.LABEL, Styles.LABEL);
@@ -94,6 +95,11 @@ class SelectComponentProfile extends BaseComponent {
       select.setAttribute(Attributes.NAME, BILLING_OPTIONS.NAME);
       label.setAttribute(Attributes.FOR, BILLING_OPTIONS.ID);
       label.innerText = BILLING_OPTIONS.LABEL_CONTENT;
+    }
+    if (type !== Address.SHIPPING && type !== Address.BILLING) {
+      select.setAttribute(Attributes.NAME, NEW_ADDRESS.NAME);
+      label.setAttribute(Attributes.FOR, NEW_ADDRESS.ID);
+      label.innerText = NEW_ADDRESS.LABEL_CONTENT;
     }
 
     select.append(disabledOption);
