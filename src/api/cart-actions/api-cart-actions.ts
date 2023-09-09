@@ -318,6 +318,37 @@ class APICartActions {
     }
   }
 
+  public async removeCart(): Promise<IResponseCart> {
+    const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
+    const anonymousToken = await this.apiAnonToken.getAnon();
+    const idCart = localData.id;
+    const token = localData.customerToken || anonymousToken || '';
+    const version = localData.version;
+    const url = `${this.apiUrl}/${this.projectKey}/me/carts/${idCart}?version=${version}`;
+
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+    try {
+      const response: Response = await fetch(url, {
+        method: 'DELETE',
+        headers: headers,
+      });
+
+      const responseData: IResponseCart = await response.json();
+      this.clearLocalData();
+
+      return responseData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private clearLocalData(): void {
+    localStorage.removeItem(this.storageKey);
+  }
+
   private updateLocalData(version: number): void {
     const localCartData = JSON.parse(localStorage.getItem(this.storageKey) || '');
     localCartData.version = version;
