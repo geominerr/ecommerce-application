@@ -141,6 +141,12 @@ function converteResponseCartData(response: IResponseCart): ICart {
   };
 }
 
+function extractEntries(response: IResponseCart): [string, string][] {
+  const lineItems = response?.lineItems;
+
+  return lineItems.map((lineItem) => [lineItem.productId, lineItem.id]);
+}
+
 function extractlineItemID(response: IResponseCart, productId: string): string {
   const lineItems = response?.lineItems;
   let lineItemId = '';
@@ -157,4 +163,4 @@ function extractlineItemID(response: IResponseCart, productId: string): string {
 }
 
 export default converteResponseData;
-export { transform, converteResponseCartData, extractlineItemID };
+export { transform, converteResponseCartData, extractlineItemID, extractEntries };
