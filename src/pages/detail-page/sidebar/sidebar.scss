@@ -77,9 +77,32 @@
     transition: all 0.3s;
     cursor: pointer;
 
+    &--disabled {
+      pointer-events: none;
+
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0.8rem;
+        right: 0.8rem;
+        width: 2rem;
+        height: 2rem;
+        background-image: url('../../../assets/icons/full-cart.png');
+        background-size: 2rem 2rem;
+      }
+    }
+
+    &--remove {
+      background-color: rgb(143, 72, 72);
+      border: 0.1rem solid rgb(143, 72, 72);
+    }
+
     &--credit {
       background-color: rgb(38, 87, 84);
     }
+
+
 
     @media (hover: hover) {
       &:hover {

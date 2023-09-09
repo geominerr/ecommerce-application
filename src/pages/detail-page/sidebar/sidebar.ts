@@ -1,9 +1,15 @@
 import BaseComponent from '../../../components/base/base-component/base-component';
 import { Content, Events, Styles, TagNames } from './enum';
 import { IProductAttribute, IProductData } from './sidebar-interfaces';
+import productMap from '../../../utils/product-map/product-map';
+import APICart from '../../../api/cart-actions/api-cart-actions';
 import './sidebar.scss';
 
 class Sidebar extends BaseComponent {
+  private productMap = productMap;
+
+  private apiCart = APICart;
+
   private container: HTMLDivElement;
 
   private title: HTMLHeadElement;
@@ -12,12 +18,19 @@ class Sidebar extends BaseComponent {
 
   private buttonCredit: HTMLButtonElement;
 
+  private buttonRemove: HTMLButtonElement;
+
+  private productData: IProductData;
+
   constructor(data: IProductData) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.SIDEBAR);
     this.title = this.createElement(TagNames.DIV, Styles.TITLE);
     this.buttonBuy = this.createElement(TagNames.DIV, Styles.BUTTON);
     this.buttonCredit = this.createElement(TagNames.DIV, Styles.BUTTON);
+    this.buttonRemove = this.createElement(TagNames.DIV, Styles.BUTTON);
+
+    this.productData = data;
 
     this.createComponent(data);
   }
@@ -27,7 +40,7 @@ class Sidebar extends BaseComponent {
   }
 
   private createComponent(data: IProductData): void {
-    const { container, title, buttonBuy, buttonCredit } = this;
+    const { container, title, buttonBuy, buttonCredit, buttonRemove } = this;
 
     const prices: string[] = [data.price];
 
@@ -46,10 +59,20 @@ class Sidebar extends BaseComponent {
     buttonBuy.innerText = Content.BUTTON_BUY;
     buttonCredit.innerText = Content.BUTTON_CREDIT;
     buttonCredit.classList.add(Styles.BUTTON_CREDIT);
+    buttonRemove.innerText = Content.BUTTON_REMOVE;
+    buttonRemove.classList.add(Styles.BUTTON_REMOVE);
+    buttonRemove.style.display = 'none';
 
-    this.addClickHandler(buttonBuy, buttonCredit);
+    if (productMap.hasProduct(data.id)) {
+      buttonRemove.style.display = 'block';
+      buttonCredit.style.display = 'none';
+      buttonBuy.classList.add(Styles.BUTTON_DISABLED);
+      buttonBuy.innerText = 'Added';
+    }
 
-    [buttonBuy, buttonCredit].forEach((el) => buttonWrapper.append(el));
+    this.addClickHandler(buttonBuy, buttonCredit, buttonRemove);
+
+    [buttonBuy, buttonCredit, buttonRemove].forEach((el) => buttonWrapper.append(el));
     [title, reviewStars, price, buttonWrapper].forEach((el) => productWrapper.append(el));
     [productWrapper, attributeList, description].forEach((el) => container.append(el));
   }
@@ -129,13 +152,42 @@ class Sidebar extends BaseComponent {
     return container;
   }
 
-  private addClickHandler(buttonBuy: HTMLElement, buttonCredit: HTMLElement): void {
+  private addClickHandler(
+    buttonBuy: HTMLElement,
+    buttonCredit: HTMLElement,
+    buttonRemove: HTMLElement
+  ): void {
     buttonBuy.addEventListener(Events.CLICK, () => {
-      /// add to cart
+      if (!buttonBuy.classList.contains(Styles.BUTTON_DISABLED)) {
+        this.apiCart
+          .addProductByID(this.productData.id)
+          .then((lineItemID) => {
+            this.productMap.setProduct(this.productData.id, lineItemID);
+
+            buttonBuy.classList.add(Styles.BUTTON_DISABLED);
+            buttonCredit.style.display = 'none';
+            buttonRemove.style.display = 'block';
+          })
+          .catch((err) => console.log(err));
+      }
     });
 
-    buttonCredit.addEventListener(Events.CLICK, () => {
-      /// does something  :-)
+    buttonRemove.addEventListener(Events.CLICK, () => {
+      if (this.productMap.hasProduct(this.productData.id)) {
+        const lineItemId = this.productMap.getLineItemId(this.productData.id);
+
+        this.apiCart
+          .changeAmountByLineItemID(lineItemId, 0)
+          .then(() => {
+            this.productMap.removeProduct(this.productData.id);
+
+            buttonBuy.classList.remove(Styles.BUTTON_DISABLED);
+            buttonBuy.innerText = Content.BUTTON_BUY;
+            buttonCredit.style.display = 'block';
+            buttonRemove.style.display = 'none';
+          })
+          .catch((err) => console.log(err));
+      }
     });
   }
 }
