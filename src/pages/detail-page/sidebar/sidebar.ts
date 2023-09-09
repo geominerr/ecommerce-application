@@ -164,6 +164,8 @@ class Sidebar extends BaseComponent {
           .then((lineItemID) => {
             this.productMap.setProduct(this.productData.id, lineItemID);
 
+            // TO DO success message adding product
+
             buttonBuy.classList.add(Styles.BUTTON_DISABLED);
             buttonCredit.style.display = 'none';
             buttonRemove.style.display = 'block';
@@ -180,7 +182,7 @@ class Sidebar extends BaseComponent {
           .changeAmountByLineItemID(lineItemId, 0)
           .then(() => {
             this.productMap.removeProduct(this.productData.id);
-
+            // TO DO  success message removing product
             buttonBuy.classList.remove(Styles.BUTTON_DISABLED);
             buttonBuy.innerText = Content.BUTTON_BUY;
             buttonCredit.style.display = 'block';
