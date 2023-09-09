@@ -176,6 +176,7 @@ class ProfileForm extends BaseComponent {
     this.stateManager = state;
   }
 
+  // eslint-disable-next-line max-lines-per-function
   private createComponent(): void {
     const {
       form,
@@ -209,6 +210,7 @@ class ProfileForm extends BaseComponent {
     this.changePasswordData();
     this.cancelUserData();
     this.cancelPasswords();
+    this.pushNewAddress();
     this.updateUserData();
     this.updateShippingData();
     this.updateDeafaultShippingAddress();
@@ -274,6 +276,20 @@ class ProfileForm extends BaseComponent {
         this.disableAllInputs();
         this.hidePersonalInfo();
         await this.fetchUserData();
+      }
+    });
+  }
+
+  private pushNewAddress(): void {
+    this.fieldSetNewAddress.buttonSave.addEventListener('click', async () => {
+      if (this.fieldSetNewAddress.isValidData()) {
+        const api = new APIUserActions();
+        const { streetName, streetNumber, postalCode, city, country } =
+          this.fieldSetNewAddress.getInputValues();
+        await api.addNewAddress(streetName, streetNumber, postalCode, city, country);
+        // await fieldSetShipping.highlightInputs(1000);
+        await this.fetchUserData();
+        this.fieldSetNewAddress.fieldsetElement.classList.remove(Styles.FIELDSET_SHOW);
       }
     });
   }

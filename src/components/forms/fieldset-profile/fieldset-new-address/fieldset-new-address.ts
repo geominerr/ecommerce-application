@@ -1,5 +1,6 @@
 import BaseComponent from '../../../base/base-component/base-component';
 import SelectComponentProfile from '../../select-profile/select';
+import SelectComponentType from '../../select-type/select';
 import InputBase from '../../input-profile/input-base/input-base';
 import InputPostal from '../../input-profile/input-postal/input-postal';
 import { AddressCheck } from '../../../../utils/address_check';
@@ -15,6 +16,8 @@ class FieldsetNewAddress extends BaseComponent {
   private titleContainer: HTMLDivElement;
 
   private actionsContainer: HTMLDivElement;
+
+  public selectType: SelectComponentType;
 
   public select: SelectComponentProfile;
 
@@ -44,6 +47,7 @@ class FieldsetNewAddress extends BaseComponent {
     this.buttonSave = this.createElement(TagNames.BUTTON, Styles.BUTTON_SAVE);
     this.buttonSave.innerHTML = 'Save';
     this.buttonsContainer = this.createElement(TagNames.DIV, Styles.BUTTONS_CONTAINER);
+    this.selectType = new SelectComponentType();
     this.select = new SelectComponentProfile('new');
     this.inputPostal = new InputPostal(validator.postalCodeCheck, OPTIONS[3]);
     this.inputCity = new InputBase(validator.cityCheck, OPTIONS[0]);
@@ -53,7 +57,6 @@ class FieldsetNewAddress extends BaseComponent {
     this.inputPostal.setSelectComponent(this.select);
 
     this.createComponent();
-    // this.cancelShippingData();
   }
 
   public getElement(): HTMLElement {
@@ -83,15 +86,20 @@ class FieldsetNewAddress extends BaseComponent {
   }
 
   public isValidData(): boolean {
-    const { inputCity, inputPostal, inputStreet, inputStreetNumber, select } = this;
+    const { inputCity, inputPostal, inputStreet, inputStreetNumber, select, selectType } = this;
 
-    const isValid: boolean = [inputCity, inputPostal, inputStreet, inputStreetNumber, select].every(
-      (input): boolean => input.isValid()
-    );
+    const isValid: boolean = [
+      inputCity,
+      inputPostal,
+      inputStreet,
+      inputStreetNumber,
+      select,
+      selectType,
+    ].every((input): boolean => input.isValid());
 
     if (!isValid) {
-      [inputCity, inputPostal, inputStreet, inputStreetNumber, select].forEach((input): void =>
-        input.showHintRequiredFieldIsEmpty()
+      [inputCity, inputPostal, inputStreet, inputStreetNumber, select, selectType].forEach(
+        (input): void => input.showHintRequiredFieldIsEmpty()
       );
     }
 
@@ -102,6 +110,7 @@ class FieldsetNewAddress extends BaseComponent {
     const {
       fieldsetElement,
       legendElement,
+      selectType,
       select,
       inputPostal,
       inputCity,
@@ -114,8 +123,8 @@ class FieldsetNewAddress extends BaseComponent {
     this.buttonsContainer.append(this.buttonCancel, this.buttonSave);
     fieldsetElement.append(this.titleContainer);
 
-    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(
-      (component: InputBase | InputPostal | SelectComponentProfile): void =>
+    [selectType, select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(
+      (component: InputBase | InputPostal | SelectComponentProfile | SelectComponentType): void =>
         fieldsetElement.append(component.getElement())
     );
     fieldsetElement.append(this.buttonsContainer);
@@ -150,12 +159,6 @@ class FieldsetNewAddress extends BaseComponent {
 
     return { streetName, streetNumber, postalCode, city, country };
   }
-
-  // private cancelShippingData(): void {
-  //   this.buttonCancel.addEventListener('click', async () => {
-  //     this.fieldsetElement.classList.add(Styles.FIELDSET_HIDE);
-  //   });
-  // }
 
   public async highlightInputs(duration: number): Promise<void> {
     const { select, inputPostal, inputCity, inputStreet, inputStreetNumber } = this;
