@@ -141,5 +141,20 @@ function converteResponseCartData(response: IResponseCart): ICart {
   };
 }
 
+function extractlineItemID(response: IResponseCart, productId: string): string {
+  const lineItems = response?.lineItems;
+  let lineItemId = '';
+
+  if (lineItems) {
+    lineItems.forEach((lineItem) => {
+      if (lineItem?.productId === productId) {
+        lineItemId = lineItem.id;
+      }
+    });
+  }
+
+  return lineItemId;
+}
+
 export default converteResponseData;
-export { transform, converteResponseCartData };
+export { transform, converteResponseCartData, extractlineItemID };
