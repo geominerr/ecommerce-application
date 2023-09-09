@@ -15,6 +15,22 @@ export default class AboutUs extends TemplateView {
 
   private descriptionBottom: HTMLDivElement;
 
+  private aboutSubheader: HTMLHeadingElement;
+
+  private aboutParagraph: HTMLParagraphElement;
+
+  private featuresSubheader: HTMLHeadingElement;
+
+  private featuresParagraph: HTMLParagraphElement;
+
+  private teamHeader: HTMLHeadingElement;
+
+  private cardOne: HTMLDivElement;
+
+  private cardTwo: HTMLDivElement;
+
+  private cardThree: HTMLDivElement;
+
   constructor() {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
@@ -23,6 +39,32 @@ export default class AboutUs extends TemplateView {
     this.descriptionLeft = this.createElement(TagNames.DIV, Styles.DESCRIPTION_LEFT);
     this.descriptionRight = this.createElement(TagNames.DIV, Styles.DESCRIPTION_RIGHT);
     this.descriptionBottom = this.createElement(TagNames.DIV, Styles.DESCRIPTION_BOTTOM);
+    this.aboutSubheader = this.createElement(TagNames.H2, Styles.SUBHEADER);
+    this.aboutParagraph = this.createElement(TagNames.P, Styles.PARAGRAPH);
+    this.featuresSubheader = this.createElement(TagNames.H2, Styles.SUBHEADER);
+    this.featuresParagraph = this.createElement(TagNames.P, Styles.PARAGRAPH);
+    this.teamHeader = this.createElement(TagNames.H2, Styles.SUBHEADER);
+    this.cardOne = this.createCard(
+      '../assets/img/about-us/maksim-voloshyn.jpg',
+      'https://github.com/geominerr',
+      'Maksim Voloshyn',
+      'Developer',
+      'API, project structure, logic'
+    );
+    this.cardTwo = this.createCard(
+      '../assets/img/about-us/boris-novi.png',
+      'https://github.com/BorisNovi',
+      'Boris Novikov',
+      'Developer',
+      'API, logic, scrum'
+    );
+    this.cardThree = this.createCard(
+      '../assets/img/about-us/maksim-harelenka.jpg',
+      'https://github.com/IMcQueenI',
+      'Maksim Harelenka',
+      'Developer',
+      'Router, logic'
+    );
   }
 
   private documentTitle: string = 'About us';
@@ -30,6 +72,7 @@ export default class AboutUs extends TemplateView {
   private aboutSubheaderContent: string = `Final Project of the "JavaScript/Front-end" Course`;
 
   private aboutDescriptionContent: string = `Welcome to our online store! This e-commerce platform effectively replicates all the advantages of physical stores in a digital format. The system offers an intuitively designed user interface from the product search stage to the moment of order placement, enhancing engagement and building trust among customers.
+
   The platform simulates a range of high-quality musical equipment. Users can browse detailed product descriptions, add selected items to their cart, and make purchases with maximum convenience. To streamline the process, we offer registration and login options, advanced product search capabilities, as well as categorization and sorting.
   `;
 
@@ -52,6 +95,14 @@ export default class AboutUs extends TemplateView {
       descriptionLeft,
       descriptionRight,
       descriptionBottom,
+      aboutSubheader,
+      aboutParagraph,
+      featuresSubheader,
+      featuresParagraph,
+      teamHeader,
+      cardOne,
+      cardTwo,
+      cardThree,
     } = this;
 
     container.append(header);
@@ -59,47 +110,19 @@ export default class AboutUs extends TemplateView {
     container.append(projectDescription);
 
     projectDescription.append(descriptionLeft);
-    const aboutSubheader = this.createElement(TagNames.H2, Styles.SUBHEADER);
-    const aboutParagraph = this.createElement(TagNames.P, Styles.PARAGRAPH);
     descriptionLeft.append(aboutSubheader, aboutParagraph);
     aboutSubheader.innerText = this.aboutSubheaderContent;
     aboutParagraph.innerText = this.aboutDescriptionContent;
 
-    const featuresSubheader = this.createElement(TagNames.H2, Styles.SUBHEADER);
-    const featuresParagraph = this.createElement(TagNames.P, Styles.PARAGRAPH);
     descriptionLeft.append(featuresSubheader, featuresParagraph);
     featuresSubheader.innerText = this.featuresSubheaderContent;
     featuresParagraph.innerHTML = this.featuresDescriptionContent;
 
     projectDescription.append(descriptionRight);
-    const teamHeader = this.createElement(TagNames.H2, Styles.SUBHEADER);
     teamHeader.innerHTML = 'Our team';
-    descriptionRight.append(
-      teamHeader,
-      this.createCard(
-        '../assets/img/about-us/boris-novi.jpeg',
-        'https://github.com/geominerr',
-        'Maksim',
-        'Developer 1',
-        'decription'
-      ),
-      this.createCard(
-        '../assets/img/about-us/boris-novi.jpeg',
-        'https://github.com/BorisNovi',
-        'Boris',
-        'Developer 2',
-        'You'
-      ),
-      this.createCard(
-        '../assets/img/about-us/boris-novi.jpeg',
-        'https://github.com/IMcQueenI',
-        'Maksim',
-        'Developer 3',
-        'decription'
-      )
-    );
+    descriptionRight.append(teamHeader, cardOne, cardTwo, cardThree);
 
-    projectDescription.append(descriptionBottom);
+    container.append(descriptionBottom);
     const rsLink = this.createElement(TagNames.A, Styles.RS_LINK);
     const rsImage = this.createElement(TagNames.IMG, Styles.RS_IMG);
     rsLink.setAttribute(Attributes.HREF, 'https://rs.school/');
