@@ -203,7 +203,9 @@ class ProfileForm extends BaseComponent {
     this.cancelPasswords();
     this.updateUserData();
     this.updateShippingData();
+    this.updateDeafaultShippingAddress();
     this.updateBillingData();
+    this.updateDeafaultBillingAddress();
     this.setNewPassword();
   }
 
@@ -282,6 +284,27 @@ class ProfileForm extends BaseComponent {
     });
   }
 
+  private updateDeafaultShippingAddress(): void {
+    this.form.addEventListener('click', async (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('checkbox-standart')) {
+        const fieldSetShipping = this.fieldSetShippingList.find((fieldSet) =>
+          fieldSet.getElement().contains(target)
+        );
+        if (fieldSetShipping && fieldSetShipping.isValidData()) {
+          const api = new APIUserActions();
+          const isChecked = fieldSetShipping.checkboxShipDef.isChecked();
+          if (isChecked === false) {
+            await api.removeDefaultShippingAddress();
+          } else {
+            await api.updateDefaultShippingAddress(fieldSetShipping.addressId);
+          }
+          await this.fetchUserData();
+        }
+      }
+    });
+  }
+
   private updateBillingData(): void {
     this.form.addEventListener('click', async (event) => {
       const target = event.target as HTMLElement;
@@ -302,6 +325,27 @@ class ProfileForm extends BaseComponent {
             country
           );
           await fieldSetBilling.highlightInputs(1000);
+          await this.fetchUserData();
+        }
+      }
+    });
+  }
+
+  private updateDeafaultBillingAddress(): void {
+    this.form.addEventListener('click', async (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('checkbox-standart')) {
+        const fieldSetBilling = this.fieldSetBillingList.find((fieldSet) =>
+          fieldSet.getElement().contains(target)
+        );
+        if (fieldSetBilling && fieldSetBilling.isValidData()) {
+          const api = new APIUserActions();
+          const isChecked = fieldSetBilling.checkboxBillDef.isChecked();
+          if (isChecked === false) {
+            await api.removeDefaultBillingAddress();
+          } else {
+            await api.updateDefaultBillingAddress(fieldSetBilling.addressId);
+          }
           await this.fetchUserData();
         }
       }
