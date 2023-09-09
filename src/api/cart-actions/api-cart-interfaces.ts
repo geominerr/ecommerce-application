@@ -21,13 +21,15 @@ interface ILineItem {
     en: string;
   };
   variant: {
-    images: IProductImage;
+    images: IProductImage[];
     attributes: IProductAttribute;
   };
   price: IPrice;
   quantity: number;
-  totalPrice: ITotalPrice;
-  discountedPrice?: IDiscountedPrice;
+  totalPrice: {
+    centAmount: number;
+  };
+  discountedPrice: IDiscountedPrice;
   discountedPricePerQuantity?: IDiscountPerQuantity[];
   key?: string;
   productKey?: string;
@@ -97,14 +99,6 @@ interface IDiscountPerQuantity {
         };
       }
     ];
-  };
-}
-interface ITotalPrice {
-  totalPrice: {
-    type: string;
-    currencyCode: string;
-    centAmount: number;
-    fractionDigits: number;
   };
 }
 

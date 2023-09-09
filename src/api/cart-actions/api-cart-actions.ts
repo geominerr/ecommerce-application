@@ -1,8 +1,12 @@
 import { CTP_API_URL, CTP_PROJECT_KEY, LOCAL_KEY } from '../api-env-constants';
 import { ICartLocalData, IResponseCart } from './api-cart-interfaces';
 import { APIAnonToken } from '../api-anon-token';
+import productMap from '../../utils/product-map/product-map';
+import { extractlineItemID } from '../../utils/response-converter/response-converter';
 
 class APICartActions {
+  private productMap = productMap;
+
   private apiAnonToken: APIAnonToken;
 
   private apiUrl: string = CTP_API_URL;
@@ -21,7 +25,8 @@ class APICartActions {
   public async createCart(): Promise<void> {
     let token = '';
     const accessToken = localStorage.getItem(this.storageKeyAccessToken);
-
+    // при создании новой коризины очищаем наш словарь продуктов
+    this.productMap.reset();
     // проверяем залогинен ли пользователь чтобы не создавать анонимную корзину.
     if (accessToken) {
       token = accessToken;
@@ -106,7 +111,7 @@ class APICartActions {
   }
 
   // передаем ID товара, если повторно вызывать с одинаковым id товара, то будет увелечивать количество товара + 1
-  public async addProductByID(id: string): Promise<void> {
+  public async addProductByID(id: string): Promise<string> {
     if (!this.isCreatedCart()) await this.createCart();
 
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
@@ -120,7 +125,6 @@ class APICartActions {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     };
-
     const data = {
       version: version,
       actions: [
@@ -138,10 +142,11 @@ class APICartActions {
         headers: headers,
         body: JSON.stringify(data),
       });
-
       const responseData: IResponseCart = await response.json();
       const newVersion: number = responseData.version;
       if (newVersion) this.updateLocalData(newVersion);
+      // этот метод будет возваращать lineItemID, чтобы на детальной старнице мы могли удалить этот товал
+      return extractlineItemID(responseData, id);
     } catch (error) {
       throw error;
     }
@@ -165,7 +170,7 @@ class APICartActions {
       version: version,
       actions: [
         {
-          action: 'changeLineItemQuantity"',
+          action: 'changeLineItemQuantity',
           lineItemId: itemId,
           quantity: quantity,
         },
@@ -329,4 +334,6 @@ class APICartActions {
   }
 }
 
-export default APICartActions;
+const APICart = new APICartActions();
+
+export default APICart;
