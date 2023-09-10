@@ -106,6 +106,13 @@ class FieldsetNewAddress extends BaseComponent {
     return isValid;
   }
 
+  public clearInputs(): void {
+    this.inputCity.setValue('');
+    this.inputStreet.setValue('');
+    this.inputStreetNumber.setValue('');
+    this.inputPostal.setValue('');
+  }
+
   private createComponent(): void {
     const {
       fieldsetElement,
@@ -150,41 +157,50 @@ class FieldsetNewAddress extends BaseComponent {
     postalCode: string;
     city: string;
     country: string;
+    type: string;
   } {
     const streetName = this.inputStreet.getValue();
     const streetNumber = this.inputStreetNumber.getValue();
     const postalCode = this.inputPostal.getValue();
     const city = this.inputCity.getValue();
     const country = this.select.getValue();
+    const type = this.selectType.getValue();
 
-    return { streetName, streetNumber, postalCode, city, country };
+    return { streetName, streetNumber, postalCode, city, country, type };
   }
 
   public async highlightInputs(duration: number): Promise<void> {
-    const { select, inputPostal, inputCity, inputStreet, inputStreetNumber } = this;
-    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach((input) => {
-      const inputShipping = input.getElement().querySelector('.input-profile, .input-postal');
-      if (inputShipping) {
-        inputShipping.classList.add(Styles.HIGHLIGHT);
+    const { selectType, select, inputPostal, inputCity, inputStreet, inputStreetNumber } = this;
+    [selectType, select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(
+      (input) => {
+        const inputShipping = input.getElement().querySelector('.input-profile, .input-postal');
+        if (inputShipping) {
+          inputShipping.classList.add(Styles.HIGHLIGHT);
+        }
       }
-    });
+    );
 
+    const selectAddress = selectType.getElement().querySelector('select');
     const selectElement = select.getElement().querySelector('select');
-    if (selectElement) {
+    if (selectElement && selectAddress) {
       selectElement.classList.add(Styles.HIGHLIGHT);
+      selectAddress.classList.add(Styles.HIGHLIGHT);
     }
 
     await new Promise((resolve) => setTimeout(resolve, duration));
 
-    [select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach((input) => {
-      const inputShipping = input.getElement().querySelector('.input-profile, .input-postal');
-      if (inputShipping) {
-        inputShipping.classList.remove(Styles.HIGHLIGHT);
+    [selectType, select, inputPostal, inputCity, inputStreet, inputStreetNumber].forEach(
+      (input) => {
+        const inputShipping = input.getElement().querySelector('.input-profile, .input-postal');
+        if (inputShipping) {
+          inputShipping.classList.remove(Styles.HIGHLIGHT);
+        }
       }
-    });
+    );
 
-    if (selectElement) {
+    if (selectElement && selectAddress) {
       selectElement.classList.remove(Styles.HIGHLIGHT);
+      selectAddress.classList.remove(Styles.HIGHLIGHT);
     }
   }
 }

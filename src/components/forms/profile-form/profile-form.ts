@@ -284,10 +284,29 @@ class ProfileForm extends BaseComponent {
     this.fieldSetNewAddress.buttonSave.addEventListener('click', async () => {
       if (this.fieldSetNewAddress.isValidData()) {
         const api = new APIUserActions();
-        const { streetName, streetNumber, postalCode, city, country } =
+        const { streetName, streetNumber, postalCode, city, country, type } =
           this.fieldSetNewAddress.getInputValues();
-        await api.addNewAddress(streetName, streetNumber, postalCode, city, country);
-        // await fieldSetShipping.highlightInputs(1000);
+        if (type === 'SHIP') {
+          const addressId = await api.addNewAddress(
+            streetName,
+            streetNumber,
+            postalCode,
+            city,
+            country
+          );
+          await api.addShippingAddressByID(addressId);
+        } else if (type === 'BILL') {
+          const addressId = await api.addNewAddress(
+            streetName,
+            streetNumber,
+            postalCode,
+            city,
+            country
+          );
+          await api.addBillingAddressByID(addressId);
+        }
+        await this.fieldSetNewAddress.highlightInputs(1000);
+        this.fieldSetNewAddress.clearInputs();
         await this.fetchUserData();
         this.fieldSetNewAddress.fieldsetElement.classList.remove(Styles.FIELDSET_SHOW);
       }

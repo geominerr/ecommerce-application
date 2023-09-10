@@ -294,8 +294,8 @@ export class APIUserActions {
     postalCode: string,
     city: string,
     country: string
-  ): Promise<void> {
-    const requestVersion = localStorage.getItem('requestVersion');
+  ): Promise<string> {
+    let requestVersion = localStorage.getItem('requestVersion') ?? '0';
     const requestData = {
       version: requestVersion !== null ? parseInt(requestVersion) : 0,
       actions: [
@@ -308,6 +308,45 @@ export class APIUserActions {
             streetName: streetName,
             streetNumber: streetNumber,
           },
+        },
+      ],
+    };
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem(this.keyAccessToken)}`,
+      'Content-Type': 'application/json',
+    };
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(requestData),
+      });
+      if (response.status === 200) {
+        const data = await response.json();
+        const addresses = data.addresses;
+        const lastAddress = addresses[addresses.length - 1];
+        requestVersion = data.version;
+        localStorage.setItem('requestVersion', requestVersion);
+        return lastAddress.id;
+      } else {
+        throw new Error('Failed to update user data');
+      }
+    } catch (error) {
+      console.error('Failed to update user data:', error);
+      throw error;
+    }
+  }
+
+  // eslint-disable-next-line max-lines-per-function
+  public async addShippingAddressByID(addressId: string): Promise<void> {
+    let requestVersion = localStorage.getItem('requestVersion') ?? '0';
+    const requestData = {
+      version: requestVersion !== null ? parseInt(requestVersion) : 0,
+      actions: [
+        {
+          action: 'addShippingAddressId',
+          addressId: addressId,
         },
       ],
     };
@@ -326,7 +365,46 @@ export class APIUserActions {
       });
 
       if (response.status === 200) {
-        // Success
+        const data = await response.json();
+        requestVersion = data.version;
+        localStorage.setItem('requestVersion', requestVersion);
+      } else {
+        throw new Error('Failed to update user data');
+      }
+    } catch (error) {
+      console.error('Failed to update user data:', error);
+    }
+  }
+
+  public async addBillingAddressByID(addressId: string): Promise<void> {
+    let requestVersion = localStorage.getItem('requestVersion') ?? '0';
+    const requestData = {
+      version: requestVersion !== null ? parseInt(requestVersion) : 0,
+      actions: [
+        {
+          action: 'addBillingAddressId',
+          addressId: addressId,
+        },
+      ],
+    };
+
+    const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me`;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem(this.keyAccessToken)}`,
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        requestVersion = data.version;
+        localStorage.setItem('requestVersion', requestVersion);
       } else {
         throw new Error('Failed to update user data');
       }
