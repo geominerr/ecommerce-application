@@ -58,13 +58,13 @@ class Header extends BaseComponent {
     const userLinks: HTMLElement = this.createElement(TagNames.DIV, Styles.NAV_USER);
 
     LINKS_OPTIONS.forEach((option: ILinkOptions): void => {
-      const link: HTMLAnchorElement = this.createNavLink(option);
+      const link = this.createNavLink(option);
 
       productLinks.append(link);
     });
 
     LINKS_OPTIONS_USER.forEach((option: ILinkOptions): void => {
-      const link: HTMLAnchorElement = this.createNavLink(option);
+      const link = this.createNavLink(option);
 
       userLinks.append(link);
     });
@@ -74,7 +74,7 @@ class Header extends BaseComponent {
     return navigation;
   }
 
-  private createNavLink(options: ILinkOptions): HTMLAnchorElement {
+  private createNavLink(options: ILinkOptions): HTMLAnchorElement | HTMLElement {
     const navLink: HTMLAnchorElement = this.createElement(TagNames.A, Styles.LINK);
     navLink.setAttribute(Attributes.HREF, options.href);
 
@@ -87,6 +87,14 @@ class Header extends BaseComponent {
       img.setAttribute(Attributes.SRC, options.imgPath);
 
       navLink.append(img);
+
+      if (options.href === '/cart') {
+        const cartWrapper = this.createElement(TagNames.DIV, Styles.CART_WRAPPER);
+        const counterProduct = this.createElement(TagNames.DIV, Styles.PRODUCT_COUNTER);
+        [counterProduct, navLink].forEach((el: HTMLElement): void => cartWrapper.append(el));
+
+        return cartWrapper;
+      }
     }
 
     return navLink;
@@ -94,7 +102,7 @@ class Header extends BaseComponent {
 
   private createLogo(): HTMLElement {
     const { logo } = this;
-    const link: HTMLAnchorElement = this.createNavLink(LOGO_OPTIONS);
+    const link = this.createNavLink(LOGO_OPTIONS);
 
     logo.append(link);
 
