@@ -20,6 +20,8 @@ export class Router {
 
   public routes: Route[];
 
+  private extLinks: string[];
+
   // это костыль, переделаю в новой ветке
   private pathLocation: string = '/detail-product';
 
@@ -63,6 +65,13 @@ export class Router {
       { path: '/catalog/sound-systems', view: catalog },
       { path: '/catalog/controllers', view: catalog },
       { path: '/catalog/soundbars', view: catalog },
+    ];
+
+    this.extLinks = [
+      'https://rs.school/',
+      'https://github.com/geominerr',
+      'https://github.com/BorisNovi',
+      'https://github.com/IMcQueenI',
     ];
 
     this.router = this.router.bind(this);
@@ -128,6 +137,12 @@ export class Router {
     const target = e.target as HTMLElement;
 
     if (target instanceof HTMLAnchorElement) {
+      if (this.extLinks.includes(target.href)) {
+        return;
+      }
+    }
+
+    if (target instanceof HTMLAnchorElement) {
       e.preventDefault();
 
       const url = target.getAttribute('href');
@@ -141,6 +156,10 @@ export class Router {
       const anchor = target?.parentNode;
 
       if (anchor && anchor instanceof HTMLAnchorElement) {
+        if (this.extLinks.includes(anchor.href)) {
+          return;
+        }
+
         e.preventDefault();
 
         const url = anchor.getAttribute('href');

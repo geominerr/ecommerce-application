@@ -1,3 +1,176 @@
-.about-us{
-	margin-top: 100px;
+.about-us-container {
+	width: 100%;
+	padding: 0rem 2rem 2.5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+
+	.header {
+		font-size: 3rem;
+		margin: 4rem 0rem 4rem 0rem;
+		color: rgb(75, 75, 75);
+		width: auto;
+	}
+
+	.project-description {
+		display: flex;
+		justify-content: space-around;
+		align-items: flex-start;
+
+		.description-left {
+			display: flex;
+			flex-direction: column;
+
+			.subheader {
+				font-size: 2.5rem;
+				margin: 3rem 0rem 3rem 0rem;
+				color: rgb(75, 75, 75);
+			}
+
+			.paragraph {
+				font-size: 1.7rem;
+				margin: 2rem 0rem 10rem 0rem;
+				line-height: 3rem;
+
+				ul {
+					li {
+						list-style: circle;
+					}
+				}
+			}
+		}
+
+		.description-right {
+			display: flex;
+			flex-direction: column;
+
+			.subheader {
+				font-size: 2.5rem;
+				margin: 3rem 0rem 3rem 0rem;
+				color: rgb(75, 75, 75);
+			}
+
+			.developer-card {
+				max-width: 30rem;
+				border: 0.1rem solid rgb(207, 207, 207);
+				margin: 2rem 0 2rem 0;
+				padding: 1rem 1.5rem 2rem;
+				transition: all 0.1s;
+
+				.photo-container {
+					max-height: 25rem;
+					overflow: hidden;
+
+					.photo {
+						width: 20rem;
+						height: auto;
+						transition: all 0.3s;
+					}
+				}
+
+				.description-container {
+
+					line-height: 2rem;
+
+					.card-heading {
+						font-size: 1.7rem;
+						padding: 1rem 0;
+					}
+
+					.card-position {
+						font-size: 1.5rem;
+					}
+
+					.card-description {}
+
+					.github-link {
+						text-decoration: underline;
+						color: rgb(75, 75, 75);
+						font-size: 1.5rem;
+					}
+				}
+			}
+		}
+	}
+
+	.description-bottom {
+		width: 100%;
+
+		.rs-link {
+			display: flex;
+		}
+	}
 }
+
+@media screen and (min-width: 801px) {
+	.project-description {
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		.description-left {
+			width: 60%;
+		}
+	}
+
+	.description-bottom {
+		width: 100%;
+
+		.rs-link {
+			display: flex;
+			width: 40rem;
+			margin: -15rem 0;
+		}
+	}
+}
+
+@media (min-width: 200px) and (max-width: 800px) {
+	.project-description {
+		flex-direction: column;
+		flex-wrap: wrap;
+
+		.description-left {
+			width: 100%;
+		}
+	}
+
+	.description-bottom {
+		.rs-link {
+			width: 23rem;
+			margin: 3rem 0;
+		}
+	}
+}
+
+@media (hover :hover) {
+	.photo:hover {
+		transform: scale(1.1);
+	}
+
+	.github-link:hover {
+		font-weight: 500;
+	}
+}
+
+/*
+CONTAINER = 'about-us-container',
+  PROJ_DESCRIPTION = 'project-description',
+  DEVCARD = 'devcard',
+  HEADER = 'header',
+  SUBHEADER = 'subheader',
+  DESCRIPTION_LEFT = 'description-left',
+  DESCRIPTION_RIGHT = 'description-right',
+  DESCRIPTION_BOTTOM = 'description-bottom',
+  PARAGRAPH = 'paragraph',
+  DEV_CARD = 'developer-card',
+  PHOTO_CONTAINER = 'photo-container',
+  PHOTO = 'photo',
+  DESCRIPTION_CONTAINER = 'description-container',
+  CARD_HEADING = 'card-heading',
+  CARD_POSITION = 'card-position',
+  CARD_DESCRIPTION = 'card-description',
+  GH_LINK = 'github-link',
+  RS_LINK = 'rs-link',
+  RS_IMG = 'rs-img',
+*/
