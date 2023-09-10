@@ -31,6 +31,8 @@ export default class Cart extends TemplateView {
 
   private buttonGroup: HTMLElement;
 
+  private callback: () => Promise<void>;
+
   constructor() {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
@@ -43,6 +45,7 @@ export default class Cart extends TemplateView {
     this.totalPriceDiscount = this.createElement(TagNames.P, Styles.DISCOUNT_PRICE);
     this.promoGroup = this.createPromoGroup();
     this.buttonGroup = this.createButtonGroup();
+    this.callback = this.updateCart.bind(this);
     this.createComponent();
   }
 
@@ -91,7 +94,8 @@ export default class Cart extends TemplateView {
         buttonGroup.style.display = 'flex';
 
         convertedData.products.forEach((product) => {
-          const lineItem = new LineItem(product).getElement();
+          // прокидываю updateCart()  в lineItem, чтобы там вызывать при событиях
+          const lineItem = new LineItem(product, this.callback).getElement();
           lineItemContainer.append(lineItem);
         });
       }
@@ -130,6 +134,9 @@ export default class Cart extends TemplateView {
 
   private createPromoGroup(): HTMLElement {
     const container = this.createElement(TagNames.DIV, Styles.PROMO_GROUP);
+
+    // TO DO
+
     container.innerText = 'PromoCode';
     return container;
   }
@@ -145,6 +152,7 @@ export default class Cart extends TemplateView {
     this.container.addEventListener('click', (e) => {
       const { target } = e;
 
+      // чистим корзину
       if (target instanceof HTMLElement) {
         if (target.classList.contains(Styles.BTN_CLEAR)) {
           this.apiCart
@@ -153,25 +161,12 @@ export default class Cart extends TemplateView {
             .catch((err) => console.log(err));
         }
 
-        if (target.innerText === 'Add product') {
-          // сейчас харкод, будет id передаваться с карточки
-          const IdProduct = 'f9adbb3d-f996-4d5d-acb7-736e96b3dfad';
-          this.apiCart.addProductByID(IdProduct);
-        }
-
-        if (target.innerText === 'Get cart') {
-          this.apiCart.getCart();
-        }
-
-        if (target.innerText === 'Remove') {
-          // сейчас харкод, будет Lineid передаваться с корзины
-          // const lineId = '8e16ce4f-e40b-4f41-9d7a-b1eb8b9e3c3b';
-          // const quantity = 1;
-          this.apiCart.removeDicsount('e599b6ef-be2e-484f-a439-b7dc2c23e590');
-        }
-
-        if (target.innerText === 'get Discount') {
-          this.apiCart.addDicsount('max');
+        if (target.classList.contains(Styles.BTN_ORDER)) {
+          // cейчас по клику make order добавляется дисконт code='max' :-)
+          this.apiCart
+            .addDicsount('max')
+            .then(() => this.updateCart())
+            .catch((err) => console.log(err));
         }
       }
     });
