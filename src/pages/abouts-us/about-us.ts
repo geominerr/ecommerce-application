@@ -63,7 +63,7 @@ export default class AboutUs extends TemplateView {
       'https://github.com/IMcQueenI',
       'Maksim Harelenka',
       'Developer',
-      'Router, logic'
+      'API, router, logic'
     );
   }
 
@@ -125,7 +125,7 @@ export default class AboutUs extends TemplateView {
     container.append(descriptionBottom);
     const rsLink = this.createElement(TagNames.A, Styles.RS_LINK);
     const rsImage = this.createElement(TagNames.IMG, Styles.RS_IMG);
-    rsLink.setAttribute(Attributes.HREF, 'https://rs.school/');
+    rsLink.setAttribute(Attributes.HREF, 'https://rs.school');
     rsLink.setAttribute(Attributes.TARGET, '_blank');
     rsImage.setAttribute(Attributes.SRC, '../assets/svg/rs_school_js.svg');
     rsLink.append(rsImage);
