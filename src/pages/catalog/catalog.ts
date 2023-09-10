@@ -11,6 +11,7 @@ import { APIProductActions } from '../../api/product-actions/api-product-actions
 import { transform } from '../../utils/response-converter/response-converter';
 import { TagNames, Styles } from './enum';
 import './catalog.scss';
+import { detectScrollDown } from '../../utils/detect_scroll_down';
 
 export default class Catalog extends TemplateView {
   private container: HTMLDivElement;
@@ -49,6 +50,8 @@ export default class Catalog extends TemplateView {
 
   private prices: string[] = [];
 
+  private isLoading: boolean;
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
@@ -71,6 +74,7 @@ export default class Catalog extends TemplateView {
       this.filter.getElement()
     );
     this.addButtonClickHandler();
+    this.isLoading = false;
   }
 
   private documentTitle: string = 'Catalog';
@@ -134,7 +138,11 @@ export default class Catalog extends TemplateView {
   }
 
   private async makeCard(searchParam: string = ''): Promise<void> {
-    const CARD_DATA = await this.api.getProjectData('product-projections', 40, 0, searchParam);
+    if (this.isLoading) return;
+    this.isLoading = true;
+
+    const CARD_DATA = await this.api.getProjectData('product-projections', 10, 0, searchParam);
+    this.isLoading = false;
 
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
     if (CARD_DATA.limit) {
@@ -332,6 +340,10 @@ export default class Catalog extends TemplateView {
         filter.querySelectorAll('input').forEach((el) => (el.checked = false)); // Удаить, если будет сохранение чекбоксов в память
       }
     });
+
+    detectScrollDown((bool) => {
+      console.log('scroll', bool);
+    }); // Проверяем скролл страницы вниз для бесконечнной загрузуи
   }
 
   private addButtonClickHandler(): void {
