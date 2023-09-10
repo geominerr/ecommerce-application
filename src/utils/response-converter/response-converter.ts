@@ -93,13 +93,15 @@ function converteLineItem(lineItem: ILineItem): ICartProduct {
   const imageUrl = lineItem?.variant?.images[0]?.url;
   const quantity = lineItem.quantity;
   const priceNumber = lineItem?.price?.value?.centAmount;
-  const price = `€ ${(priceNumber / 100).toFixed(2)}`;
+  const discountedPriceNumber = lineItem?.price?.discounted?.value?.centAmount;
+  let price = `€ ${(priceNumber / 100).toFixed(2)}`;
+  if (discountedPriceNumber) {
+    price = `€ ${(discountedPriceNumber / 100).toFixed(2)}`;
+  }
   const discountPriceNumber = lineItem?.discountedPrice?.value?.centAmount;
-
   let totalPrice = `€ ${(lineItem?.totalPrice?.centAmount / 100).toFixed(2)}`;
   let discountPrice = '';
   let totalDiscountedPrice = '';
-
   // totalDiscountPrice (если используется скидка) === totalPrice  в теле ответа....
   // если скидки нет то и discountPriceNumber тоже не будет...
   if (discountPriceNumber) {
@@ -107,6 +109,9 @@ function converteLineItem(lineItem: ILineItem): ICartProduct {
     discountPrice = `€ ${(discountPriceNumber / 100).toFixed(2)}`;
     // не нашел totalPrice без скидки, если используется промо, поэтому считаем сами)
     totalPrice = `€ ${((priceNumber * quantity) / 100).toFixed(2)}`;
+    if (discountedPriceNumber) {
+      totalPrice = `€ ${((discountedPriceNumber * quantity) / 100).toFixed(2)}`;
+    }
   }
 
   return {
