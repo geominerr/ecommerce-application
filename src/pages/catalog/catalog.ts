@@ -52,6 +52,8 @@ export default class Catalog extends TemplateView {
 
   private isLoading: boolean;
 
+  private cardsCount: number;
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
@@ -75,6 +77,7 @@ export default class Catalog extends TemplateView {
     );
     this.addButtonClickHandler();
     this.isLoading = false;
+    this.cardsCount = 0;
   }
 
   private documentTitle: string = 'Catalog';
@@ -342,7 +345,8 @@ export default class Catalog extends TemplateView {
     });
 
     detectScrollDown((bool) => {
-      console.log('scroll', bool);
+      this.cardsCount += 5;
+      console.log('scroll', bool, this.cardsCount);
     }); // Проверяем скролл страницы вниз для бесконечнной загрузуи
   }
 
