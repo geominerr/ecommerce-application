@@ -29,6 +29,7 @@ class APICartActions {
     const accessToken = localStorage.getItem(this.storageKeyAccessToken);
     // при создании новой коризины очищаем наш словарь продуктов
     this.productMap.reset();
+
     // проверяем залогинен ли пользователь чтобы не создавать анонимную корзину.
     if (accessToken) {
       token = accessToken;
@@ -67,8 +68,14 @@ class APICartActions {
         localData.customerToken = token;
       }
 
-      console.log(responseData);
       localStorage.setItem(this.storageKey, JSON.stringify(localData));
+
+      // при создании обновляем map т.к может прийти пользовательская с товарами...
+      const entries = extractEntries(responseData);
+
+      if (entries) {
+        this.productMap.updateMap(entries);
+      }
     } catch (error) {
       throw error;
     }
@@ -197,7 +204,7 @@ class APICartActions {
   }
 
   // передаем LineItemID , если количесвто не передавать quantity в тело запроса полностью удалить товар из корзины.
-  public async removetByLineItemID(itemId: string, quantity: number): Promise<IResponseCart> {
+  public async removetByLineItemID(itemId: string): Promise<IResponseCart> {
     const localData: ICartLocalData = JSON.parse(localStorage.getItem(this.storageKey) || '');
     const anonymousToken = await this.apiAnonToken.getAnon();
     const idCart = localData.id;
@@ -216,7 +223,7 @@ class APICartActions {
         {
           action: 'removeLineItem',
           lineItemId: itemId,
-          quantity: quantity,
+          quantity: 1,
         },
       ],
     };
@@ -348,7 +355,7 @@ class APICartActions {
     }
   }
 
-  private async setStartStateMap(): Promise<void> {
+  public async setStartStateMap(): Promise<void> {
     const localCartData = localStorage.getItem(this.storageKey);
 
     if (!localCartData) {
@@ -389,4 +396,3 @@ class APICartActions {
 const APICart = new APICartActions();
 
 export default APICart;
-export { APICartActions };
