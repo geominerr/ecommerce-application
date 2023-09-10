@@ -340,6 +340,7 @@ class APICartActions {
 
       const responseData: IResponseCart = await response.json();
       this.clearLocalData();
+      this.productMap.reset();
 
       return responseData;
     } catch (error) {
