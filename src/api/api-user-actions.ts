@@ -4,6 +4,8 @@ import { APIAnonToken } from './api-anon-token';
 import { CTP_PROJECT_KEY, CTP_API_URL, STORE_KEY, LOCAL_KEY } from './api-env-constants';
 import { IUserData } from './api-interfaces';
 import { ICartLocalData } from './cart-actions/api-cart-interfaces';
+import APICart from './cart-actions/api-cart-actions';
+import productMap from '../utils/product-map/product-map';
 
 const API_ACCESS_TOKEN = new APIAcceesToken();
 
@@ -93,6 +95,7 @@ export class APIUserActions {
         const data: ICustomerAndCart = await response.json();
         this.saveTokensToLocalStorage(ACCESS_TOKEN);
         localStorage.setItem(this.keyUserId, data.customer.id);
+
         return data.customer;
       } else {
         throw new Error(`${await response.json().then((data) => data.message)}`);
@@ -141,10 +144,13 @@ export class APIUserActions {
 
         // проверка, если в LS нет корзины то мы ее не прокидывали при авторизации значит и нет в ответе cart.id
         if (this.isHasLocalCartData()) {
-          const newIdCart = data.cart.id;
-          const newVersion = data.cart.version;
+          const newIdCart = data?.cart?.id;
+          const newVersion = data?.cart?.version;
           this.updateLocalCartData(ACCESS_TOKEN, newIdCart, newVersion);
         }
+
+        // !!! создаем новые корзину и обновляем map !!!
+        APICart.getCart();
 
         return data.customer;
       } else {
@@ -178,7 +184,7 @@ export class APIUserActions {
         id: idCart,
         typeId: 'cart',
         activeCartSignInMode: 'MergeWithExistingCustomerCart',
-        updateProductData: true,
+        // updateProductData: true,
       },
     };
 
@@ -209,6 +215,9 @@ export class APIUserActions {
     localStorage.removeItem('anonymousAccessToken');
     localStorage.removeItem('anonymousTokenExpiration');
     localStorage.removeItem('anonymousRefreshToken');
+
+    // !!! для логаута очищаем map т.к. корзина будет пустая !!!
+    productMap.reset();
   }
 
   private saveTokensToLocalStorage(accessToken: string): void {
