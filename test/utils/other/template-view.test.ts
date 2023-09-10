@@ -1,4 +1,4 @@
-import TemplateView from '../src/pages/template-view/template-view';
+import TemplateView from '../../../src/pages/template-view/template-view';
 
 test('should return an empty string', async () => {
   const templateView = new TemplateView();

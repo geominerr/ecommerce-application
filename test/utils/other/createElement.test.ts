@@ -1,4 +1,4 @@
-import { createElement } from '../src/router/createElement';
+import { createElement } from '../../../src/router/createElement';
 
 test('should create an HTMLElement with the given tagName', () => {
   const tagName = 'div';

@@ -18,6 +18,8 @@ enum Styles {
   BILLING = 'billing-addresses',
   BUTTON_ADD = 'add-button',
   BUTTON_CHANGE = 'change-button',
+  FIELDSET_SHOW = 'fieldset--show',
+  FIELDSET_HIDE = 'fieldset--hide',
 }
 
 enum Content {

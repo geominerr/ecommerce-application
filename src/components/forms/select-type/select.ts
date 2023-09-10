@@ -1,32 +1,28 @@
 import BaseComponent from '../../base/base-component/base-component';
 import ErrorHint from '../error-hint/error-hint';
-import InputPostal from '../input-profile/input-postal/input-postal';
-import { Address, Attributes, Events, Styles, TagNames } from './enum';
-import { AddresType } from './select-interfaces';
-import { COUNTRIES, BILLING_OPTIONS, SHIPPING_OPTIONS, NEW_ADDRESS } from './select-options';
+import { Attributes, Events, Styles, TagNames } from './enum';
+import { COUNTRIES, TYPE } from './select-options';
 import './select.scss';
 
-class SelectComponentProfile extends BaseComponent {
+class SelectComponentType extends BaseComponent {
   private container: HTMLDivElement;
 
   private select: HTMLSelectElement;
 
   private errorHint: ErrorHint;
 
-  private input: InputPostal | null = null;
-
-  private disabledOptionText: string = 'Select country';
+  private disabledOptionText: string = 'Select type';
 
   private disableOptionIndex: number = 0;
 
   private hintRequiredField: string = 'This is a required field';
 
-  constructor(type: AddresType) {
+  constructor() {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
     this.select = this.createElement(TagNames.SELECT, Styles.SELECT);
     this.errorHint = new ErrorHint();
-    this.createComponent(type);
+    this.createComponent();
   }
 
   public getElement(): HTMLElement {
@@ -60,10 +56,6 @@ class SelectComponentProfile extends BaseComponent {
     return this.select.options[this.select.selectedIndex].value;
   }
 
-  public setInputPostal(input: InputPostal): void {
-    this.input = input;
-  }
-
   public isValid(): boolean {
     return this.select.selectedIndex !== this.disableOptionIndex;
   }
@@ -76,7 +68,7 @@ class SelectComponentProfile extends BaseComponent {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  private createComponent(type: AddresType): void {
+  private createComponent(): void {
     const { container, select, disabledOptionText } = this;
     const label: HTMLLabelElement = this.createElement(TagNames.LABEL, Styles.LABEL);
     const disabledOption: HTMLOptionElement = this.createElement(TagNames.OPTION, Styles.OPTION);
@@ -87,20 +79,9 @@ class SelectComponentProfile extends BaseComponent {
     disabledOption.hidden = true;
     disabledOption.innerText = disabledOptionText;
 
-    select.setAttribute(Attributes.NAME, SHIPPING_OPTIONS.NAME);
-    label.setAttribute(Attributes.FOR, SHIPPING_OPTIONS.ID);
-    label.innerText = SHIPPING_OPTIONS.LABEL_CONTENT;
-
-    if (type !== Address.SHIPPING) {
-      select.setAttribute(Attributes.NAME, BILLING_OPTIONS.NAME);
-      label.setAttribute(Attributes.FOR, BILLING_OPTIONS.ID);
-      label.innerText = BILLING_OPTIONS.LABEL_CONTENT;
-    }
-    if (type !== Address.SHIPPING && type !== Address.BILLING) {
-      select.setAttribute(Attributes.NAME, NEW_ADDRESS.NAME);
-      label.setAttribute(Attributes.FOR, NEW_ADDRESS.ID);
-      label.innerText = NEW_ADDRESS.LABEL_CONTENT;
-    }
+    select.setAttribute(Attributes.NAME, TYPE.NAME);
+    label.setAttribute(Attributes.FOR, TYPE.ID);
+    label.innerText = TYPE.LABEL_CONTENT;
 
     select.append(disabledOption);
 
@@ -120,11 +101,6 @@ class SelectComponentProfile extends BaseComponent {
 
   private addChangeHandler(select: HTMLSelectElement): void {
     select.addEventListener(Events.CHANGE, (): void => {
-      if (this.input) {
-        const codeCountry: string = this.getCodeCountry();
-        this.input.showHintZipCode(codeCountry);
-      }
-
       if (select.selectedIndex !== this.disableOptionIndex) {
         select.classList.remove(Styles.SELECT_ERROR);
         this.errorHint.hideErrorText();
@@ -133,4 +109,4 @@ class SelectComponentProfile extends BaseComponent {
   }
 }
 
-export default SelectComponentProfile;
+export default SelectComponentType;

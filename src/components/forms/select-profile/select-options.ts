@@ -21,4 +21,10 @@ const BILLING_OPTIONS: SelectOptions = {
   LABEL_CONTENT: 'Billing country',
 };
 
-export { COUNTRIES, SHIPPING_OPTIONS, BILLING_OPTIONS };
+const NEW_ADDRESS: SelectOptions = {
+  ID: 'country',
+  NAME: 'country',
+  LABEL_CONTENT: 'Country',
+};
+
+export { COUNTRIES, SHIPPING_OPTIONS, BILLING_OPTIONS, NEW_ADDRESS };

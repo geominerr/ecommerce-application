@@ -1,4 +1,4 @@
-import { EmailPasswordCheck } from '../src/utils/email_password_check';
+import { EmailPasswordCheck } from '../../../src/utils/email_password_check';
 const CHECK = new EmailPasswordCheck();
 
 // Email test

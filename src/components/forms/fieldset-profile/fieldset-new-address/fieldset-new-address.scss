@@ -1,0 +1,57 @@
+.fieldset-new-address {
+  margin-top: 3rem;
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  width: 35rem;
+}
+
+.legend {
+  align-self: center;
+  padding: 0 0 1rem;
+  margin: 0;
+  font-size: 2.2rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.addresses-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  .edit {
+    cursor: pointer;
+  }
+}
+
+.actions-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  .edit {
+    cursor: pointer;
+  }
+  .close {
+    cursor: pointer;
+  }
+}
+
+.new-buttons-container {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.fieldset--hide {
+  display: none;
+}
+
+.fieldset--show {
+  display: flex;
+}
+
+.highlight {
+  background: rgb(64, 224, 208, 0.3);
+}

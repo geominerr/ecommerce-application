@@ -1,4 +1,4 @@
-import { APIProductActions } from '../src/api/product-actions/api-product-actions';
+import { APIProductActions } from '../../src/api/product-actions/api-product-actions';
 
 // API test
 test('getProjectData should fetch project data successfully', async () => {
