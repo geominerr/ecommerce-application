@@ -18,7 +18,10 @@ enum Styles {
   PRICE_DISCOUNT = 'product__price-discount',
   BUTTON = 'product__button',
   BUTTON_CREDIT = 'product__button--credit',
+  BUTTON_REMOVE = 'product__button--remove',
   BUTTON_WRAPPER = 'product__button-wrapper',
+  BUTTON_DISABLED = 'product__button--disabled',
+  BUTTON_VISIBLE = 'product__button--visible',
   DESCRIPTION = 'description',
   DESCRIPTION_TITLE = 'description__title',
   DESCRIPTION_TEXT = 'description__text',
@@ -39,6 +42,7 @@ enum Content {
   TITLE_ATTRIBUTES = 'Characteristics',
   BUTTON_BUY = 'Add to cart',
   BUTTON_CREDIT = 'Buy in credit',
+  BUTTON_REMOVE = 'Remove from cart',
 }
 
 enum Events {

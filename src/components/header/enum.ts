@@ -21,6 +21,8 @@ enum Styles {
   BURGER_LINE = 'burger-icon__line',
   IMAGE = 'img',
   LOCK_BODY = 'lock',
+  CART_WRAPPER = 'cart-icon-wrapper',
+  PRODUCT_COUNTER = 'product-counter',
 }
 
 enum Events {

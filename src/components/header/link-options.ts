@@ -1,6 +1,9 @@
 import { ILinkOptions } from './header-interfaces';
 
-const LINKS_OPTIONS: ILinkOptions[] = [{ href: '/catalog', content: 'Catalog' }];
+const LINKS_OPTIONS: ILinkOptions[] = [
+  { href: '/about_us', content: 'About us' },
+  { href: '/catalog', content: 'Catalog' },
+];
 
 const LINKS_OPTIONS_USER: ILinkOptions[] = [
   { href: '/authorization', content: 'Login' },

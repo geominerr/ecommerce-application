@@ -1,9 +1,15 @@
 import BaseComponent from '../base/base-component/base-component';
 import { Attributes, Content, Events, Styles, TagNames } from './enum';
 import { ProductData } from './product-card-interfaces';
+import APICart from '../../api/cart-actions/api-cart-actions';
+import productMap from '../../utils/product-map/product-map';
 import './product-card.scss';
 
 class ProductCard extends BaseComponent {
+  private productMap = productMap;
+
+  private apiCart = APICart;
+
   private card: HTMLDivElement;
 
   private imgWrapper: HTMLDivElement;
@@ -61,6 +67,11 @@ class ProductCard extends BaseComponent {
     buttonCart.innerText = Content.BUTTON_CART;
     description.innerText = data.description;
 
+    if (productMap.hasProduct(data.id)) {
+      buttonCart.classList.add(Styles.BUTTON_FULL_CART);
+      buttonCart.innerText = 'Added';
+    }
+
     if (data.discountPrice) {
       price.classList.add(Styles.PRICE_DISABLED);
       discountPrice.innerText = data.discountPrice;
@@ -81,9 +92,18 @@ class ProductCard extends BaseComponent {
 
     card.addEventListener(Events.CLICK, (e: Event): void => {
       const { target } = e;
+
       if (target !== buttonCart) {
-        // только как теперь роуетру обьяснить куда идти )))
         hiddenLink.click(); // <= здесь мы принудительно вызываем клик, а наш роутер уже дальше сам в курсе что делать )))
+      } else if (!buttonCart.classList.contains(Styles.BUTTON_FULL_CART)) {
+        this.apiCart
+          .addProductByID(this.productData.id)
+          .then((lineItemId) => {
+            this.productMap.setProduct(this.productData.id, lineItemId);
+            buttonCart.classList.add(Styles.BUTTON_FULL_CART);
+            buttonCart.innerText = 'Added';
+          })
+          .catch((err) => console.log(err));
       }
     });
   }

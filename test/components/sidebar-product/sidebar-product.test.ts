@@ -31,7 +31,11 @@ describe('Sidebar product', () => {
     styles.forEach((style): void => {
       const element = document.body.querySelector(`.${style}`);
 
-      expect(element).not.toBeNull();
+      if (style === 'product__button--disabled' || style === 'product__button--visible') {
+        expect(element).toBeNull();
+      } else {
+        expect(element).not.toBeNull();
+      }
     });
   });
 });

@@ -33,6 +33,7 @@
     align-items: center;
     justify-content: flex-end;
     flex-wrap: wrap;
+    gap: 2rem;
   }
 
   &__user {
@@ -52,6 +53,33 @@
 
 .image {
   width: 100%;
+}
+
+.cart-icon-wrapper {
+  position: relative;
+
+  .product-counter {
+    position: absolute;
+    top: -0.3rem;
+    right: -0.3rem;
+    padding: 0.4rem;
+    min-width: 2rem;
+    min-height: 2rem;
+
+    display: none;
+    text-align: center;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    color: rgb(255, 255, 255);
+
+    background-color: rgb(29, 149, 39);
+    border-radius: 50%;
+
+    &--visible {
+      display: block;
+    }
+  }
 }
 
 .logo-wrapper {
@@ -103,6 +131,7 @@
   }
 
 
+
   .nav {
     &--open {
       right: 0;
@@ -143,6 +172,7 @@
       .nav-link:nth-child(3) {
         order: 2;
       }
+
       .nav-link:last-child {
         order: 0;
       }

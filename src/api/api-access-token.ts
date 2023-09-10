@@ -9,7 +9,10 @@ import {
   USER_CTP_CLIENT_ID,
   USER_CTP_CLIENT_SECRET,
   USER_CTP_SCOPES,
+  CTP_CLIENT_ID,
   CTP_AUTH_URL,
+  CTP_CLIENT_SECRET,
+  CTP_SCOPES,
   PROJECT_KEY,
 } from './api-env-constants';
 
@@ -30,6 +33,34 @@ export class APIAcceesToken {
     this.CTP_SCOPES = USER_CTP_SCOPES;
     this.CTP_AUTH_URL = CTP_AUTH_URL;
     this.PROJECT_KEY = PROJECT_KEY;
+  }
+
+  //добавил чтобы можно было получить discounts под пользователським scope не работает
+  public async getAdminAccessToken(): Promise<string> {
+    const url = `${CTP_AUTH_URL}/oauth/token`;
+    const credentials = `${CTP_CLIENT_ID}:${CTP_CLIENT_SECRET}`;
+    const authHeader = 'Basic ' + btoa(credentials);
+
+    const data = new URLSearchParams();
+    data.append('grant_type', 'client_credentials');
+    data.append('scope', `${CTP_SCOPES}`);
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: authHeader,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data,
+      });
+
+      const responseData = (await response.json()) as AccessTokenResponse;
+
+      return responseData.access_token;
+    } catch (error) {
+      throw error;
+    }
   }
 
   public async getAccessToken(): Promise<string> {
