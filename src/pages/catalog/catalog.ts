@@ -16,6 +16,8 @@ import { detectScrollDown } from '../../utils/detect_scroll_down';
 export default class Catalog extends TemplateView {
   private container: HTMLDivElement;
 
+  private loadingIndicator: HTMLDivElement;
+
   private prodContainer: HTMLDivElement;
 
   private cardContainer: HTMLDivElement;
@@ -63,6 +65,7 @@ export default class Catalog extends TemplateView {
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
+    this.loadingIndicator = this.createElement(TagNames.DIV, Styles.LOADING);
     this.prodContainer = this.createElement(TagNames.DIV, Styles.PROD_CONTAINER);
     this.cardContainer = this.createElement(TagNames.DIV, Styles.CARD_CONTAINER);
     this.sortContainer = this.createElement(TagNames.DIV, Styles.SORT_CONTAINER);
@@ -109,6 +112,7 @@ export default class Catalog extends TemplateView {
     const sortElement = this.selectSort.getElement();
 
     navbarBreadcrumb.updateFromPathname();
+    container.append(this.loadingIndicator);
 
     navSidebar.append(navigationElement);
     navSidebar.append(filterElement);
@@ -155,6 +159,7 @@ export default class Catalog extends TemplateView {
 
     if (this.isLoading) return; // Также стоит использовать этот флаг для индикатора загрузузки
     this.isLoading = true;
+    this.loadingIndicator.style.display = 'block';
 
     const CARD_DATA = await this.api.getProjectData(
       'product-projections',
@@ -163,6 +168,7 @@ export default class Catalog extends TemplateView {
       this.sortQueryOptions
     );
     this.isLoading = false;
+    this.loadingIndicator.style.display = 'none';
 
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
     if (CARD_DATA.limit) {

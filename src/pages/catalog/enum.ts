@@ -10,6 +10,7 @@ enum Styles {
   NAV_SIDEBAR = 'nav-sidebar',
   PROD_CONTAINER = 'product-container-catalog',
   SORT_CONTAINER = 'sort-search-container',
+  LOADING = 'loading-indicator',
 }
 
 export { TagNames, Styles };

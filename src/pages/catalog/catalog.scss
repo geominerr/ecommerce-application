@@ -28,7 +28,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	border-top: 0.1rem solid rgb(207, 207, 207);
+	border-top: 0.1rem solid #cfcfcf;
 	min-width: 30rem;
 }
 
@@ -45,6 +45,29 @@
 	justify-content: start;
 	flex-wrap: wrap;
 	flex: 1;
+}
+
+.loading-indicator {
+	left: 50%;
+	top: 50%;
+	z-index: -1;
+	display: block;
+	position: fixed;
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	border: 1px solid #cfcfcf;
+	border-top: 1px solid #212121;
+	animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media screen and (max-width: 800px) {
@@ -75,5 +98,5 @@
 	padding: 2rem;
 	font-size: 2rem;
 	font-family: 'Montserratt', sans-serif;
-	color: rgb(33, 33, 33);
+	color: #212121;
 }
