@@ -53,7 +53,7 @@ class CheckboxComponent extends BaseComponent {
     const { container, inputWrapper, label, input, hint } = this;
     const hintElement: HTMLElement = hint.getElement();
 
-    // input.setAttribute(Attributes.ID, id);
+    input.setAttribute(Attributes.ID, id);
     input.setAttribute(Attributes.TYPE, Attributes.TYPE_VALUE_CHECKBOX);
     label.setAttribute(Attributes.FOR, id);
     label.innerText = contentLabel;

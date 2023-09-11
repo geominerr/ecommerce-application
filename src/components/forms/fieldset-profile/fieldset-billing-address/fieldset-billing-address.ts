@@ -4,7 +4,7 @@ import InputBase from '../../input-profile/input-base/input-base';
 import InputPostal from '../../input-profile/input-postal/input-postal';
 import CheckboxComponent from '../../checkbox/checkbox';
 import { AddressCheck } from '../../../../utils/address_check';
-import { TagNames, Styles, Contents, Attributes } from './enum';
+import { TagNames, Styles, Contents } from './enum';
 import { OPTIONS } from './input-options';
 import './fieldset-billing.scss';
 //
@@ -40,6 +40,8 @@ class FieldsetBill extends BaseComponent {
 
   public checkboxBillDef: CheckboxComponent;
 
+  private static currentCheckboxId: number = 0;
+
   public addressId: string;
 
   constructor(validatorAdrress: AddressCheck, addressId: string) {
@@ -63,7 +65,10 @@ class FieldsetBill extends BaseComponent {
     this.inputStreet = new InputBase(validatorAdrress.streetCheck, OPTIONS[1]);
     this.inputStreetNumber = new InputBase(validatorAdrress.streetCheck, OPTIONS[2]);
     this.inputPostal = new InputPostal(validatorAdrress.postalCodeCheck, OPTIONS[3]);
-    this.checkboxBillDef = new CheckboxComponent(Contents.LABEL, Attributes.ID_VALUE_BILL_DEF);
+    this.checkboxBillDef = new CheckboxComponent(
+      Contents.LABEL,
+      `checkboxBill-${FieldsetBill.currentCheckboxId++}`
+    );
     this.select.setInputPostal(this.inputPostal);
     this.inputPostal.setSelectComponent(this.select);
 

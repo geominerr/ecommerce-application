@@ -15,6 +15,8 @@ class SelectComponentType extends BaseComponent {
 
   private disableOptionIndex: number = 0;
 
+  private static id: number = 0;
+
   private hintRequiredField: string = 'This is a required field';
 
   constructor() {
@@ -73,14 +75,16 @@ class SelectComponentType extends BaseComponent {
     const label: HTMLLabelElement = this.createElement(TagNames.LABEL, Styles.LABEL);
     const disabledOption: HTMLOptionElement = this.createElement(TagNames.OPTION, Styles.OPTION);
     const errorHintElement: HTMLElement = this.errorHint.getElement();
+    const inputId = `select-type-${SelectComponentType.id++}`;
 
     disabledOption.disabled = true;
     disabledOption.selected = true;
     disabledOption.hidden = true;
     disabledOption.innerText = disabledOptionText;
 
+    select.setAttribute(Attributes.ID, inputId);
     select.setAttribute(Attributes.NAME, TYPE.NAME);
-    label.setAttribute(Attributes.FOR, TYPE.ID);
+    label.setAttribute(Attributes.FOR, inputId);
     label.innerText = TYPE.LABEL_CONTENT;
 
     select.append(disabledOption);

@@ -17,6 +17,8 @@ class InputPostal extends BaseComponent {
 
   private validator: ValidationPostal;
 
+  private static idCounter: number = 0;
+
   private selectComponent: SelectComponentProfile | null = null;
 
   private hintRequiredField: string = 'This is a required field';
@@ -38,10 +40,12 @@ class InputPostal extends BaseComponent {
   private createComponent(options: InputOptions): void {
     const { container, label, input, errorHint } = this;
     const errorHintElement: HTMLElement = errorHint.getElement();
+    const inputId = `postal-${InputPostal.idCounter++}`;
 
+    input.setAttribute(Attributes.ID, inputId);
     input.setAttribute(Attributes.TYPE, options.TYPE);
     input.setAttribute(Attributes.NAME, options.NAME);
-    label.setAttribute(Attributes.FOR, options.ID);
+    label.setAttribute(Attributes.FOR, inputId);
     input.setAttribute(Attributes.PLACEHOLDER, options.PLACEHOLDER);
     label.innerText = options.CONTENT_LABEL;
 
