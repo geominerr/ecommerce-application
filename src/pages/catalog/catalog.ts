@@ -4,7 +4,7 @@ import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcru
 import Navbar from '../../components/navbar/navbar';
 import InputSearch from '../../components/search/search';
 import SelectSort from '../../components/select-sort/select-sort';
-import Filter from '../../components/product-card/filter/filter';
+import Filter from '../../components/filter/filter';
 import Buttons from './buttons/buttons';
 import { NOT_FOUND_PRODUCT } from './not-found-product';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
@@ -52,7 +52,13 @@ export default class Catalog extends TemplateView {
 
   private isLoading: boolean;
 
-  private cardsCount: number;
+  private limit: number;
+
+  private offsetCount: number;
+
+  private isProductsEnd: boolean;
+
+  private sortQueryOptions: string;
 
   constructor(api: APIProductActions) {
     super();
@@ -77,7 +83,10 @@ export default class Catalog extends TemplateView {
     );
     this.addButtonClickHandler();
     this.isLoading = false;
-    this.cardsCount = 0;
+    this.limit = 10;
+    this.offsetCount = 0;
+    this.isProductsEnd = false;
+    this.sortQueryOptions = '';
   }
 
   private documentTitle: string = 'Catalog';
@@ -118,15 +127,12 @@ export default class Catalog extends TemplateView {
 
   // Отсюда начинается загрузка
   private load(sortParams?: string[] | null): void {
-    // эта же проверка есть в filterByCategory()
-
-    // if (!window.location.href.split('/')[4]) {
-    //   // запускается, если просто catalog, без категории
-    //   this.makeCard();
-    // } else
+    // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
+    this.cardContainer.innerHTML = '';
+    this.offsetCount = 0;
+    this.isProductsEnd = false;
 
     // добавил сохранение параметров сортировки в памяти приложения, теперь при переходах будет приментся сортировка
-
     if (sortParams) {
       const typeSort = sortParams[0];
       const directionSort = sortParams[1];
@@ -140,17 +146,32 @@ export default class Catalog extends TemplateView {
     document.title = this.documentTitle;
   }
 
-  private async makeCard(searchParam: string = ''): Promise<void> {
+  private async makeCard(
+    searchParam: string = '',
+    limit: number = 10,
+    offset: number = 0
+  ): Promise<void> {
+    this.sortQueryOptions = searchParam;
+
     if (this.isLoading) return;
     this.isLoading = true;
 
-    const CARD_DATA = await this.api.getProjectData('product-projections', 10, 0, searchParam);
+    const CARD_DATA = await this.api.getProjectData(
+      'product-projections',
+      limit,
+      offset,
+      this.sortQueryOptions
+    );
     this.isLoading = false;
 
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
     if (CARD_DATA.limit) {
-      // чистим контейнер а иначе там будут сотни карточек при каждом новом клике по catalog link
-      this.cardContainer.innerHTML = '';
+      if (CARD_DATA.offset >= CARD_DATA.total - this.limit) {
+        /* Проверка используется для того, чтобы остановить
+        бесконечный скролл когда закончатся товары */
+        console.log('end: ', CARD_DATA.total);
+        this.isProductsEnd = true;
+      }
 
       if (CARD_DATA.results.length) {
         CARD_DATA.results.forEach((res) => {
@@ -219,9 +240,9 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
-  // Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
-  // Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов.
+  /* Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
+      Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
+      Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов. */
   private filterByRegistrationCountry(
     country: string[] = [''],
     min_price: string = this.default_min_price,
@@ -241,8 +262,9 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по минимальной цене. По умолчанию ноль.
-  // Принимает минимальную цену, максимальную цену и дополнительный параметр поиска/фильтра/сортирвки.
+  /* Фильтрует по минимальной цене. По умолчанию ноль.
+      Принимает минимальную цену, максимальную цену и
+      дополнительный параметр поиска/фильтра/сортирвки. */
   private filterByMinPrice(
     min_price: string = this.default_min_price,
     max_price: string = this.default_max_price,
@@ -305,6 +327,9 @@ export default class Catalog extends TemplateView {
       this.sortParams = [];
       this.sortParams.push(typeSort, directionSort);
 
+      // Очищаем контейнер перед отрисовкой
+      this.cardContainer.innerHTML = '';
+
       this.sort(typeSort, directionSort);
     });
 
@@ -345,8 +370,11 @@ export default class Catalog extends TemplateView {
     });
 
     detectScrollDown((bool) => {
-      this.cardsCount += 5;
-      console.log('scroll', bool, this.cardsCount);
+      console.log('scroll', bool, this.offsetCount, this.isProductsEnd);
+      if (!this.isProductsEnd) {
+        this.offsetCount += 10;
+        this.makeCard(this.sortQueryOptions, this.limit, this.offsetCount);
+      }
     }); // Проверяем скролл страницы вниз для бесконечнной загрузуи
   }
 

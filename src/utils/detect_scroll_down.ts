@@ -10,8 +10,8 @@ export function detectScrollDown(callback: (result: boolean) => void): void {
     if (scrollTop > lastScrollTop && !isCallbackPending) {
       if (
         // Сработает незадолго до конца страницы
-        scrollTop + windowHeight >= documentHeight - 200 &&
-        scrollTop + windowHeight <= documentHeight - 160
+        scrollTop + windowHeight >=
+        documentHeight - 200
       ) {
         isCallbackPending = true;
         callback(true);

@@ -1,4 +1,4 @@
-import BaseComponent from '../../base/base-component/base-component';
+import BaseComponent from '../base/base-component/base-component';
 import { Attributes, Styles, TagNames } from './enum';
 import './filter.scss';
 
