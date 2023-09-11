@@ -153,7 +153,7 @@ export default class Catalog extends TemplateView {
   ): Promise<void> {
     this.sortQueryOptions = searchParam;
 
-    if (this.isLoading) return;
+    if (this.isLoading) return; // Также стоит использовать этот флаг для индикатора загрузузки
     this.isLoading = true;
 
     const CARD_DATA = await this.api.getProjectData(
@@ -191,7 +191,8 @@ export default class Catalog extends TemplateView {
     return element;
   }
 
-  // Сортирует либо по алфавиту, либо по цене. Можно передать тип сортировки "price" или "name.en" направление "asc" и "desc".
+  /* Сортирует либо по алфавиту, либо по цене.
+      Можно передать тип сортировки "price" или "name.en" направление "asc" и "desc". */
   private sort(
     sort_type: string = '',
     direction: string = '',
@@ -217,8 +218,8 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
-  // Те же условия что и у предыдущего метода.
+  /* Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
+      Те же условия что и у предыдущего метода. */
   private filterByBrand(
     brand: string[] = [''],
     country: string[] = [''],
@@ -319,6 +320,11 @@ export default class Catalog extends TemplateView {
     filter: HTMLElement
   ): void {
     selectSort.addEventListener('change', () => {
+      // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
+      this.cardContainer.innerHTML = '';
+      this.offsetCount = 0;
+      this.isProductsEnd = false;
+
       const params: string[] = this.selectSort.getValue();
       const typeSort = params[0];
       const directionSort = params[1];
@@ -355,6 +361,11 @@ export default class Catalog extends TemplateView {
       }
 
       if (target instanceof HTMLButtonElement) {
+        // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
+        this.cardContainer.innerHTML = '';
+        this.offsetCount = 0;
+        this.isProductsEnd = false;
+
         // TODO: сделать так, чтобы работало при использовании сортировки.
         this.sort(
           this.sortParams[0],
