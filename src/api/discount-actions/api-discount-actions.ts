@@ -5,7 +5,7 @@ import { IResponseDiscount } from './api-discount-actions-interfaces';
 const API_ACCESS_TOKEN = new APIAcceesToken();
 
 class APIDiscountActions {
-  public async getDiscountCodes(): Promise<void> {
+  public async getDiscountCodes(): Promise<IResponseDiscount> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAdminAccessToken();
 
     if (!ACCESS_TOKEN) throw new Error('Failed to obtain access token.');
@@ -31,6 +31,7 @@ class APIDiscountActions {
       }
 
       console.log(discounts);
+      return discounts;
     } catch (error) {
       throw error;
     }

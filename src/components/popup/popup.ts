@@ -43,6 +43,20 @@ class Popup extends BaseComponent {
     this.removeStylesWithDelay();
   }
 
+  public showDiscountCodes(codes: string): void {
+    this.popupDescription.innerText = `Today's codes is:\n ${codes}`;
+    this.popupDescription.classList.add(Styles.POPUP_SUCCESS);
+    this.container.classList.add(Styles.POPUP_VISIBLE);
+  }
+
+  public showDiscountCodesEmpty(): void {
+    this.popupDescription.innerText = `No discount codes today!`;
+    this.popupDescription.classList.add(Styles.POPUP_ERROR);
+    this.container.classList.add(Styles.POPUP_VISIBLE);
+
+    this.removeStylesWithDelay();
+  }
+
   public showOldPassNotConfirmErrorMessage(): void {
     this.popupDescription.innerText = 'Sorry, we you entered the wrong old password!';
     this.popupDescription.classList.add(Styles.POPUP_ERROR);
