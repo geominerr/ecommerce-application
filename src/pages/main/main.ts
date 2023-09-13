@@ -46,35 +46,35 @@ export default class Main extends TemplateView {
         </div>
         <div class="main-advantages list">
             <div class="main-advantages prices">
-                <img src="../assets/img/advantages/pig.png" alt="none">
+                <img src="../assets/svg/advantages/pig.svg" alt="none">
                 <div class="main-advantages description">
                     low<br>
                     prices
                 </div>
             </div>
             <div class="main-advantages advice">
-                <img src="../assets/img/advantages/support.png" alt="none">
+                <img src="../assets/svg/advantages/support.svg" alt="none">
                 <div class="main-advantages description">
                     friendly<br>
                     advice
                 </div>
             </div>
             <div class="main-advantages delivery">
-                <img src="../assets/img/advantages/car.png" alt="none">
+                <img src="../assets/svg/advantages/car.svg" alt="none">
                 <div class="main-advantages description">
                     fast<br>
                     delivery
                 </div>
             </div>
             <div class="main-advantages package">
-                <img src="../assets/img/advantages/package.png" alt="none">
+                <img src="../assets/svg/advantages/package.svg" alt="none">
                 <div class="main-advantages description">
                     reliable<br>
                     packaging<br>
                 </div>
             </div>
             <div class="main-advantages ambient">
-                <img src="../assets/img/advantages/ambient.png" alt="none">
+                <img src="../assets/svg/advantages/ambient.svg" alt="none">
                 <div class="main-advantages description">
                     minimum<br>
                     percentage<br>
@@ -82,7 +82,7 @@ export default class Main extends TemplateView {
                 </div>
             </div>
             <div class="main-advantages loyalty">
-                <img src="../assets/img/advantages/loyalty.png" alt="none">
+                <img src="../assets/svg/advantages/loyalty.svg" alt="none">
                 <div class="main-advantages description">
                     discount<br>
                     of a regular<br>
