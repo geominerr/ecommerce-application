@@ -59,6 +59,14 @@ export class AddressCheck {
     return null;
   }
 
+  public promoCheck(street: string): string | null {
+    if (street.length < 1) {
+      return 'The promo code must be at least 1 character long.';
+    }
+    // Все ок? - null
+    return null;
+  }
+
   // eslint-disable-next-line max-lines-per-function
   public postalCodeCheck(code: string, country: string): string | null {
     let message: string = '';

@@ -10,10 +10,6 @@
   color: rgb(18, 18, 18);
 
   border-bottom: 0.1rem solid rgba(49, 49, 49, 0.3);
-
-  &:last-child {
-    border-bottom: none;
-  }
 }
 
 .line-item {
@@ -42,6 +38,7 @@
     padding-top: 0.5rem;
     font-size: 1.5rem;
     max-height: 2rem;
+    color: rgb(14, 14, 14);
   }
 
   &__actions-group {
@@ -69,7 +66,7 @@
     font-size: 1.5rem;
     color: rgb(202, 202, 202);
 
-    background-color: rgb(143, 72, 72);
+    background-color: rgb(14, 14, 14);
     border: 0.1rem solid rgb(14, 14, 14);
 
     transition: all 0.3s;
