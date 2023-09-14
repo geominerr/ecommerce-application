@@ -19,6 +19,8 @@ class SelectComponentProfile extends BaseComponent {
 
   private disableOptionIndex: number = 0;
 
+  private static id: number = 0;
+
   private hintRequiredField: string = 'This is a required field';
 
   constructor(type: AddresType) {
@@ -81,24 +83,28 @@ class SelectComponentProfile extends BaseComponent {
     const label: HTMLLabelElement = this.createElement(TagNames.LABEL, Styles.LABEL);
     const disabledOption: HTMLOptionElement = this.createElement(TagNames.OPTION, Styles.OPTION);
     const errorHintElement: HTMLElement = this.errorHint.getElement();
+    const inputId = `select-${SelectComponentProfile.id++}`;
 
     disabledOption.disabled = true;
     disabledOption.selected = true;
     disabledOption.hidden = true;
     disabledOption.innerText = disabledOptionText;
 
+    select.setAttribute(Attributes.ID, inputId);
     select.setAttribute(Attributes.NAME, SHIPPING_OPTIONS.NAME);
-    label.setAttribute(Attributes.FOR, SHIPPING_OPTIONS.ID);
+    label.setAttribute(Attributes.FOR, inputId);
     label.innerText = SHIPPING_OPTIONS.LABEL_CONTENT;
 
     if (type !== Address.SHIPPING) {
+      select.setAttribute(Attributes.ID, inputId);
       select.setAttribute(Attributes.NAME, BILLING_OPTIONS.NAME);
-      label.setAttribute(Attributes.FOR, BILLING_OPTIONS.ID);
+      label.setAttribute(Attributes.FOR, inputId);
       label.innerText = BILLING_OPTIONS.LABEL_CONTENT;
     }
     if (type !== Address.SHIPPING && type !== Address.BILLING) {
+      select.setAttribute(Attributes.ID, inputId);
       select.setAttribute(Attributes.NAME, NEW_ADDRESS.NAME);
-      label.setAttribute(Attributes.FOR, NEW_ADDRESS.ID);
+      label.setAttribute(Attributes.FOR, inputId);
       label.innerText = NEW_ADDRESS.LABEL_CONTENT;
     }
 

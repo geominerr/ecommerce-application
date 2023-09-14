@@ -29,13 +29,14 @@
 	}
 
 	&__promo-group {
-		width: 100%;
+		width: 15rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 2.2rem;
+		font-size: 2rem;
 		min-height: 4rem;
 		border: 0.2rem solid black;
+    cursor: pointer;
 	}
 
 	&__btn-group {
@@ -71,7 +72,7 @@
 		cursor: pointer;
 
 		&--clear {
-			background-color: rgb(143, 72, 72);
+			background-color: rgb(14, 14, 14);
 			border: 0.1rem solid rgb(143, 72, 72);
 		}
 

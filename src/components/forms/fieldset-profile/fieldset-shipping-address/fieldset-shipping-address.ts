@@ -4,7 +4,7 @@ import InputBase from '../../input-profile/input-base/input-base';
 import InputPostal from '../../input-profile/input-postal/input-postal';
 import CheckboxComponent from '../../checkbox/checkbox';
 import { AddressCheck } from '../../../../utils/address_check';
-import { TagNames, Styles, Contents, Attributes } from './enum';
+import { TagNames, Styles, Contents } from './enum';
 import { OPTIONS } from './input-options';
 import './fieldset-shipping.scss';
 
@@ -39,6 +39,8 @@ class FieldsetShip extends BaseComponent {
 
   public checkboxShipDef: CheckboxComponent;
 
+  private static currentCheckboxId: number = 0;
+
   public addressId: string;
 
   constructor(validator: AddressCheck, addressId: string) {
@@ -62,7 +64,10 @@ class FieldsetShip extends BaseComponent {
     this.inputCity = new InputBase(validator.cityCheck, OPTIONS[0]);
     this.inputStreet = new InputBase(validator.streetCheck, OPTIONS[1]);
     this.inputStreetNumber = new InputBase(validator.streetCheck, OPTIONS[2]);
-    this.checkboxShipDef = new CheckboxComponent(Contents.LABEL, Attributes.ID_VALUE_SHIP_DEF);
+    this.checkboxShipDef = new CheckboxComponent(
+      Contents.LABEL,
+      `checkboxShip-${FieldsetShip.currentCheckboxId++}`
+    );
     this.select.setInputPostal(this.inputPostal);
     this.inputPostal.setSelectComponent(this.select);
 

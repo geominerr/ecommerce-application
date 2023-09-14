@@ -61,7 +61,7 @@ class App {
     this.notFound = new NotFound();
     this.catalog = new Catalog(this.apiProducts);
     this.profile = new Profile(this.api, this.validatorEmail, this.validatorAddress);
-    this.cart = new Cart();
+    this.cart = new Cart(this.validatorAddress);
     this.router = new Router(
       this.main,
       this.authorization,

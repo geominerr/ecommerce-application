@@ -1,7 +1,10 @@
 import TemplateView from '../template-view/template-view';
 import APICart from '../../api/cart-actions/api-cart-actions';
+import APIDiscountActions from '../../api/discount-actions/api-discount-actions';
 import LineItem from './line-item/line-item';
 import EMPTY_CART from './empty-cart';
+import { AddressCheck } from '../../utils/address_check';
+import FieldsetPromo from '../../components/forms/fieldset-cart/fieldset-promo/fieldset-promo';
 import { converteResponseCartData } from '../../utils/response-converter/response-converter';
 import { TagNames, Styles, Content } from './enum';
 import './cart.scss';
@@ -27,13 +30,15 @@ export default class Cart extends TemplateView {
 
   private totalPriceDiscount: HTMLElement;
 
+  private fieldsetPromo: FieldsetPromo;
+
   private promoGroup: HTMLElement;
 
   private buttonGroup: HTMLElement;
 
   private callback: () => Promise<void>;
 
-  constructor() {
+  constructor(validatorAdrress: AddressCheck) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
     this.title = this.createElement(TagNames.H2, Styles.TITLE);
@@ -43,6 +48,7 @@ export default class Cart extends TemplateView {
     this.buttonBuy = this.createElement(TagNames.BUTTON, Styles.BTN);
     this.totalPrice = this.createElement(TagNames.P, Styles.PRICE);
     this.totalPriceDiscount = this.createElement(TagNames.P, Styles.DISCOUNT_PRICE);
+    this.fieldsetPromo = new FieldsetPromo(validatorAdrress);
     this.promoGroup = this.createPromoGroup();
     this.buttonGroup = this.createButtonGroup();
     this.callback = this.updateCart.bind(this);
@@ -50,12 +56,18 @@ export default class Cart extends TemplateView {
   }
 
   private createComponent(): void {
-    const { container, title, lineItemContainer, promoGroup, buttonGroup } = this;
+    const { container, title, lineItemContainer, promoGroup, fieldsetPromo, buttonGroup } = this;
 
+    const promoElement: HTMLElement = fieldsetPromo.getElement();
     title.innerText = Content.TITLE;
-    [title, lineItemContainer, promoGroup, buttonGroup].forEach((el) => container.append(el));
+    [title, lineItemContainer, promoGroup, promoElement, buttonGroup].forEach((el) =>
+      container.append(el)
+    );
 
     this.addClickHandler();
+    this.showPromo();
+    this.hidePromo();
+    this.applyCode();
   }
 
   public async getHtml(): Promise<HTMLElement> {
@@ -69,6 +81,49 @@ export default class Cart extends TemplateView {
 
   public setTitle(): void {
     document.title = this.documentTitle;
+  }
+
+  private showPromo(): void {
+    this.promoGroup.addEventListener('click', () => {
+      this.fieldsetPromo.showPromo();
+    });
+  }
+
+  private hidePromo(): void {
+    this.fieldsetPromo.buttonCancel.addEventListener('click', () => {
+      this.fieldsetPromo.hidePromo();
+      this.fieldsetPromo.clearPromo();
+    });
+  }
+
+  private applyCode(): void {
+    this.fieldsetPromo.buttonSave.addEventListener('click', async () => {
+      try {
+        if (this.fieldsetPromo && this.fieldsetPromo.isValidData()) {
+          const arrCodes: string[] = [];
+          const api = new APIDiscountActions();
+          const codes = await api.getDiscountCodes();
+          codes.results.forEach((code) => {
+            arrCodes.push(code.code);
+          });
+
+          const inputPromoValue = this.fieldsetPromo.getInputValues().promo;
+          if (arrCodes.includes(inputPromoValue)) {
+            this.apiCart
+              .addDicsount(inputPromoValue)
+              .then(() => this.updateCart())
+              .catch((err) => console.log(err));
+            this.fieldsetPromo.hidePromo();
+            this.fieldsetPromo.clearPromo();
+          } else {
+            console.log('такого промокода нет');
+            // тут нужно добавить hint или popup что такого промокода нет
+          }
+        }
+      } catch (error) {
+        console.error('Error applying promo code:', error);
+      }
+    });
   }
 
   private async updateCart(): Promise<void> {
@@ -159,15 +214,17 @@ export default class Cart extends TemplateView {
             .removeCart()
             .then(() => this.updateCart().catch((err) => console.log(err)))
             .catch((err) => console.log(err));
+          this.fieldsetPromo.hidePromo();
+          this.fieldsetPromo.clearPromo();
         }
 
-        if (target.classList.contains(Styles.BTN_ORDER)) {
-          // cейчас по клику make order добавляется дисконт code='max' :-)
-          this.apiCart
-            .addDicsount('max')
-            .then(() => this.updateCart())
-            .catch((err) => console.log(err));
-        }
+        // if (target.classList.contains(Styles.BTN_ORDER)) {
+        //   // cейчас по клику make order добавляется дисконт code='max' :-)
+        //   this.apiCart
+        //     .addDicsount('max')
+        //     .then(() => this.updateCart())
+        //     .catch((err) => console.log(err));
+        // }
       }
     });
   }
