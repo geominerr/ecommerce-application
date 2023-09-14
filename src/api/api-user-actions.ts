@@ -67,7 +67,6 @@ export class APIUserActions {
     anonymousCart?: { id: string; typeId: string }
   ): Promise<Customer> {
     const ACCESS_TOKEN = await API_ACCESS_TOKEN.getAccessToken();
-    console.log(ACCESS_TOKEN);
 
     const url = `${this.CTP_API_URL}/${this.CTP_PROJECT_KEY}/me/login`;
 

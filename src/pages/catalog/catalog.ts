@@ -129,23 +129,6 @@ export default class Catalog extends TemplateView {
     return container;
   }
 
-  // Отсюда начинается загрузка
-  private load(sortParams?: string[] | null): void {
-    // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
-    this.cardContainer.innerHTML = '';
-    this.offsetCount = 0;
-    this.isProductsEnd = false;
-
-    // добавил сохранение параметров сортировки в памяти приложения, теперь при переходах будет приментся сортировка
-    if (sortParams) {
-      const typeSort = sortParams[0];
-      const directionSort = sortParams[1];
-      this.sort(typeSort, directionSort);
-    } else {
-      this.filterByCategory();
-    }
-  }
-
   public setTitle(): void {
     document.title = this.documentTitle;
   }
@@ -175,7 +158,6 @@ export default class Catalog extends TemplateView {
       if (CARD_DATA.offset >= CARD_DATA.total - this.limit) {
         /* Проверка используется для того, чтобы остановить
         бесконечный скролл когда закончатся товары */
-        console.log('end: ', CARD_DATA.total);
         this.isProductsEnd = true;
       }
 
@@ -195,6 +177,23 @@ export default class Catalog extends TemplateView {
     element.classList.add(style);
 
     return element;
+  }
+
+  // Отсюда начинается загрузка
+  private load(sortParams?: string[] | null): void {
+    // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
+    this.cardContainer.innerHTML = '';
+    this.offsetCount = 0;
+    this.isProductsEnd = false;
+
+    // добавил сохранение параметров сортировки в памяти приложения, теперь при переходах будет приментся сортировка
+    if (sortParams) {
+      const typeSort = sortParams[0];
+      const directionSort = sortParams[1];
+      this.sort(typeSort, directionSort);
+    } else {
+      this.filterByCategory();
+    }
   }
 
   /* Сортирует либо по алфавиту, либо по цене.

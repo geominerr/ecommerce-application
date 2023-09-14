@@ -9,7 +9,6 @@ export class APIAnonToken {
   }
 
   // Метод получеает анонимный токен, обновляет, если просрочен.
-  // eslint-disable-next-line max-lines-per-function
   public async getAnon(): Promise<string> {
     const storageAnonymousToken = localStorage.getItem('anonymousAccessToken');
     const currentDate = new Date();
@@ -26,13 +25,6 @@ export class APIAnonToken {
         currentDate.getTime() + Number(anonymousTokenResponse.expires_in) * 1000;
 
       localStorage.setItem('anonymousTokenExpiration', String(tokenExpiration));
-
-      console.log(
-        'Получен свежий токен: ',
-        anonymousTokenResponse.access_token,
-        'Срок жизни: ',
-        anonymousTokenResponse.expires_in
-      );
       return anonymousTokenResponse.access_token;
     }
 
@@ -48,24 +40,9 @@ export class APIAnonToken {
           currentDate.getTime() + Number(refreshedTokenResponse.expires_in) * 1000;
 
         localStorage.setItem('anonymousTokenExpiration', String(tokenExpiration));
-
-        console.log(
-          'Вернулся обновленный токен: ',
-          refreshedTokenResponse.access_token,
-          'Срок жизни: ',
-          refreshedTokenResponse.expires_in
-        );
         return refreshedTokenResponse.access_token;
       }
     }
-
-    console.log(
-      'Токен вернулся из памяти: ',
-      storageAnonymousToken,
-      ' Обновится через:',
-      (Number(tokenExpirationDate) - currentDate.getTime()) / 1000,
-      'cек'
-    );
     return storageAnonymousToken;
   }
 }
