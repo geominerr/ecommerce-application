@@ -120,6 +120,7 @@ export default class Cart extends TemplateView {
             this.fieldsetPromo.clearPromo();
             this.popup.showPromoCodeSuccesMessage();
           } else {
+            // добавил popup о неуспешности применения скидки
             this.popup.showPromoCodeErrorMessage();
           }
         }
