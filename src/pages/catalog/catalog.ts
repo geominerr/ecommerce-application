@@ -386,11 +386,13 @@ export default class Catalog extends TemplateView {
       }
     });
 
-    detectScrollDown((bool) => {
-      console.log('scroll', bool, this.offsetCount, this.isProductsEnd);
-      if (!this.isProductsEnd) {
-        this.offsetCount += 10;
-        this.makeCard(this.sortQueryOptions, this.limit, this.offsetCount);
+    detectScrollDown(() => {
+      if (window.location.href.split('/').includes('catalog')) {
+        // Если мы на странице "catalog"
+        if (!this.isProductsEnd) {
+          this.offsetCount += 10;
+          this.makeCard(this.sortQueryOptions, this.limit, this.offsetCount);
+        }
       }
     }); // Проверяем скролл страницы вниз для бесконечнной загрузуи
   }
