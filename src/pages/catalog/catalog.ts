@@ -202,10 +202,10 @@ export default class Catalog extends TemplateView {
   private sort(
     sort_type: string = '',
     direction: string = '',
-    brand: string[] = [''],
-    country: string[] = [''],
-    min_price: string = this.default_min_price,
-    max_price = this.default_max_price,
+    brand: string[] = this.brands,
+    country: string[] = this.countries,
+    min_price: string = this.prices[0],
+    max_price = this.prices[1],
     additionalSortParam = ''
   ): void {
     if (!direction) {
@@ -316,6 +316,8 @@ export default class Catalog extends TemplateView {
 
   // Ищет по любой строке. регистронезависим.
   private search(search_string = ''): void {
+    this.cardContainer.innerHTML = '';
+    document.querySelectorAll('input').forEach((el) => (el.checked = false));
     this.makeCard(`text.en="${search_string}"`);
   }
 
@@ -342,7 +344,14 @@ export default class Catalog extends TemplateView {
       // Очищаем контейнер перед отрисовкой
       this.cardContainer.innerHTML = '';
 
-      this.sort(typeSort, directionSort);
+      this.sort(
+        typeSort,
+        directionSort,
+        this.brands,
+        this.countries,
+        this.prices[0],
+        this.prices[1]
+      );
     });
 
     inputSearch.addEventListener('change', (e: Event) => {
@@ -366,13 +375,15 @@ export default class Catalog extends TemplateView {
         this.sortParams = ['', ''];
       }
 
-      if (target instanceof HTMLButtonElement) {
+      if (
+        (target instanceof HTMLInputElement && target.type === 'checkbox') ||
+        target instanceof HTMLButtonElement
+      ) {
         // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
         this.cardContainer.innerHTML = '';
         this.offsetCount = 0;
         this.isProductsEnd = false;
 
-        // TODO: сделать так, чтобы работало при использовании сортировки.
         this.sort(
           this.sortParams[0],
           this.sortParams[1],
@@ -381,8 +392,6 @@ export default class Catalog extends TemplateView {
           this.prices[0],
           this.prices[1]
         );
-
-        filter.querySelectorAll('input').forEach((el) => (el.checked = false)); // Удаить, если будет сохранение чекбоксов в память
       }
     });
 
