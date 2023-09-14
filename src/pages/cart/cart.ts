@@ -76,7 +76,7 @@ export default class Cart extends TemplateView {
   public async getHtml(): Promise<HTMLElement> {
     // под капотом обновление все полей, которые могут изменятся, продукты, общая цена и тд и тп
     await this.updateCart()
-      .then(() => console.log('Ok'))
+      .then(() => console.log('Cart updated'))
       .catch((err) => console.log(err));
 
     return this.container;

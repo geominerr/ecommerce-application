@@ -35,6 +35,8 @@ class Filter extends BaseComponent {
 
   private maxPriceLabel: HTMLLabelElement;
 
+  private pricesApplyButton: HTMLButtonElement;
+
   private filterButton: HTMLButtonElement;
 
   constructor() {
@@ -42,6 +44,7 @@ class Filter extends BaseComponent {
     this.filterContainer = this.createElement(TagNames.DIV, Styles.CONTAINER);
     this.closeBtn = this.createElement(TagNames.DIV, Styles.CLOSE_BTN);
     this.filterButton = this.createElement(TagNames.BUTTON, Styles.BUTTON);
+    this.pricesApplyButton = this.createElement(TagNames.BUTTON, Styles.BUTTON);
     this.countryContainer = this.createElement(TagNames.DIV, Styles.COUNTRY_CONTAINER);
     this.brandContainer = this.createElement(TagNames.DIV, Styles.BRAND_CONTAINER);
     this.priceContainer = this.createElement(TagNames.DIV, Styles.PRICE_CONTAINER);
@@ -49,7 +52,7 @@ class Filter extends BaseComponent {
     // Чекбоксы для стран
     this.checkboxJapan = this.createCheckbox('Japan', 'Japan');
     this.checkboxUSA = this.createCheckbox('USA', 'USA');
-    this.checkboxBritain = this.createCheckbox('Great Britain', 'Great Britain');
+    this.checkboxBritain = this.createCheckbox('UK', 'Great Britain');
     this.checkboxGermany = this.createCheckbox('Germany', 'Germany');
 
     // Чекбоксы для брендов
@@ -153,8 +156,8 @@ class Filter extends BaseComponent {
     this.filterContainer.append(countryHeader);
     this.closeBtn.id = 'close-btn-filter';
     this.filterContainer.append(this.closeBtn);
-    this.filterButton.innerText = 'Apply filter';
-    this.filterButton.id = 'filter-btn';
+    this.filterButton.innerText = 'Reset filters';
+    this.filterButton.id = 'reset-btn';
     this.filterContainer.append(this.countryContainer);
 
     this.countryContainer.append(this.checkboxJapan);
@@ -180,9 +183,9 @@ class Filter extends BaseComponent {
     this.filterContainer.append(priceHeader);
     this.filterContainer.append(this.priceContainer);
 
-    this.priceContainer.append(this.minPriceLabel);
-    this.priceContainer.append(this.maxPriceLabel);
-
+    this.priceContainer.append(this.minPriceLabel, this.maxPriceLabel, this.pricesApplyButton);
+    this.pricesApplyButton.innerText = 'Apply prices';
+    this.pricesApplyButton.id = 'prices-btn';
     this.filterContainer.append(this.filterButton);
   }
 
