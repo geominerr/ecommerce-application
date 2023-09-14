@@ -3,8 +3,9 @@ import APICart from '../../api/cart-actions/api-cart-actions';
 import APIDiscountActions from '../../api/discount-actions/api-discount-actions';
 import LineItem from './line-item/line-item';
 import EMPTY_CART from './empty-cart';
-import { AddressCheck } from '../../utils/address_check';
 import FieldsetPromo from '../../components/forms/fieldset-cart/fieldset-promo/fieldset-promo';
+import { popup } from '../../components/popup/popup';
+import { AddressCheck } from '../../utils/address_check';
 import { converteResponseCartData } from '../../utils/response-converter/response-converter';
 import { TagNames, Styles, Content } from './enum';
 import './cart.scss';
@@ -35,6 +36,8 @@ export default class Cart extends TemplateView {
   private promoGroup: HTMLElement;
 
   private buttonGroup: HTMLElement;
+
+  private popup = popup;
 
   private callback: () => Promise<void>;
 
@@ -115,9 +118,9 @@ export default class Cart extends TemplateView {
               .catch((err) => console.log(err));
             this.fieldsetPromo.hidePromo();
             this.fieldsetPromo.clearPromo();
+            this.popup.showPromoCodeSuccesMessage();
           } else {
-            console.log('такого промокода нет');
-            // тут нужно добавить hint или popup что такого промокода нет
+            this.popup.showPromoCodeErrorMessage();
           }
         }
       } catch (error) {
@@ -189,9 +192,6 @@ export default class Cart extends TemplateView {
 
   private createPromoGroup(): HTMLElement {
     const container = this.createElement(TagNames.DIV, Styles.PROMO_GROUP);
-
-    // TO DO
-
     container.innerText = 'PromoCode';
     return container;
   }
@@ -217,14 +217,6 @@ export default class Cart extends TemplateView {
           this.fieldsetPromo.hidePromo();
           this.fieldsetPromo.clearPromo();
         }
-
-        // if (target.classList.contains(Styles.BTN_ORDER)) {
-        //   // cейчас по клику make order добавляется дисконт code='max' :-)
-        //   this.apiCart
-        //     .addDicsount('max')
-        //     .then(() => this.updateCart())
-        //     .catch((err) => console.log(err));
-        // }
       }
     });
   }

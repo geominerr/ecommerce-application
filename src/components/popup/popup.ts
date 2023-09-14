@@ -35,6 +35,22 @@ class Popup extends BaseComponent {
     this.removeStylesWithDelay();
   }
 
+  public showPromoCodeSuccesMessage(): void {
+    this.popupDescription.innerText = `Your promo code has been successfully applied!`;
+    this.popupDescription.classList.add(Styles.POPUP_SUCCESS);
+    this.container.classList.add(Styles.POPUP_VISIBLE);
+
+    this.removeStylesWithDelay();
+  }
+
+  public showPromoCodeErrorMessage(): void {
+    this.popupDescription.innerText = `There is no such promo code!`;
+    this.popupDescription.classList.add(Styles.POPUP_ERROR);
+    this.container.classList.add(Styles.POPUP_VISIBLE);
+
+    this.removeStylesWithDelay();
+  }
+
   public showChangePasswordMessage(): void {
     this.popupDescription.innerText = `You have successfully changed your password. Please login again!`;
     this.popupDescription.classList.add(Styles.POPUP_SUCCESS);
