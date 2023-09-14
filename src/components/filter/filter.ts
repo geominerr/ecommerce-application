@@ -52,7 +52,7 @@ class Filter extends BaseComponent {
     // Чекбоксы для стран
     this.checkboxJapan = this.createCheckbox('Japan', 'Japan');
     this.checkboxUSA = this.createCheckbox('USA', 'USA');
-    this.checkboxBritain = this.createCheckbox('Great Britain', 'Great Britain');
+    this.checkboxBritain = this.createCheckbox('UK', 'Great Britain');
     this.checkboxGermany = this.createCheckbox('Germany', 'Germany');
 
     // Чекбоксы для брендов
@@ -185,6 +185,7 @@ class Filter extends BaseComponent {
 
     this.priceContainer.append(this.minPriceLabel, this.maxPriceLabel, this.pricesApplyButton);
     this.pricesApplyButton.innerText = 'Apply prices';
+    this.pricesApplyButton.id = 'prices-btn';
     this.filterContainer.append(this.filterButton);
   }
 

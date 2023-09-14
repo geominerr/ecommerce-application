@@ -365,6 +365,7 @@ export default class Catalog extends TemplateView {
       }
     });
 
+    // eslint-disable-next-line max-lines-per-function
     filter.addEventListener('click', (e: Event) => {
       const { target } = e;
       this.countries = this.filter.getCountryValue();
@@ -377,7 +378,7 @@ export default class Catalog extends TemplateView {
 
       if (
         (target instanceof HTMLInputElement && target.type === 'checkbox') ||
-        target instanceof HTMLButtonElement
+        (target instanceof HTMLButtonElement && target.id === 'prices-btn')
       ) {
         // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
         this.cardContainer.innerHTML = '';
@@ -392,6 +393,19 @@ export default class Catalog extends TemplateView {
           this.prices[0],
           this.prices[1]
         );
+      }
+
+      if (target instanceof HTMLButtonElement && target.id === 'reset-btn') {
+        // Сбрасываем вообще все.
+        document.querySelectorAll('input').forEach((el) => (el.checked = false));
+        this.brands = [];
+        this.countries = [];
+        this.prices = [];
+        this.cardContainer.innerHTML = '';
+        // И загружаем, не забыв про сортировку.
+        this.sort(this.sortParams[0], this.sortParams[1]);
+        this.isProductsEnd = false;
+        this.offsetCount = 0;
       }
     });
 
