@@ -2,6 +2,7 @@ import BaseComponent from '../base/base-component/base-component';
 import { Attributes, Events, Styles, TagNames } from './enum';
 import { ILinkOptions } from './header-interfaces';
 import { LINKS_OPTIONS, LINKS_OPTIONS_USER, LOGO_OPTIONS } from './link-options';
+import { popupDiscount } from '../../utils/popup_discount-codes';
 import './header.scss';
 
 class Header extends BaseComponent {
@@ -56,11 +57,13 @@ class Header extends BaseComponent {
     const { navigation } = this;
     const productLinks: HTMLElement = this.createElement(TagNames.DIV, Styles.NAV_PRODUCTS);
     const userLinks: HTMLElement = this.createElement(TagNames.DIV, Styles.NAV_USER);
+    const dicounts: HTMLButtonElement = this.createElement(TagNames.BUTTON, Styles.PROMO_BUTTON);
+    dicounts.innerText = 'Discounts';
 
     LINKS_OPTIONS.forEach((option: ILinkOptions): void => {
       const link = this.createNavLink(option);
 
-      productLinks.append(link);
+      productLinks.append(dicounts, link);
     });
 
     LINKS_OPTIONS_USER.forEach((option: ILinkOptions): void => {
@@ -126,6 +129,10 @@ class Header extends BaseComponent {
           burgerIcon.classList.remove(Styles.BURGER_ACTIVE);
           navigation.classList.remove(Styles.NAV_OPEN);
         }
+      }
+
+      if (target instanceof HTMLButtonElement && target.classList[0] === 'promo-button') {
+        popupDiscount();
       }
     });
   }

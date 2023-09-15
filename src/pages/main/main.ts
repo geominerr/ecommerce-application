@@ -1,8 +1,14 @@
 /* eslint-disable max-lines-per-function */
 import TemplateView from '../template-view/template-view';
 import './main-page.scss';
+import { popupDiscount } from '../../utils/popup_discount-codes';
 
 export default class Main extends TemplateView {
+  constructor() {
+    super();
+    this.addHandler();
+  }
+
   private documentTitle: string = 'Main';
 
   public async getHtml(): Promise<string> {
@@ -10,7 +16,7 @@ export default class Main extends TemplateView {
     <div class="main-banner" style="background-image: url(../assets/img/banner.png)">
         <p>Your best <br>
         summer sound!</p>
-        <button class="learn-more"><a href="">Learn more</a></button>
+        <button class="learn-more"><a href="" class="get-discounts">Get discounts</a></button>
     </div>
     <div class="main-categories">
         <div class="main-headphones">
@@ -96,6 +102,19 @@ export default class Main extends TemplateView {
         to a holiday!</p>
     </div>
     `;
+  }
+
+  private addHandler(): void {
+    // Эта конструкция слушает кнопку на главной странице.
+    document.addEventListener('click', (e: Event): void => {
+      const { target } = e;
+      if (
+        target instanceof HTMLElement &&
+        (target.classList[0] === 'get-discounts' || target.classList[0] === 'learn-more')
+      ) {
+        popupDiscount();
+      }
+    });
   }
 
   public setTitle(): void {

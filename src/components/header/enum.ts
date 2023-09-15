@@ -5,6 +5,7 @@ enum TagNames {
   A = 'a',
   IMG = 'img',
   SPAN = 'span',
+  BUTTON = 'button',
 }
 
 enum Styles {
@@ -23,6 +24,7 @@ enum Styles {
   LOCK_BODY = 'lock',
   CART_WRAPPER = 'cart-icon-wrapper',
   PRODUCT_COUNTER = 'product-counter',
+  PROMO_BUTTON = 'promo-button',
 }
 
 enum Events {
