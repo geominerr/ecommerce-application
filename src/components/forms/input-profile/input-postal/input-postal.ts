@@ -67,6 +67,10 @@ class InputPostal extends BaseComponent {
     this.input.disabled = false;
   }
 
+  public clearValue(): void {
+    this.input.value = '';
+  }
+
   public setValue(value: string): void {
     // Set the value of the input element
     this.input.value = value;

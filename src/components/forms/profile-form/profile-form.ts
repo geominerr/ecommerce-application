@@ -254,6 +254,7 @@ class ProfileForm extends BaseComponent {
   private cancelPasswords(): void {
     this.fieldSetPassword.buttonCancel.addEventListener('click', () => {
       this.fieldSetPassword.hidePassword();
+      this.fieldSetPassword.clearPassword();
     });
   }
 

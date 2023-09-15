@@ -33,6 +33,10 @@ class SelectComponent extends BaseComponent {
     return this.container;
   }
 
+  public clearValue(): void {
+    this.select.selectedIndex = this.disableOptionIndex;
+  }
+
   public getCodeCountry(): string {
     if (this.select.selectedIndex === this.disableOptionIndex) {
       return '';

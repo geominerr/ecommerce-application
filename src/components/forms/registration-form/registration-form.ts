@@ -145,6 +145,7 @@ class RegistrationForm extends BaseComponent {
           .then(() => {
             this.api.loginUserPassFlow(email, password).then(() => {
               this.popup.showRegistrationMessage();
+              this.clearForm();
               this.redirectToMain();
             });
           })
@@ -267,6 +268,14 @@ class RegistrationForm extends BaseComponent {
       history.pushState(null, '', this.pathToAuthorization);
       this.router.router();
     }
+  }
+
+  private clearForm(): void {
+    this.fieldSetPersonal.clearInputs();
+    this.fieldSetShipping.clearInputs();
+    this.fieldSetBilling.clearInputs();
+    this.checkboxShipDef.getCheckboxElement().checked = false;
+    this.checkboxBillDef.getCheckboxElement().checked = false;
   }
 }
 
