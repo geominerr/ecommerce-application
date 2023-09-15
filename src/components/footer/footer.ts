@@ -39,6 +39,17 @@ class Footer extends BaseComponent {
     this.dicountCodeRequest.addEventListener('click', () => {
       popupDiscount();
     });
+
+    // Эта конструкция слушает кнопку на главной странице.
+    document.addEventListener('click', (e: Event): void => {
+      const { target } = e;
+      if (
+        target instanceof HTMLElement &&
+        (target.classList[0] === 'get-discounts' || target.classList[0] === 'learn-more')
+      ) {
+        popupDiscount();
+      }
+    });
   }
 }
 

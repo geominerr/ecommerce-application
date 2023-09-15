@@ -10,7 +10,7 @@ export default class Main extends TemplateView {
     <div class="main-banner" style="background-image: url(../assets/img/banner.png)">
         <p>Your best <br>
         summer sound!</p>
-        <button class="learn-more"><a href="/catalog">Learn more</a></button>
+        <button class="learn-more"><a href="" class="get-discounts">Get discounts</a></button>
     </div>
     <div class="main-categories">
         <div class="main-headphones">
