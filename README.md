@@ -16,7 +16,7 @@ Hello! Introducing our project called Music Universe. This is an online store se
 
 ### 🤚 BACKEND
 
-- Node.js, Express, Commercetools
+- Node.js, Commercetools
 
 ### Build
 
