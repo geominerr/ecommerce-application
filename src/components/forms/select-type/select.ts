@@ -54,6 +54,10 @@ class SelectComponentType extends BaseComponent {
     this.select.disabled = false;
   }
 
+  public clearValue(): void {
+    this.select.selectedIndex = this.disableOptionIndex;
+  }
+
   public getValue(): string {
     return this.select.options[this.select.selectedIndex].value;
   }

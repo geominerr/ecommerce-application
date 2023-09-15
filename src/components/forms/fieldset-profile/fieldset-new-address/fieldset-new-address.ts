@@ -107,10 +107,12 @@ class FieldsetNewAddress extends BaseComponent {
   }
 
   public clearInputs(): void {
-    this.inputCity.setValue('');
-    this.inputStreet.setValue('');
-    this.inputStreetNumber.setValue('');
-    this.inputPostal.setValue('');
+    this.select.clearValue();
+    this.selectType.clearValue();
+    this.inputCity.clearValue();
+    this.inputStreet.clearValue();
+    this.inputStreetNumber.clearValue();
+    this.inputPostal.clearValue();
   }
 
   private createComponent(): void {

@@ -109,6 +109,14 @@ class FieldsetBill extends BaseComponent {
         fieldsetElement.append(component.getElement())
     );
   }
+
+  public clearInputs(): void {
+    this.select.clearValue();
+    this.inputPostal.clearValue();
+    this.inputCity.clearValue();
+    this.inputStreet.clearValue();
+    this.inputStreetNumber.clearValue();
+  }
 }
 
 export default FieldsetBill;

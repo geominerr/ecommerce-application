@@ -54,6 +54,10 @@ class InputPostal extends BaseComponent {
     return this.container;
   }
 
+  public clearValue(): void {
+    this.input.value = '';
+  }
+
   public isValid(): boolean {
     if (!this.input.value) {
       return false;

@@ -81,6 +81,8 @@ class InputPassword extends BaseComponent {
 
   public clearValue(): void {
     this.input.value = '';
+    this.removePassHintStyles();
+    this.hideHintNotConfirmPass();
   }
 
   public getInputElement(): HTMLInputElement {
@@ -139,6 +141,10 @@ class InputPassword extends BaseComponent {
         input.type = Attributes.TYPE_VALUE_PASS;
       }
     });
+  }
+
+  private removePassHintStyles(): void {
+    this.errorHint.removePassHintStyles();
   }
 }
 

@@ -21,16 +21,6 @@ class APIDiscountActions {
       });
 
       const discounts: IResponseDiscount = await response.json();
-      // покажет discountCodeS которые можно применит
-      for (const discount of discounts.results) {
-        const name = discount.name.en;
-        const code = discount.code;
-        const id = discount.id;
-
-        console.log({ name, code, id });
-      }
-
-      console.log(discounts);
       return discounts;
     } catch (error) {
       throw error;

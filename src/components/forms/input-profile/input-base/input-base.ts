@@ -79,6 +79,10 @@ class InputBase extends BaseComponent {
     this.input.disabled = true;
   }
 
+  public clearValue(): void {
+    this.input.value = '';
+  }
+
   public inputEnable(): void {
     // Set the value of the input element
     this.input.disabled = false;

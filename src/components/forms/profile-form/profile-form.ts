@@ -254,6 +254,7 @@ class ProfileForm extends BaseComponent {
   private cancelPasswords(): void {
     this.fieldSetPassword.buttonCancel.addEventListener('click', () => {
       this.fieldSetPassword.hidePassword();
+      this.fieldSetPassword.clearPassword();
     });
   }
 
@@ -421,8 +422,7 @@ class ProfileForm extends BaseComponent {
         const { currentPassword, newPassword } = this.takePasswordValues();
         await api
           .changeUserPassword(currentPassword, newPassword)
-          .then((data) => {
-            console.log(data);
+          .then(() => {
             this.popup.showChangePasswordMessage();
             this.fieldSetPassword.clearPassword();
             this.fieldSetPassword.hidePassword();
