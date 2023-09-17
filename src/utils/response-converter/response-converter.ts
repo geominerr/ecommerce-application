@@ -148,6 +148,7 @@ function converteResponseCartData(response: IResponseCart): ICart {
 
 function extractEntries(response: IResponseCart): [string, string][] | undefined {
   const lineItems = response?.lineItems;
+  // проверяем есть lineItems
   if (lineItems) {
     return lineItems.map((lineItem) => [lineItem.productId, lineItem.id]);
   }

@@ -148,7 +148,6 @@ export class APIUserActions {
           this.updateLocalCartData(ACCESS_TOKEN, newIdCart, newVersion);
         }
 
-        // !!! создаем новые корзину и обновляем map !!!
         APICart.setStartStateMap();
 
         return data.customer;
