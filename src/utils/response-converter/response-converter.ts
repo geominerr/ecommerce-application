@@ -146,10 +146,11 @@ function converteResponseCartData(response: IResponseCart): ICart {
   };
 }
 
-function extractEntries(response: IResponseCart): [string, string][] {
+function extractEntries(response: IResponseCart): [string, string][] | undefined {
   const lineItems = response?.lineItems;
-
-  return lineItems.map((lineItem) => [lineItem.productId, lineItem.id]);
+  if (lineItems) {
+    return lineItems.map((lineItem) => [lineItem.productId, lineItem.id]);
+  }
 }
 
 function extractlineItemID(response: IResponseCart, productId: string): string {

@@ -358,7 +358,7 @@ class APICartActions {
   public async setStartStateMap(): Promise<void> {
     const localCartData = localStorage.getItem(this.storageKey);
 
-    if (!localCartData) {
+    if (!localCartData && !localStorage.getItem(this.storageKeyAccessToken)) {
       return;
     }
 

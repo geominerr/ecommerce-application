@@ -142,14 +142,14 @@ export class APIUserActions {
         this.saveTokensToLocalStorage(ACCESS_TOKEN);
 
         // проверка, если в LS нет корзины то мы ее не прокидывали при авторизации значит и нет в ответе cart.id
-        if (this.isHasLocalCartData()) {
+        if (this.isHasLocalCartData() || data.cart) {
           const newIdCart = data?.cart?.id;
           const newVersion = data?.cart?.version;
           this.updateLocalCartData(ACCESS_TOKEN, newIdCart, newVersion);
         }
 
         // !!! создаем новые корзину и обновляем map !!!
-        APICart.getCart();
+        APICart.setStartStateMap();
 
         return data.customer;
       } else {
@@ -736,16 +736,13 @@ export class APIUserActions {
   }
 
   private updateLocalCartData(customerToken: string, id: string, version: number): void {
-    const localData = localStorage.getItem(this.storageKeyCart);
+    const cartData: ICartLocalData = {
+      anonymousId: '',
+      customerToken: customerToken,
+      id: id,
+      version: version,
+    };
 
-    if (localData) {
-      const cartData: ICartLocalData = JSON.parse(localData);
-      cartData.anonymousId = '';
-      cartData.customerToken = customerToken;
-      cartData.id = id;
-      cartData.version = version;
-
-      localStorage.setItem(this.storageKeyCart, JSON.stringify(cartData));
-    }
+    localStorage.setItem(this.storageKeyCart, JSON.stringify(cartData));
   }
 }
