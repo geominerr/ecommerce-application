@@ -5,6 +5,10 @@ import {
   IProductAttribute,
   ProductData,
   RawProductData,
+  IResponseCart,
+  ICart,
+  ILineItem,
+  ICartProduct,
 } from './response-converter-interfaces';
 
 function normalizeAttributeName(name: string): string {
@@ -82,5 +86,88 @@ function transform(data: RawProductData): ProductData {
   return transformed;
 }
 
+function converteLineItem(lineItem: ILineItem): ICartProduct {
+  const productId = lineItem?.productId;
+  const lineItemId = lineItem?.id;
+  const name = lineItem?.name?.en;
+  const imageUrl = lineItem?.variant?.images[0]?.url;
+  const quantity = lineItem.quantity;
+  const priceNumber = lineItem?.price?.value?.centAmount;
+  const discountedPriceNumber = lineItem?.price?.discounted?.value?.centAmount;
+  let price = `€ ${(priceNumber / 100).toFixed(2)}`;
+  if (discountedPriceNumber) {
+    price = `€ ${(discountedPriceNumber / 100).toFixed(2)}`;
+  }
+  const discountPriceNumber = lineItem?.discountedPrice?.value?.centAmount;
+  let totalPrice = `€ ${(lineItem?.totalPrice?.centAmount / 100).toFixed(2)}`;
+  let discountPrice = '';
+  let totalDiscountedPrice = '';
+  // totalDiscountPrice (если используется скидка) === totalPrice  в теле ответа....
+  // если скидки нет то и discountPriceNumber тоже не будет...
+  if (discountPriceNumber) {
+    totalDiscountedPrice = totalPrice;
+    discountPrice = `€ ${(discountPriceNumber / 100).toFixed(2)}`;
+    // не нашел totalPrice без скидки, если используется промо, поэтому считаем сами)
+    totalPrice = `€ ${((priceNumber * quantity) / 100).toFixed(2)}`;
+    if (discountedPriceNumber) {
+      totalPrice = `€ ${((discountedPriceNumber * quantity) / 100).toFixed(2)}`;
+    }
+  }
+
+  return {
+    productId,
+    lineItemId,
+    name,
+    imageUrl,
+    quantity,
+    price,
+    totalPrice,
+    discountPrice,
+    totalDiscountedPrice,
+  };
+}
+
+function converteResponseCartData(response: IResponseCart): ICart {
+  const id = response?.id;
+  const totalPrice = `€ ${(response?.totalPrice?.centAmount / 100)?.toFixed(2)}`;
+  const totalProducts = response?.totalLineItemQuantity;
+  // может быть пустой массив
+  let products: ICartProduct[] = [];
+
+  if (response?.lineItems?.length) {
+    products = response?.lineItems?.map((lineItem) => converteLineItem(lineItem));
+  }
+
+  return {
+    id: id,
+    products: products,
+    totalPrice: totalPrice,
+    totalProducts: totalProducts,
+  };
+}
+
+function extractEntries(response: IResponseCart): [string, string][] | undefined {
+  const lineItems = response?.lineItems;
+  // проверяем есть lineItems
+  if (lineItems) {
+    return lineItems.map((lineItem) => [lineItem.productId, lineItem.id]);
+  }
+}
+
+function extractlineItemID(response: IResponseCart, productId: string): string {
+  const lineItems = response?.lineItems;
+  let lineItemId = '';
+
+  if (lineItems) {
+    lineItems.forEach((lineItem) => {
+      if (lineItem?.productId === productId) {
+        lineItemId = lineItem.id;
+      }
+    });
+  }
+
+  return lineItemId;
+}
+
 export default converteResponseData;
-export { transform };
+export { transform, converteResponseCartData, extractlineItemID, extractEntries };

@@ -66,6 +66,10 @@ class InputBase extends BaseComponent {
     return this.input.value;
   }
 
+  public clearValue(): void {
+    this.input.value = '';
+  }
+
   public showHintRequiredFieldIsEmpty(): void {
     if (!this.input.value) {
       this.input.classList.add(Styles.INPUT_ERROR);

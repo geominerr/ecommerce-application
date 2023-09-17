@@ -20,6 +20,7 @@ enum Events {
 enum Address {
   BILLING = 'billing',
   SHIPPING = 'shipping',
+  NEW_ADDRESS = 'new',
 }
 
 enum Attributes {

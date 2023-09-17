@@ -51,11 +51,12 @@ class ErrorHint extends BaseComponent {
     this.element.classList.remove(Styles.VISIBLE_WARNING);
   }
 
-  private removePassHintStyles(): void {
+  public removePassHintStyles(): void {
     this.element.classList.remove(
       Styles.VISIBLE_PASS_WEAK,
       Styles.VISIBLE_PASS_MEDIUM,
-      Styles.VISIBLE_PASS_STRONG
+      Styles.VISIBLE_PASS_STRONG,
+      Styles.VISIBLE
     );
   }
 }

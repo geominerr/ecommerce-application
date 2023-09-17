@@ -16,6 +16,8 @@ class InputBase extends BaseComponent {
 
   private validator: ValidationFunction;
 
+  private static id: number = 0;
+
   private hintRequiredField: string = 'This is a required field';
 
   private hintUserNotFound: string = 'Invalid email or password. Please try again!';
@@ -38,10 +40,12 @@ class InputBase extends BaseComponent {
   private createComponent(options: InputOptions): void {
     const { container, label, input, errorHint } = this;
     const errorHintElement: HTMLElement = errorHint.getElement();
+    const inputId = `input-${InputBase.id++}`;
 
+    input.setAttribute(Attributes.ID, inputId);
     input.setAttribute(Attributes.TYPE, options.TYPE);
     input.setAttribute(Attributes.NAME, options.NAME);
-    label.setAttribute(Attributes.FOR, options.ID);
+    label.setAttribute(Attributes.FOR, inputId);
     input.setAttribute(Attributes.PLACEHOLDER, options.PLACEHOLDER);
     label.innerText = options.CONTENT_LABEL;
 
@@ -73,6 +77,10 @@ class InputBase extends BaseComponent {
   public inputDisable(): void {
     // Set the value of the input element
     this.input.disabled = true;
+  }
+
+  public clearValue(): void {
+    this.input.value = '';
   }
 
   public inputEnable(): void {

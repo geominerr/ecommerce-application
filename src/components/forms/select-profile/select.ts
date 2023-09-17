@@ -3,7 +3,7 @@ import ErrorHint from '../error-hint/error-hint';
 import InputPostal from '../input-profile/input-postal/input-postal';
 import { Address, Attributes, Events, Styles, TagNames } from './enum';
 import { AddresType } from './select-interfaces';
-import { COUNTRIES, BILLING_OPTIONS, SHIPPING_OPTIONS } from './select-options';
+import { COUNTRIES, BILLING_OPTIONS, SHIPPING_OPTIONS, NEW_ADDRESS } from './select-options';
 import './select.scss';
 
 class SelectComponentProfile extends BaseComponent {
@@ -18,6 +18,8 @@ class SelectComponentProfile extends BaseComponent {
   private disabledOptionText: string = 'Select country';
 
   private disableOptionIndex: number = 0;
+
+  private static id: number = 0;
 
   private hintRequiredField: string = 'This is a required field';
 
@@ -51,6 +53,15 @@ class SelectComponentProfile extends BaseComponent {
     this.select.disabled = true;
   }
 
+  public inputEnable(): void {
+    // Set the value of the input element
+    this.select.disabled = false;
+  }
+
+  public clearValue(): void {
+    this.select.selectedIndex = this.disableOptionIndex;
+  }
+
   public getValue(): string {
     return this.select.options[this.select.selectedIndex].value;
   }
@@ -70,25 +81,35 @@ class SelectComponentProfile extends BaseComponent {
     }
   }
 
+  // eslint-disable-next-line max-lines-per-function
   private createComponent(type: AddresType): void {
     const { container, select, disabledOptionText } = this;
     const label: HTMLLabelElement = this.createElement(TagNames.LABEL, Styles.LABEL);
     const disabledOption: HTMLOptionElement = this.createElement(TagNames.OPTION, Styles.OPTION);
     const errorHintElement: HTMLElement = this.errorHint.getElement();
+    const inputId = `select-${SelectComponentProfile.id++}`;
 
     disabledOption.disabled = true;
     disabledOption.selected = true;
     disabledOption.hidden = true;
     disabledOption.innerText = disabledOptionText;
 
+    select.setAttribute(Attributes.ID, inputId);
     select.setAttribute(Attributes.NAME, SHIPPING_OPTIONS.NAME);
-    label.setAttribute(Attributes.FOR, SHIPPING_OPTIONS.ID);
+    label.setAttribute(Attributes.FOR, inputId);
     label.innerText = SHIPPING_OPTIONS.LABEL_CONTENT;
 
     if (type !== Address.SHIPPING) {
+      select.setAttribute(Attributes.ID, inputId);
       select.setAttribute(Attributes.NAME, BILLING_OPTIONS.NAME);
-      label.setAttribute(Attributes.FOR, BILLING_OPTIONS.ID);
+      label.setAttribute(Attributes.FOR, inputId);
       label.innerText = BILLING_OPTIONS.LABEL_CONTENT;
+    }
+    if (type !== Address.SHIPPING && type !== Address.BILLING) {
+      select.setAttribute(Attributes.ID, inputId);
+      select.setAttribute(Attributes.NAME, NEW_ADDRESS.NAME);
+      label.setAttribute(Attributes.FOR, inputId);
+      label.innerText = NEW_ADDRESS.LABEL_CONTENT;
     }
 
     select.append(disabledOption);

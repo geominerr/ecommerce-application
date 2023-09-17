@@ -4,16 +4,19 @@ import NavbarBreadcrumb from '../../components/navbar-breadcrumb/navbar-breadcru
 import Navbar from '../../components/navbar/navbar';
 import InputSearch from '../../components/search/search';
 import SelectSort from '../../components/select-sort/select-sort';
-import Filter from '../../components/product-card/filter/filter';
+import Filter from '../../components/filter/filter';
 import Buttons from './buttons/buttons';
 import { NOT_FOUND_PRODUCT } from './not-found-product';
 import { APIProductActions } from '../../api/product-actions/api-product-actions';
 import { transform } from '../../utils/response-converter/response-converter';
 import { TagNames, Styles } from './enum';
 import './catalog.scss';
+import { detectScrollDown } from '../../utils/detect_scroll_down';
 
 export default class Catalog extends TemplateView {
   private container: HTMLDivElement;
+
+  private loadingIndicator: HTMLDivElement;
 
   private prodContainer: HTMLDivElement;
 
@@ -49,9 +52,20 @@ export default class Catalog extends TemplateView {
 
   private prices: string[] = [];
 
+  private isLoading: boolean;
+
+  private limit: number;
+
+  private offsetCount: number;
+
+  private isProductsEnd: boolean;
+
+  private sortQueryOptions: string;
+
   constructor(api: APIProductActions) {
     super();
     this.container = this.createElement(TagNames.DIV, Styles.CATALOG_CONTENT);
+    this.loadingIndicator = this.createElement(TagNames.DIV, Styles.LOADING);
     this.prodContainer = this.createElement(TagNames.DIV, Styles.PROD_CONTAINER);
     this.cardContainer = this.createElement(TagNames.DIV, Styles.CARD_CONTAINER);
     this.sortContainer = this.createElement(TagNames.DIV, Styles.SORT_CONTAINER);
@@ -71,6 +85,11 @@ export default class Catalog extends TemplateView {
       this.filter.getElement()
     );
     this.addButtonClickHandler();
+    this.isLoading = false;
+    this.limit = 10;
+    this.offsetCount = 0;
+    this.isProductsEnd = false;
+    this.sortQueryOptions = '';
   }
 
   private documentTitle: string = 'Catalog';
@@ -93,6 +112,7 @@ export default class Catalog extends TemplateView {
     const sortElement = this.selectSort.getElement();
 
     navbarBreadcrumb.updateFromPathname();
+    container.append(this.loadingIndicator);
 
     navSidebar.append(navigationElement);
     navSidebar.append(filterElement);
@@ -109,37 +129,37 @@ export default class Catalog extends TemplateView {
     return container;
   }
 
-  // Отсюда начинается загрузка
-  private load(sortParams?: string[] | null): void {
-    // эта же проверка есть в filterByCategory()
-
-    // if (!window.location.href.split('/')[4]) {
-    //   // запускается, если просто catalog, без категории
-    //   this.makeCard();
-    // } else
-
-    // добавил сохранение параметров сортировки в памяти приложения, теперь при переходах будет приментся сортировка
-
-    if (sortParams) {
-      const typeSort = sortParams[0];
-      const directionSort = sortParams[1];
-      this.sort(typeSort, directionSort);
-    } else {
-      this.filterByCategory();
-    }
-  }
-
   public setTitle(): void {
     document.title = this.documentTitle;
   }
 
-  private async makeCard(searchParam: string = ''): Promise<void> {
-    const CARD_DATA = await this.api.getProjectData('product-projections', 40, 0, searchParam);
+  private async makeCard(
+    searchParam: string = '',
+    limit: number = 10,
+    offset: number = 0
+  ): Promise<void> {
+    this.sortQueryOptions = searchParam;
+
+    if (this.isLoading) return; // Также стоит использовать этот флаг для индикатора загрузузки
+    this.isLoading = true;
+    this.loadingIndicator.style.display = 'block';
+
+    const CARD_DATA = await this.api.getProjectData(
+      'product-projections',
+      limit,
+      offset,
+      this.sortQueryOptions
+    );
+    this.isLoading = false;
+    this.loadingIndicator.style.display = 'none';
 
     // лучше проверить прилетела ли дата,чтобы приложение не крашнуть на undefined/null.forEach()
     if (CARD_DATA.limit) {
-      // чистим контейнер а иначе там будут сотни карточек при каждом новом клике по catalog link
-      this.cardContainer.innerHTML = '';
+      if (CARD_DATA.offset >= CARD_DATA.total - this.limit) {
+        /* Проверка используется для того, чтобы остановить
+        бесконечный скролл когда закончатся товары */
+        this.isProductsEnd = true;
+      }
 
       if (CARD_DATA.results.length) {
         CARD_DATA.results.forEach((res) => {
@@ -159,14 +179,32 @@ export default class Catalog extends TemplateView {
     return element;
   }
 
-  // Сортирует либо по алфавиту, либо по цене. Можно передать тип сортировки "price" или "name.en" направление "asc" и "desc".
+  // Отсюда начинается загрузка
+  private load(sortParams?: string[] | null): void {
+    // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
+    this.cardContainer.innerHTML = '';
+    this.offsetCount = 0;
+    this.isProductsEnd = false;
+
+    // добавил сохранение параметров сортировки в памяти приложения, теперь при переходах будет приментся сортировка
+    if (sortParams) {
+      const typeSort = sortParams[0];
+      const directionSort = sortParams[1];
+      this.sort(typeSort, directionSort);
+    } else {
+      this.filterByCategory();
+    }
+  }
+
+  /* Сортирует либо по алфавиту, либо по цене.
+      Можно передать тип сортировки "price" или "name.en" направление "asc" и "desc". */
   private sort(
     sort_type: string = '',
     direction: string = '',
-    brand: string[] = [''],
-    country: string[] = [''],
-    min_price: string = this.default_min_price,
-    max_price = this.default_max_price,
+    brand: string[] = this.brands,
+    country: string[] = this.countries,
+    min_price: string = this.prices[0],
+    max_price = this.prices[1],
     additionalSortParam = ''
   ): void {
     if (!direction) {
@@ -185,8 +223,8 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
-  // Те же условия что и у предыдущего метода.
+  /* Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
+      Те же условия что и у предыдущего метода. */
   private filterByBrand(
     brand: string[] = [''],
     country: string[] = [''],
@@ -208,9 +246,9 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
-  // Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
-  // Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов.
+  /* Фильтрует по стране бренда. По умолчанию массив с пустой строкой.
+      Вернет только те товавры, у которых есть атрибут страны. - Ключ "exists".
+      Стоит позаботиться, чтобы у всех товаров было несколько общих атрибутов. */
   private filterByRegistrationCountry(
     country: string[] = [''],
     min_price: string = this.default_min_price,
@@ -230,8 +268,9 @@ export default class Catalog extends TemplateView {
     );
   }
 
-  // Фильтрует по минимальной цене. По умолчанию ноль.
-  // Принимает минимальную цену, максимальную цену и дополнительный параметр поиска/фильтра/сортирвки.
+  /* Фильтрует по минимальной цене. По умолчанию ноль.
+      Принимает минимальную цену, максимальную цену и
+      дополнительный параметр поиска/фильтра/сортирвки. */
   private filterByMinPrice(
     min_price: string = this.default_min_price,
     max_price: string = this.default_max_price,
@@ -276,6 +315,8 @@ export default class Catalog extends TemplateView {
 
   // Ищет по любой строке. регистронезависим.
   private search(search_string = ''): void {
+    this.cardContainer.innerHTML = '';
+    document.querySelectorAll('input').forEach((el) => (el.checked = false));
     this.makeCard(`text.en="${search_string}"`);
   }
 
@@ -286,6 +327,11 @@ export default class Catalog extends TemplateView {
     filter: HTMLElement
   ): void {
     selectSort.addEventListener('change', () => {
+      // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
+      this.cardContainer.innerHTML = '';
+      this.offsetCount = 0;
+      this.isProductsEnd = false;
+
       const params: string[] = this.selectSort.getValue();
       const typeSort = params[0];
       const directionSort = params[1];
@@ -294,7 +340,17 @@ export default class Catalog extends TemplateView {
       this.sortParams = [];
       this.sortParams.push(typeSort, directionSort);
 
-      this.sort(typeSort, directionSort);
+      // Очищаем контейнер перед отрисовкой
+      this.cardContainer.innerHTML = '';
+
+      this.sort(
+        typeSort,
+        directionSort,
+        this.brands,
+        this.countries,
+        this.prices[0],
+        this.prices[1]
+      );
     });
 
     inputSearch.addEventListener('change', (e: Event) => {
@@ -308,6 +364,7 @@ export default class Catalog extends TemplateView {
       }
     });
 
+    // eslint-disable-next-line max-lines-per-function
     filter.addEventListener('click', (e: Event) => {
       const { target } = e;
       this.countries = this.filter.getCountryValue();
@@ -318,8 +375,15 @@ export default class Catalog extends TemplateView {
         this.sortParams = ['', ''];
       }
 
-      if (target instanceof HTMLButtonElement) {
-        // TODO: сделать так, чтобы работало при использовании сортировки.
+      if (
+        (target instanceof HTMLInputElement && target.type === 'checkbox') ||
+        (target instanceof HTMLButtonElement && target.id === 'prices-btn')
+      ) {
+        // Очищаем контейнер перед отрисовкой и сбрасывваем ограничение
+        this.cardContainer.innerHTML = '';
+        this.offsetCount = 0;
+        this.isProductsEnd = false;
+
         this.sort(
           this.sortParams[0],
           this.sortParams[1],
@@ -328,10 +392,31 @@ export default class Catalog extends TemplateView {
           this.prices[0],
           this.prices[1]
         );
+      }
 
-        filter.querySelectorAll('input').forEach((el) => (el.checked = false)); // Удаить, если будет сохранение чекбоксов в память
+      if (target instanceof HTMLButtonElement && target.id === 'reset-btn') {
+        // Сбрасываем вообще все.
+        document.querySelectorAll('input').forEach((el) => (el.checked = false));
+        this.brands = [];
+        this.countries = [];
+        this.prices = [];
+        this.cardContainer.innerHTML = '';
+        // И загружаем, не забыв про сортировку.
+        this.sort(this.sortParams[0], this.sortParams[1]);
+        this.isProductsEnd = false;
+        this.offsetCount = 0;
       }
     });
+
+    detectScrollDown(() => {
+      if (window.location.href.split('/').includes('catalog')) {
+        // Если мы на странице "catalog"
+        if (!this.isProductsEnd) {
+          this.offsetCount += 10;
+          this.makeCard(this.sortQueryOptions, this.limit, this.offsetCount);
+        }
+      }
+    }); // Проверяем скролл страницы вниз для бесконечнной загрузуи
   }
 
   private addButtonClickHandler(): void {

@@ -94,6 +94,15 @@ class FieldsetPersonal extends BaseComponent {
     return isValid;
   }
 
+  public clearInputs(): void {
+    this.inputMail.clearValue();
+    this.inputFirstName.clearValue();
+    this.inputLastName.clearValue();
+    this.inputDateBirth.clearValue();
+    this.inputPassword.clearValue();
+    this.inputPasswordRepeat.clearValue();
+  }
+
   private createComponent(): void {
     const {
       fieldsetElement,

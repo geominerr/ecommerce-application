@@ -5,6 +5,7 @@ enum TagNames {
   A = 'a',
   IMG = 'img',
   SPAN = 'span',
+  BUTTON = 'button',
 }
 
 enum Styles {
@@ -21,6 +22,9 @@ enum Styles {
   BURGER_LINE = 'burger-icon__line',
   IMAGE = 'img',
   LOCK_BODY = 'lock',
+  CART_WRAPPER = 'cart-icon-wrapper',
+  PRODUCT_COUNTER = 'product-counter',
+  PROMO_BUTTON = 'promo-button',
 }
 
 enum Events {

@@ -21,6 +21,7 @@ enum Styles {
   PRICE_DISABLED = 'card__price--disabled',
   DESCRIPTION = 'card__description',
   BUTTON_CART = 'card__button-cart',
+  BUTTON_FULL_CART = 'card__button-cart--full',
 }
 
 enum Events {

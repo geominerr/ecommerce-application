@@ -1,3 +1,5 @@
+import { IResponseCart } from './cart-actions/api-cart-interfaces';
+
 interface Result {
   [key: string]: unknown;
   id: string;
@@ -160,4 +162,20 @@ interface IProductImage {
 interface IProductAttribute {
   name: string;
   value: string;
+}
+
+export interface IAnonymousResponse {
+  access_token: string;
+  refresh_token: string | undefined;
+  expires_in: number;
+}
+
+export interface IAnonymousRefresh {
+  access_token: string;
+  expires_in: number;
+}
+
+export interface ICustomerAndCart {
+  customer: CustomerResponse;
+  cart: IResponseCart;
 }

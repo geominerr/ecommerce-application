@@ -19,6 +19,7 @@ enum Styles {
   BUTTON_SAVE = 'save-button',
   BUTTONS_HIDE = 'hide',
   BUTTONS_SHOW = 'show',
+  HIGHLIGHT = 'highlight',
 }
 
 enum Contents {
@@ -26,8 +27,4 @@ enum Contents {
   LABEL = 'Set default billing address',
 }
 
-enum Attributes {
-  ID_VALUE_BILL_DEF = 'billing-checkbox-default',
-}
-
-export { TagNames, Styles, Contents, Attributes };
+export { TagNames, Styles, Contents };

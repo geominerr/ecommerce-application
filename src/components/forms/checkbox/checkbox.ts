@@ -45,11 +45,15 @@ class CheckboxComponent extends BaseComponent {
     this.input.checked = checked;
   }
 
+  public isChecked(): boolean {
+    return this.input.checked;
+  }
+
   private createComponent(contentLabel: string, id: string): void {
     const { container, inputWrapper, label, input, hint } = this;
     const hintElement: HTMLElement = hint.getElement();
 
-    // input.setAttribute(Attributes.ID, id);
+    input.setAttribute(Attributes.ID, id);
     input.setAttribute(Attributes.TYPE, Attributes.TYPE_VALUE_CHECKBOX);
     label.setAttribute(Attributes.FOR, id);
     label.innerText = contentLabel;

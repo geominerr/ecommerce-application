@@ -118,22 +118,10 @@ class FieldsetPassword extends BaseComponent {
     return { currentPassword, newPassword };
   }
 
-  public highlightInputs(duration: number): void {
-    const { inputPassword, inputNewPassword, inputPasswordRepeat } = this;
-    [inputPassword, inputNewPassword, inputPasswordRepeat].forEach((input) => {
-      const inputProfile = input.getElement().querySelector('.input-pass');
-      if (inputProfile) {
-        inputProfile.classList.add(Styles.HIGHLIGHT);
-      }
-    });
-    setTimeout(() => {
-      [inputPassword, inputNewPassword, inputPasswordRepeat].forEach((input) => {
-        const inputProfile = input.getElement().querySelector('.input-pass');
-        if (inputProfile) {
-          inputProfile.classList.remove(Styles.HIGHLIGHT);
-        }
-      });
-    }, duration);
+  public clearPassword(): void {
+    this.inputPassword.clearValue();
+    this.inputNewPassword.clearValue();
+    this.inputPasswordRepeat.clearValue();
   }
 
   public hidePassword(): void {
