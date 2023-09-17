@@ -1,0 +1,91 @@
+{
+  "id": "testId777",
+  "version": 20,
+  "productType": {
+    "typeId": "product-type",
+    "id": "7c21b0e9-573d-4623-b250-4fb2ed2a8427"
+  },
+  "name": {
+    "en": "TestTitle"
+  },
+  "description": {
+    "en": "Test description"
+  },
+  "categories": [
+    {
+      "typeId": "category",
+      "id": "dd16b771-7a85-4390-bb50-8e44194cd73a"
+    }
+  ],
+  "categoryOrderHints": {},
+  "slug": {
+    "en": "yamaha-xmv4280"
+  },
+  "metaTitle": {
+    "en": "Yamaha XMV4280"
+  },
+  "metaDescription": {
+    "en": "Analog power amplifier"
+  },
+  "masterVariant": {
+    "id": 1,
+    "sku": "AMP-08",
+    "key": "AMP-08",
+    "prices": [
+      {
+        "id": "fc6760eb-e4b6-471f-977c-ce48bec3d660",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "EUR",
+          "centAmount": 273900,
+          "fractionDigits": 2
+        },
+        "key": "08"
+      }
+    ],
+    "images": [
+      {
+        "url": "testImage1",
+        "label": "main",
+        "dimensions": {
+          "w": 660,
+          "h": 276
+        }
+      },
+      {
+        "url": "testImage2",
+        "label": "front",
+        "dimensions": {
+          "w": 720,
+          "h": 238
+        }
+      },
+      {
+        "url": "testImage3",
+        "label": "back",
+        "dimensions": {
+          "w": 720,
+          "h": 238
+        }
+      }
+    ],
+    "attributes": [
+      { "name": "test1", "value": "test1" },
+      { "name": "test2", "value": "test2" },
+      { "name": "test3", "value": "test3" }
+    ],
+    "assets": []
+  },
+  "variants": [],
+  "searchKeywords": {},
+  "hasStagedChanges": false,
+  "published": true,
+  "key": "AMP-08",
+  "taxCategory": {
+    "typeId": "tax-category",
+    "id": "f2cc5efa-acde-4946-9b73-d2bd914575d6"
+  },
+  "priceMode": "Embedded",
+  "createdAt": "2023-08-23T11:52:00.881Z",
+  "lastModifiedAt": "2023-08-23T15:20:03.403Z"
+}
