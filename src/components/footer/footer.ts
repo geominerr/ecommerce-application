@@ -1,6 +1,5 @@
 import BaseComponent from '../base/base-component/base-component';
 import { Attributes, Content, Styles, TagNames } from './enum';
-import { popupDiscount } from '../../utils/popup_discount-codes';
 import './footer.scss';
 
 class Footer extends BaseComponent {
@@ -10,35 +9,23 @@ class Footer extends BaseComponent {
 
   private link: HTMLAnchorElement;
 
-  private dicountCodeRequest: HTMLButtonElement;
-
   constructor() {
     super();
     this.footer = this.createElement(TagNames.FOOTER, Styles.FOOTER);
     this.container = this.createElement(TagNames.DIV, Styles.CONTAINER);
     this.link = this.createElement(TagNames.A, Styles.LINK);
-    this.dicountCodeRequest = this.createElement(TagNames.BUTTON, Styles.PROMO_BUTTON);
 
     this.createComponent();
-    this.addHandler();
   }
 
   private createComponent(): void {
-    const { footer, container, link, dicountCodeRequest } = this;
+    const { footer, container, link } = this;
     link.setAttribute(Attributes.HREF, Attributes.HREF_VALUE_ABOUT_US);
     link.innerText = Content.LINK_ABOUT_US;
-    dicountCodeRequest.innerText = Content.PROMO_BUTTON;
 
     container.append(link);
-    container.append(dicountCodeRequest);
     footer.append(container);
     document.body.append(footer);
-  }
-
-  private addHandler(): void {
-    this.dicountCodeRequest.addEventListener('click', () => {
-      popupDiscount();
-    });
   }
 }
 
